@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
+require_relative 'models'
 require 'roda'
 
-class SDAQS < Roda
+class App < Roda
   route do |r|
     r.root do
-      'hello'
+      'hellewww!'
     end
   end
 end
