@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-require 'roda'
+require './application'
 
-class App < Roda
-  route do |r|
-    r.root do
-      'hello'
-    end
-  end
-end
-
-run App.freeze.app
+run SDAQS.freeze.app
