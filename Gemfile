@@ -12,6 +12,7 @@ group :development, :test do
   gem 'pry', '~> 0.12'
   gem 'rspec', '~> 3.9'
   gem 'rubocop', '~> 0.79', require: false
+  gem 'rubocop-rspec', require: false
 end
 
 group :test do
