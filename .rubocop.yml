@@ -19,6 +19,10 @@ AllCops:
 Style/Documentation:
   Enabled: false
 
+Metrics/AbcSize:
+  Exclude:
+    - 'config/**/*'
+
 Layout/LineLength:
   Max: 99
 
@@ -26,3 +30,10 @@ Metrics/BlockLength:
   Exclude:
     - 'app.rb'
     - 'spec/**/*_spec.rb'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'config/**/*'
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: 'indented_relative_to_receiver'
