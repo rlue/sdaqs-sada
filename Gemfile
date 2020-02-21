@@ -12,6 +12,7 @@ gem 'sequel_pg', '~> 1.12'
 
 group :development, :test do
   gem 'pry', git: 'https://github.com/pry/pry.git', ref: '272b3290b5250d28ee82a5ff65aa3b29b825e37b'
+  gem 'rake', '~> 13.0'
   gem 'rspec', '~> 3.9'
   gem 'rubocop', '~> 0.79', require: false
   gem 'rubocop-rspec', require: false

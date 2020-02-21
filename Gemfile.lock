@@ -23,6 +23,7 @@ GEM
     rack (2.2.2)
     rack-unreloader (1.7.0)
     rainbow (3.0.0)
+    rake (13.0.1)
     roda (3.29.0)
       rack
     rspec (3.9.0)
@@ -62,6 +63,7 @@ DEPENDENCIES
   pg (~> 1.2)
   pry!
   rack-unreloader (~> 1.7)
+  rake (~> 13.0)
   roda (~> 3.29)
   rspec (~> 3.9)
   rubocop (~> 0.79)
