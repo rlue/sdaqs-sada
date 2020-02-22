@@ -1,8 +1,40 @@
 {
+  "name": "sdaqs",
+  "version": "0.0.0",
+  "description": "Source-Differentiated Air Quality System",
+  "main": "app/index.js",
+  "author": "Ryan Lue <hello@ryanlue.com>",
+  "private": true,
+  "scripts": {
+    "build": "NODE_ENV='production' webpack"
+  },
   "installConfig": {
     "pnp": true
   },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ]
+  },
   "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-react": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.4.2",
+    "pnp-webpack-plugin": "^1.6.4",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "style-loader": "^1.1.3",
+    "svg-inline-loader": "^0.8.2",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3",
     "yarn": "^2.0.0-rc.27"
+  },
+  "dependencies": {
+    "prop-types": "^15.7.2",
+    "react-icons": "^3.9.0"
   }
 }
