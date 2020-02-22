@@ -1,1 +1,8 @@
+# RSpec
 /spec/examples.txt
+
+# Yarn
+/.yarn/*
+!/.yarn/releases
+!/.yarn/plugins
+/.pnp.*

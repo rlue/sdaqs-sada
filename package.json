@@ -1,0 +1,8 @@
+{
+  "installConfig": {
+    "pnp": true
+  },
+  "devDependencies": {
+    "yarn": "^2.0.0-rc.27"
+  }
+}
