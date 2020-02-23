@@ -86,6 +86,7 @@
     "yarn": "^2.0.0-rc.27"
   },
   "dependencies": {
+    "mapbox-gl": "^1.8.0",
     "pnp-webpack-plugin": "^1.6.4",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
