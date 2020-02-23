@@ -16,6 +16,10 @@ module.exports = {
     filename: 'index.js'
   },
   resolve: {
+    extensions: [
+      '.js',
+      '.jsx'
+    ],
     plugins: [
       PnpWebpackPlugin
     ]
