@@ -15,6 +15,7 @@ class App < Roda
         <html>
         <head>
           <meta charset="utf-8" />
+          <link href='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css' rel='stylesheet' />
         </head>
           <body>
           <div id="app"></div>
