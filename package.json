@@ -6,7 +6,7 @@
   "author": "Ryan Lue <hello@ryanlue.com>",
   "private": true,
   "scripts": {
-    "build": "NODE_ENV='production' webpack"
+    "build": "NODE_ENV='production' webpack --config config/webpack.js"
   },
   "installConfig": {
     "pnp": true

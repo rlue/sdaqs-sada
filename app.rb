@@ -4,24 +4,23 @@ require 'roda'
 require_relative 'config/models'
 
 class App < Roda
+  plugin :public
+
   route do |r|
+    r.public
+
     r.root do
       <<~HTML
-        <p>
-          Lorem ipsum dolor sit amet consectetur
-        </p>
-
-        <ol>
-          <li>
-            And here's a list!
-          </li>
-          <li>
-            It goes on!
-          </li>
-          <li>
-            And on!
-          </li>
-        </ol>
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8" />
+        </head>
+          <body>
+          <div id="app"></div>
+          <script src="assets/index.js"></script>
+        </body>
+        </html>
       HTML
     end
   end
