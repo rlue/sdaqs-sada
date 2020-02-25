@@ -55,6 +55,8 @@
           "tabWidth": 2,
           "arrowParens": "always"
         }
+      ],
+      "react/jsx-props-no-spreading": "off",
       "react/require-default-props": [
         "error",
         {
@@ -86,6 +88,7 @@
     "yarn": "^2.0.0-rc.27"
   },
   "dependencies": {
+    "downshift": "^5.0.3",
     "mapbox-gl": "^1.8.0",
     "pnp-webpack-plugin": "^1.6.4",
     "prop-types": "^15.7.2",
