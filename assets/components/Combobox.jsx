@@ -1,18 +1,16 @@
 import React from 'react'
 import { useCombobox } from 'downshift'
+import Fuse from 'fuse.js'
 import sites from '../data/sites.json'
 
 export default function Combobox() {
-  const items = sites.map((site) => site.name)
-  const [inputItems, setInputItems] = React.useState(items)
+  const fuse = React.useRef(new Fuse(sites, fuseOptions))
+  const [inputItems, setInputItems] = React.useState(fuse.current.list)
   const ds = useCombobox({
     items: inputItems,
+    itemToString: (item) => (item ? item.name : ''),
     onInputValueChange: ({ inputValue }) => {
-      setInputItems(
-        items.filter((item) =>
-          item.toLowerCase().startsWith(inputValue.toLowerCase()),
-        ),
-      )
+      setInputItems(fuse.current.search(inputValue))
     },
   })
 
@@ -35,10 +33,20 @@ export default function Combobox() {
                 ds.highlightedIndex === index ? { backgroundColor: '#bde4ff' } : {}
               }
             >
-              {item}
+              {item.name}
             </li>
           ))}
       </ul>
     </>
   )
+}
+
+const fuseOptions = {
+  shouldSort: true,
+  threshold: 0.25,
+  location: 0,
+  distance: 100,
+  maxPatternLength: 32,
+  minMatchCharLength: 1,
+  keys: ['name'],
 }

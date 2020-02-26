@@ -3878,6 +3878,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"fuse.js@npm:^3.4.6":
+  version: 3.4.6
+  resolution: "fuse.js@npm:3.4.6"
+  checksum: 2/8ff4907cfe9e87b7d4fb43d30694637bb78f4573123214a46e7bd3545067856bcd9c2aaa1101b702514cf4d73906cb8798b8fb39a78fa43fcf5bd6724ffc88e9
+  languageName: node
+  linkType: hard
+
 "gauge@npm:~2.7.3":
   version: 2.7.4
   resolution: "gauge@npm:2.7.4"
@@ -7216,6 +7223,7 @@ fsevents@^1.2.7:
     eslint-plugin-prettier: ^3.1.2
     eslint-plugin-react: latest
     eslint-plugin-react-hooks: ^1.7.0
+    fuse.js: ^3.4.6
     mapbox-gl: ^1.8.0
     pnp-webpack-plugin: ^1.6.4
     prettier: ^1.19.1
