@@ -20,6 +20,7 @@ export default function Map({ matches }) {
     map.current.fitBounds([
       [38.9269981, 11.1166666],
       [78.35, 43.061306],
+      { padding: 120 },
     ])
 
     return () => map.current.remove()
@@ -29,6 +30,15 @@ export default function Map({ matches }) {
     markers.current = matches.map(({ longitude, latitude }) =>
       new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map.current),
     )
+
+    if (matches.length) {
+      const longitudes = matches.map(({ longitude }) => longitude)
+      const latitudes = matches.map(({ latitude }) => latitude)
+      const swBound = [Math.min(...longitudes), Math.min(...latitudes)]
+      const neBound = [Math.max(...longitudes), Math.max(...latitudes)]
+
+      map.current.fitBounds([swBound, neBound], { padding: 120, maxZoom: 9 })
+    }
 
     return () => {
       markers.current.forEach((marker) => marker.remove())
