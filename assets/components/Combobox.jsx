@@ -1,16 +1,15 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { useCombobox } from 'downshift'
 import Fuse from 'fuse.js'
-import sites from '../data/sites.json'
 
-export default function Combobox() {
-  const fuse = React.useRef(new Fuse(sites, fuseOptions))
-  const [inputItems, setInputItems] = React.useState(fuse.current.list)
+export default function Combobox({ values, matches, setMatches }) {
+  const fuse = React.useRef(new Fuse(values, fuseOptions))
   const ds = useCombobox({
-    items: inputItems,
+    items: matches,
     itemToString: (item) => (item ? item.name : ''),
-    onInputValueChange: ({ inputValue }) => {
-      setInputItems(fuse.current.search(inputValue))
+    onInputValueChange: ({ inputValue, isOpen }) => {
+      setMatches(isOpen ? fuse.current.search(inputValue) : [])
     },
   })
 
@@ -31,7 +30,7 @@ export default function Combobox() {
       </label>
       <ul {...ds.getMenuProps()}>
         {ds.isOpen &&
-          inputItems.map((item, index) => (
+          matches.map((item, index) => (
             <li
               {...ds.getItemProps({ item, index })}
               key={`${item.name}${item.latitude}`}
@@ -47,6 +46,22 @@ export default function Combobox() {
       </ul>
     </>
   )
+}
+
+Combobox.propTypes = {
+  values: PropTypes.arrayOf(
+    PropTypes.shape({
+      latitude: PropTypes.string,
+      longitude: PropTypes.string,
+    }),
+  ).isRequired,
+  matches: PropTypes.arrayOf(
+    PropTypes.shape({
+      latitude: PropTypes.string,
+      longitude: PropTypes.string,
+    }),
+  ).isRequired,
+  setMatches: PropTypes.func.isRequired,
 }
 
 const fuseOptions = {
