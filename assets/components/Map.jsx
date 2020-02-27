@@ -1,7 +1,8 @@
 import React from 'react'
 import mapboxgl from 'mapbox-gl'
 
-mapboxgl.accessToken = 'pk.eyJ1Ijoicmx1ZSIsImEiOiJjazZwOHIwdXcwNzg1M2xuejVkbGNkaGEwIn0.S0KbmonSFTp9xI5J2ZGANQ'
+mapboxgl.accessToken =
+  'pk.eyJ1Ijoicmx1ZSIsImEiOiJjazZwOHIwdXcwNzg1M2xuejVkbGNkaGEwIn0.S0KbmonSFTp9xI5J2ZGANQ'
 
 export default function Map() {
   const mapContainer = React.useRef()
@@ -14,15 +15,13 @@ export default function Map() {
     })
 
     map.current.addControl(new mapboxgl.NavigationControl())
-    map.current.fitBounds([[38.9269981, 11.1166666], [78.35, 43.061306]])
+    map.current.fitBounds([
+      [38.9269981, 11.1166666],
+      [78.35, 43.061306],
+    ])
 
     return () => map.current.remove()
   }, [])
 
-  return (
-    <div
-      className="item__bifold-right"
-      ref={mapContainer}
-    />
-  )
+  return <div className="item__bifold-right" ref={mapContainer} />
 }

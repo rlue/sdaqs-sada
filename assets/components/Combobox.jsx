@@ -16,21 +16,29 @@ export default function Combobox() {
 
   return (
     <>
-      <label {...ds.getLabelProps()}>Choose an element:</label>
-      <div {...ds.getComboboxProps()}>
-        <input {...ds.getInputProps()} />
-        <button {...ds.getToggleButtonProps()} aria-label={'toggle menu'}>
-          &#8595;
-        </button>
-      </div>
+      <label {...ds.getLabelProps()} htmlFor="military-base">
+        Search bases
+        <div {...ds.getComboboxProps()}>
+          <input {...ds.getInputProps()} id="military-base" />
+          <button
+            {...ds.getToggleButtonProps()}
+            aria-label="toggle menu"
+            type="button"
+          >
+            Go!
+          </button>
+        </div>
+      </label>
       <ul {...ds.getMenuProps()}>
         {ds.isOpen &&
           inputItems.map((item, index) => (
             <li
               {...ds.getItemProps({ item, index })}
-              key={`${item}${index}`}
+              key={`${item.name}${item.latitude}`}
               style={
-                ds.highlightedIndex === index ? { backgroundColor: '#bde4ff' } : {}
+                ds.highlightedIndex === index
+                  ? { backgroundColor: '#bde4ff' }
+                  : {}
               }
             >
               {item.name}
