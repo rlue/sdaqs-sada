@@ -2,15 +2,19 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useCombobox } from 'downshift'
 import Fuse from 'fuse.js'
+import debounce from 'lodash.debounce'
 
 export default function Combobox({ values, matches, setMatches }) {
   const fuse = React.useRef(new Fuse(values, fuseOptions))
+  const inputDebouncer = React.useRef(
+    debounce(({ inputValue, isOpen }) => {
+      setMatches(isOpen ? fuse.current.search(inputValue) : [])
+    }, 300),
+  )
   const ds = useCombobox({
     items: matches,
     itemToString: (item) => (item ? item.name : ''),
-    onInputValueChange: ({ inputValue, isOpen }) => {
-      setMatches(isOpen ? fuse.current.search(inputValue) : [])
-    },
+    onInputValueChange: inputDebouncer.current,
   })
 
   return (

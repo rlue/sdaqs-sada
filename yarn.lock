@@ -5140,6 +5140,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"lodash.debounce@npm:^4.0.8":
+  version: 4.0.8
+  resolution: "lodash.debounce@npm:4.0.8"
+  checksum: 2/b6042bd8c09ff1961c9127d32266316bc21f946ece5e3464a663ec61fadb98e7d56ec0ef7e23b47d393695310c19cf24e651c1756be6da91ac02c72be7f79465
+  languageName: node
+  linkType: hard
+
 "lodash@npm:^4.17.11, lodash@npm:^4.17.13, lodash@npm:^4.17.14, lodash@npm:^4.17.15":
   version: 4.17.15
   resolution: "lodash@npm:4.17.15"
@@ -7224,6 +7231,7 @@ fsevents@^1.2.7:
     eslint-plugin-react: latest
     eslint-plugin-react-hooks: ^1.7.0
     fuse.js: ^3.4.6
+    lodash.debounce: ^4.0.8
     mapbox-gl: ^1.8.0
     pnp-webpack-plugin: ^1.6.4
     prettier: ^1.19.1

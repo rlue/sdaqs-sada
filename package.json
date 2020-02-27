@@ -90,6 +90,7 @@
   "dependencies": {
     "downshift": "^5.0.3",
     "fuse.js": "^3.4.6",
+    "lodash.debounce": "^4.0.8",
     "mapbox-gl": "^1.8.0",
     "pnp-webpack-plugin": "^1.6.4",
     "prop-types": "^15.7.2",
