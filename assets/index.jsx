@@ -7,11 +7,14 @@ import Map from './components/Map'
 
 function App() {
   const [searchSuggestions, setSearchSuggestions] = React.useState([])
+  const [focusedSuggestion, setFocusedSuggestion] = React.useState(-1)
 
   return (
     <div className="app container__bifold">
-      <SearchForm {...{ searchSuggestions, setSearchSuggestions }} />
-      <Map {...{ searchSuggestions }} />
+      <SearchForm
+        {...{ searchSuggestions, setSearchSuggestions, setFocusedSuggestion }}
+      />
+      <Map {...{ searchSuggestions, focusedSuggestion }} />
     </div>
   )
 }

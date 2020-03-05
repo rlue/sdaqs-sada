@@ -5,7 +5,7 @@ import mapboxgl from 'mapbox-gl'
 mapboxgl.accessToken =
   'pk.eyJ1Ijoicmx1ZSIsImEiOiJjazZwOHIwdXcwNzg1M2xuejVkbGNkaGEwIn0.S0KbmonSFTp9xI5J2ZGANQ'
 
-export default function Map({ searchSuggestions, selection }) {
+export default function Map({ searchSuggestions, focusedSuggestion }) {
   const mapContainer = useRef()
   const map = useRef()
   const markers = useRef([])
@@ -13,6 +13,7 @@ export default function Map({ searchSuggestions, selection }) {
 
   useMap(map, mapContainer)
   useMarkers(map, searchSuggestions, markers)
+  usePopup(map, searchSuggestions, focusedSuggestion, popup)
 
   return <div className="item__bifold-right" ref={mapContainer} />
 }
@@ -24,6 +25,7 @@ Map.propTypes = {
       longitude: PropTypes.string,
     }),
   ).isRequired,
+  focusedSuggestion: PropTypes.number,
 }
 
 function useMap(map, mapContainer) {
@@ -63,4 +65,40 @@ function useMarkers(map, searchSuggestions, markers) {
       markers.current.forEach((marker) => marker.remove())
     }
   }, [searchSuggestions])
+}
+
+function usePopup(map, searchSuggestions, focusedSuggestion, popup) {
+  useEffect(() => {
+    if (searchSuggestions[focusedSuggestion]) {
+      const match = searchSuggestions[focusedSuggestion]
+
+      const markerHeight = 50,
+        markerRadius = 10,
+        linearOffset = 25
+      const popupOffsets = {
+        top: [0, 0],
+        'top-left': [0, 0],
+        'top-right': [0, 0],
+        bottom: [0, -markerHeight],
+        'bottom-left': [
+          linearOffset,
+          (markerHeight - markerRadius + linearOffset) * -1,
+        ],
+        'bottom-right': [
+          -linearOffset,
+          (markerHeight - markerRadius + linearOffset) * -1,
+        ],
+        left: [markerRadius, (markerHeight - markerRadius) * -1],
+        right: [-markerRadius, (markerHeight - markerRadius) * -1],
+      }
+      popup.current = new mapboxgl.Popup({ offset: popupOffsets })
+        .setLngLat([match.longitude, match.latitude])
+        .setHTML(`<h1>${match.name}</h1>`)
+        .addTo(map.current)
+    }
+
+    return () => {
+      popup.current && popup.current.remove()
+    }
+  }, [searchSuggestions, focusedSuggestion])
 }

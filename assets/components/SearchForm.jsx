@@ -6,6 +6,7 @@ import sites from '../data/sites.json'
 export default function SearchForm({
   searchSuggestions,
   setSearchSuggestions,
+  setFocusedSuggestion,
 }) {
   return (
     <div className="item__bifold-left">
@@ -13,7 +14,7 @@ export default function SearchForm({
       <form>
         <Combobox
           values={sites}
-          {...{ searchSuggestions, setSearchSuggestions }}
+          {...{ searchSuggestions, setSearchSuggestions, setFocusedSuggestion }}
         />
       </form>
     </div>
@@ -28,4 +29,5 @@ SearchForm.propTypes = {
     }),
   ).isRequired,
   setSearchSuggestions: PropTypes.func.isRequired,
+  setFocusedSuggestion: PropTypes.func.isRequired,
 }

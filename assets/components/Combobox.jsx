@@ -8,6 +8,7 @@ export default function Combobox({
   values,
   searchSuggestions,
   setSearchSuggestions,
+  setFocusedSuggestion,
 }) {
   const fuse = React.useRef(new Fuse(values, fuseOptions))
   const inputDebouncer = React.useRef(
@@ -19,6 +20,8 @@ export default function Combobox({
     items: searchSuggestions,
     itemToString: (item) => (item ? item.name : ''),
     onInputValueChange: inputDebouncer.current,
+    onHighlightedIndexChange: ({ highlightedIndex }) =>
+      setFocusedSuggestion(highlightedIndex),
   })
 
   return (
