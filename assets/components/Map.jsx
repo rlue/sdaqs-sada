@@ -5,15 +5,21 @@ import mapboxgl from 'mapbox-gl'
 mapboxgl.accessToken =
   'pk.eyJ1Ijoicmx1ZSIsImEiOiJjazZwOHIwdXcwNzg1M2xuejVkbGNkaGEwIn0.S0KbmonSFTp9xI5J2ZGANQ'
 
-export default function Map({ searchSuggestions, focusedSuggestion }) {
+export default function Map({
+  searchSuggestions,
+  focusedSuggestion,
+  deployments,
+}) {
   const mapContainer = useRef()
   const map = useRef()
-  const markers = useRef([])
+  const suggestionMarkers = useRef([])
   const popup = useRef()
+  const selectionMarkers = useRef([])
 
   useMap(map, mapContainer)
-  useMarkers(map, searchSuggestions, markers)
+  useSuggestionMarkers(map, searchSuggestions, suggestionMarkers)
   usePopup(map, searchSuggestions, focusedSuggestion, popup)
+  useSelectionMarkers(map, deployments, selectionMarkers)
 
   return <div className="item__bifold-right" ref={mapContainer} />
 }
@@ -26,6 +32,7 @@ Map.propTypes = {
     }),
   ).isRequired,
   focusedSuggestion: PropTypes.number,
+  deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 function useMap(map, mapContainer) {
@@ -46,10 +53,13 @@ function useMap(map, mapContainer) {
   }, [])
 }
 
-function useMarkers(map, searchSuggestions, markers) {
+function useSuggestionMarkers(map, searchSuggestions, suggestionMarkers) {
   useEffect(() => {
-    markers.current = searchSuggestions.map(({ longitude, latitude }) =>
-      new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map.current),
+    suggestionMarkers.current = searchSuggestions.map(
+      ({ longitude, latitude }) =>
+        new mapboxgl.Marker()
+          .setLngLat([longitude, latitude])
+          .addTo(map.current),
     )
 
     if (searchSuggestions.length) {
@@ -59,10 +69,16 @@ function useMarkers(map, searchSuggestions, markers) {
       const neBound = [Math.max(...longitudes), Math.max(...latitudes)]
 
       map.current.fitBounds([swBound, neBound], { padding: 120, maxZoom: 9 })
+    } else {
+      map.current.fitBounds([
+        [38.9269981, 11.1166666],
+        [78.35, 43.061306],
+        { padding: 120 },
+      ])
     }
 
     return () => {
-      markers.current.forEach((marker) => marker.remove())
+      suggestionMarkers.current.forEach((marker) => marker.remove())
     }
   }, [searchSuggestions])
 }
@@ -101,4 +117,31 @@ function usePopup(map, searchSuggestions, focusedSuggestion, popup) {
       popup.current && popup.current.remove()
     }
   }, [searchSuggestions, focusedSuggestion])
+}
+
+function useSelectionMarkers(map, deployments, selectionMarkers) {
+  useEffect(() => {
+    selectionMarkers.current = deployments
+      .filter(({ base }) => base)
+      .map(({ base }) =>
+        new mapboxgl.Marker({ color: '#ce2c69' })
+          .setLngLat([base.longitude, base.latitude])
+          .addTo(map.current),
+      )
+
+    /*
+    if (deployments.filter(({ base }) => base).length) {
+      const longitudes = deployments.filter(({ base }) => base).map(({ base }) => base.longitude)
+      const latitudes = deployments.filter(({ base }) => base).map(({ base }) => base.latitude)
+      const swBound = [Math.min(...longitudes), Math.min(...latitudes)]
+      const neBound = [Math.max(...longitudes), Math.max(...latitudes)]
+
+      map.current.fitBounds([swBound, neBound], { padding: 120, maxZoom: 9 })
+    }
+    */
+
+    return () => {
+      selectionMarkers.current.forEach((marker) => marker.remove())
+    }
+  }, [deployments])
 }
