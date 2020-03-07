@@ -4,15 +4,19 @@ import { useCombobox } from 'downshift'
 import Fuse from 'fuse.js'
 import debounce from 'lodash.debounce'
 
-export default function Combobox({ values, matches, setMatches }) {
+export default function Combobox({
+  values,
+  searchSuggestions,
+  setSearchSuggestions,
+}) {
   const fuse = React.useRef(new Fuse(values, fuseOptions))
   const inputDebouncer = React.useRef(
     debounce(({ inputValue, isOpen }) => {
-      setMatches(isOpen ? fuse.current.search(inputValue) : [])
+      setSearchSuggestions(isOpen ? fuse.current.search(inputValue) : [])
     }, 300),
   )
   const ds = useCombobox({
-    items: matches,
+    items: searchSuggestions,
     itemToString: (item) => (item ? item.name : ''),
     onInputValueChange: inputDebouncer.current,
   })
@@ -34,7 +38,7 @@ export default function Combobox({ values, matches, setMatches }) {
       </label>
       <ul {...ds.getMenuProps()}>
         {ds.isOpen &&
-          matches.map((item, index) => (
+          searchSuggestions.map((item, index) => (
             <li
               {...ds.getItemProps({ item, index })}
               key={`${item.name}${item.latitude}`}
@@ -59,13 +63,13 @@ Combobox.propTypes = {
       longitude: PropTypes.string,
     }),
   ).isRequired,
-  matches: PropTypes.arrayOf(
+  searchSuggestions: PropTypes.arrayOf(
     PropTypes.shape({
       latitude: PropTypes.string,
       longitude: PropTypes.string,
     }),
   ).isRequired,
-  setMatches: PropTypes.func.isRequired,
+  setSearchSuggestions: PropTypes.func.isRequired,
 }
 
 const fuseOptions = {

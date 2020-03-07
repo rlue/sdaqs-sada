@@ -5,20 +5,20 @@ import mapboxgl from 'mapbox-gl'
 mapboxgl.accessToken =
   'pk.eyJ1Ijoicmx1ZSIsImEiOiJjazZwOHIwdXcwNzg1M2xuejVkbGNkaGEwIn0.S0KbmonSFTp9xI5J2ZGANQ'
 
-export default function Map({ matches, selection }) {
+export default function Map({ searchSuggestions, selection }) {
   const mapContainer = useRef()
   const map = useRef()
   const markers = useRef([])
   const popup = useRef()
 
   useMap(map, mapContainer)
-  useMarkers(map, matches, markers)
+  useMarkers(map, searchSuggestions, markers)
 
   return <div className="item__bifold-right" ref={mapContainer} />
 }
 
 Map.propTypes = {
-  matches: PropTypes.arrayOf(
+  searchSuggestions: PropTypes.arrayOf(
     PropTypes.shape({
       latitude: PropTypes.string,
       longitude: PropTypes.string,
@@ -44,15 +44,15 @@ function useMap(map, mapContainer) {
   }, [])
 }
 
-function useMarkers(map, matches, markers) {
+function useMarkers(map, searchSuggestions, markers) {
   useEffect(() => {
-    markers.current = matches.map(({ longitude, latitude }) =>
+    markers.current = searchSuggestions.map(({ longitude, latitude }) =>
       new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map.current),
     )
 
-    if (matches.length) {
-      const longitudes = matches.map(({ longitude }) => longitude)
-      const latitudes = matches.map(({ latitude }) => latitude)
+    if (searchSuggestions.length) {
+      const longitudes = searchSuggestions.map(({ longitude }) => longitude)
+      const latitudes = searchSuggestions.map(({ latitude }) => latitude)
       const swBound = [Math.min(...longitudes), Math.min(...latitudes)]
       const neBound = [Math.max(...longitudes), Math.max(...latitudes)]
 
@@ -62,5 +62,5 @@ function useMarkers(map, matches, markers) {
     return () => {
       markers.current.forEach((marker) => marker.remove())
     }
-  }, [matches])
+  }, [searchSuggestions])
 }

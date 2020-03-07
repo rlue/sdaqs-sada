@@ -5,12 +5,12 @@ import SearchForm from './components/SearchForm'
 import Map from './components/Map'
 
 function App() {
-  const [matches, setMatches] = React.useState([])
+  const [searchSuggestions, setSearchSuggestions] = React.useState([])
 
   return (
     <div className="app container__bifold">
-      <SearchForm {...{ matches, setMatches }} />
-      <Map {...{ matches }} />
+      <SearchForm {...{ searchSuggestions, setSearchSuggestions }} />
+      <Map {...{ searchSuggestions }} />
     </div>
   )
 }
