@@ -1,5 +1,6 @@
 # Compiled assets
 /public/assets
+/assets/webpack-assets.json
 
 # RSpec
 /spec/examples.txt

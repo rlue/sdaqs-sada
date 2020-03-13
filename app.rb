@@ -2,6 +2,7 @@
 
 require 'roda'
 require_relative 'config/models'
+require 'json'
 
 class App < Roda
   plugin :public
@@ -19,7 +20,10 @@ class App < Roda
         </head>
           <body>
           <div id="app"></div>
-          <script src="assets/index.js"></script>
+          #{JSON.parse(File.read('assets/webpack-assets.json')).values
+                .map { |asset| asset['js'] }
+                .map { |path| %(<script src="assets/#{path}"></script>) }
+                .join("\n")}
         </body>
         </html>
       HTML

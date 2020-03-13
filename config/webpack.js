@@ -1,5 +1,7 @@
 const path = require('path')
 const PnpWebpackPlugin = require('pnp-webpack-plugin')
+const AssetsPlugin = require('assets-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
@@ -13,8 +15,12 @@ module.exports = {
   },
   output: {
     path: path.resolve('public', 'assets'),
-    filename: 'index.js',
+    filename: '[name]-[contenthash].js',
   },
+  plugins: [
+    new AssetsPlugin({ path: path.resolve('assets') }),
+    new CleanWebpackPlugin(),
+  ],
   resolve: {
     extensions: ['.js', '.jsx'],
     plugins: [PnpWebpackPlugin],

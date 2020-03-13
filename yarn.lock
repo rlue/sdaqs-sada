@@ -1146,6 +1146,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/anymatch@npm:*":
+  version: 1.3.1
+  resolution: "@types/anymatch@npm:1.3.1"
+  checksum: 2/1647865e528a168f66f57a077e9651c10a4c172b656cc3686fddf176555d42ca0a1647bfc626ea2fceb68fc7701426ab708224be1762b4a5216fe8368ffdba3c
+  languageName: node
+  linkType: hard
+
 "@types/events@npm:*":
   version: 3.0.0
   resolution: "@types/events@npm:3.0.0"
@@ -1175,6 +1182,54 @@ __metadata:
   version: 13.7.4
   resolution: "@types/node@npm:13.7.4"
   checksum: 2/6aa330eaa5a93370adc14e44bb4af92de463116e5f37d5c30d447e3d519a185db50c65c442c2a4c8f09c7b6eae5c9bcd7783258534aee191d2ec672249c2bc22
+  languageName: node
+  linkType: hard
+
+"@types/source-list-map@npm:*":
+  version: 0.1.2
+  resolution: "@types/source-list-map@npm:0.1.2"
+  checksum: 2/191f0e3b056b481e7a0bbb38f3d5b54b015556e38075726ca2637a35d3694df85cd16761b1b188729ac687a55aec3cbc2b07033ac090bcc13efe09ad10a3e935
+  languageName: node
+  linkType: hard
+
+"@types/tapable@npm:*":
+  version: 1.0.5
+  resolution: "@types/tapable@npm:1.0.5"
+  checksum: 2/f87cd98a09be272dde705155097d0e02dfdd7fe98395ade968632ff7ee1f39839f03daee59da921345c2177d118f085dcb4e4e4d2d4bea801d354cc0f33a1d2d
+  languageName: node
+  linkType: hard
+
+"@types/uglify-js@npm:*":
+  version: 3.0.4
+  resolution: "@types/uglify-js@npm:3.0.4"
+  dependencies:
+    source-map: ^0.6.1
+  checksum: 2/078bccbb6d0310392c8ee43a3d722c36b3991979d8498882f011946c73dbcaa01036ae8f42b3f0b697dc9220a4ad59c21956c552cdedc86b377f9d84c2c2d5c1
+  languageName: node
+  linkType: hard
+
+"@types/webpack-sources@npm:*":
+  version: 0.1.6
+  resolution: "@types/webpack-sources@npm:0.1.6"
+  dependencies:
+    "@types/node": "*"
+    "@types/source-list-map": "*"
+    source-map: ^0.6.1
+  checksum: 2/2e6fc79506d10e4e57daa0cddc94e57d65ffc5ff38ac2b161aa12fc67d4ed8d9e4c84b3a7a070908806afbc34e44df2b0525dda973b69cefc96bd698daa0960c
+  languageName: node
+  linkType: hard
+
+"@types/webpack@npm:^4.4.31":
+  version: 4.41.7
+  resolution: "@types/webpack@npm:4.41.7"
+  dependencies:
+    "@types/anymatch": "*"
+    "@types/node": "*"
+    "@types/tapable": "*"
+    "@types/uglify-js": "*"
+    "@types/webpack-sources": "*"
+    source-map: ^0.6.0
+  checksum: 2/defc9965e49f020433a3008600c9aca796ad5485faa492a0935daf9ba4a39ebca9e2f3b60a4e1e1ac3e3706ca3eb845b8c89a1038ab261b3b9f2de10f4a1605b
   languageName: node
   linkType: hard
 
@@ -1688,6 +1743,18 @@ __metadata:
     object-assign: ^4.1.1
     util: 0.10.3
   checksum: 2/9bd01a7a574d99656d3998b95e904c35fe41c9e18b8193a4b1bb3b1df2772f4fb03bf75897093daca9d883ed888d9be5da2a9a952da6f1da9101f4147a2f00c1
+  languageName: node
+  linkType: hard
+
+"assets-webpack-plugin@npm:^3.9.10":
+  version: 3.9.10
+  resolution: "assets-webpack-plugin@npm:3.9.10"
+  dependencies:
+    camelcase: ^5.0.0
+    escape-string-regexp: ^1.0.3
+    lodash: ^4.17.10
+    mkdirp: ^0.5.1
+  checksum: 2/baff7413af4b0c6bcd3d65d6d7acdbd2fea512a4bd033ba70debae71064792c7258b0b5900952991791835a81c90c86877f80bcc6335d306460411cbc17c42f1
   languageName: node
   linkType: hard
 
@@ -2238,6 +2305,18 @@ __metadata:
     isobject: ^3.0.0
     static-extend: ^0.1.1
   checksum: 2/6411679ad4d2bde81b62ad721d4771d108d5d8ef32805d10ebfa6f1d6bdcfd5cb6dfea5232b85221f079e42691c36cf2db05a5e76b87ba8f6deb37a2c23a4a41
+  languageName: node
+  linkType: hard
+
+"clean-webpack-plugin@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "clean-webpack-plugin@npm:3.0.0"
+  dependencies:
+    "@types/webpack": ^4.4.31
+    del: ^4.1.1
+  peerDependencies:
+    webpack: "*"
+  checksum: 2/fc0fbd1c8e163b784209d51a5df4336ad359737f8b324697d33d1c484ee5c7efee9a1f9f18786860216019764f4a6e02e329e0410e3ab4d52e5e5b52a1038dfe
   languageName: node
   linkType: hard
 
@@ -3107,7 +3186,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"escape-string-regexp@npm:^1.0.5":
+"escape-string-regexp@npm:^1.0.3, escape-string-regexp@npm:^1.0.5":
   version: 1.0.5
   resolution: "escape-string-regexp@npm:1.0.5"
   checksum: 2/f9484b8b4c8827d816e0fd905c25ed4b561376a9c220e1430403ea84619bf680c76a883a48cff8b8e091daf55d6a497e37479f9787b9f15f3c421b6054289744
@@ -5147,7 +5226,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.11, lodash@npm:^4.17.13, lodash@npm:^4.17.14, lodash@npm:^4.17.15":
+"lodash@npm:^4.17.10, lodash@npm:^4.17.11, lodash@npm:^4.17.13, lodash@npm:^4.17.14, lodash@npm:^4.17.15":
   version: 4.17.15
   resolution: "lodash@npm:4.17.15"
   checksum: 2/aec3fbb7570aa67bda500b8299b1b1821d60646bede87f76a74dfcc7666ab3445267d734ec71424d70809d52ad67a1356fab5ab694a3faa1908d68e9d48f00f5
@@ -7219,7 +7298,9 @@ fsevents@^1.2.7:
     "@babel/core": ^7.8.4
     "@babel/preset-env": ^7.8.4
     "@babel/preset-react": ^7.8.3
+    assets-webpack-plugin: ^3.9.10
     babel-loader: ^8.0.6
+    clean-webpack-plugin: ^3.0.0
     css-loader: ^3.4.2
     downshift: ^5.0.3
     eslint: ^6.8.0
