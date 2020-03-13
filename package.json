@@ -90,6 +90,7 @@
     "yarn": "^2.0.0-rc.27"
   },
   "dependencies": {
+    "antd": "^4.0.2",
     "downshift": "^5.0.3",
     "fuse.js": "^3.4.6",
     "lodash.debounce": "^4.0.8",
