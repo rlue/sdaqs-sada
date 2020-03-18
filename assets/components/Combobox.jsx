@@ -18,14 +18,20 @@ function useFuse(values) {
   )
 }
 
-function useInputDebounce(fuse, setSearchSuggestions) {
+function useInputDebounce(fuse, setSearchSuggestions, setStatus) {
   return useRef(
     debounce(({ inputValue, isOpen }) => {
-      const results = isOpen ? fuse.current.search(inputValue) : []
-      setSearchSuggestions(results)
+      const results = fuse.current.search(inputValue)
 
-      if (isOpen && inputValue !== '' && !results.length) {
-        console.log('nothing to see here!') // FIXME
+      if (!isOpen || inputValue === '') {
+        setSearchSuggestions([])
+        setStatus('ready')
+      } else if (!results.length) {
+        setSearchSuggestions([])
+        setStatus('no results')
+      } else {
+        setSearchSuggestions(results)
+        setStatus('success')
       }
     }, 300),
   )
@@ -40,34 +46,55 @@ export default function Combobox({
   setSearchSuggestions,
   setFocusedSuggestion,
 }) {
-  const fuse = useFuse(values)
-  const inputDebouncer = useInputDebounce(fuse, setSearchSuggestions)
+  const [status, setStatus] = useState('ready')
   const [inputValue, setInputValue] = useState(selection ? selection.name : '')
+  const fuse = useFuse(values)
+  const inputDebouncer = useInputDebounce(fuse, setSearchSuggestions, setStatus)
   const ds = useCombobox({
     items: searchSuggestions,
     itemToString: (item) => (item ? item.name : ''),
     inputValue,
-    onInputValueChange: inputDebouncer.current,
-    onIsOpenChange: ({ isOpen, selectedItem }) => {
-      if (!isOpen) {
-        inputDebouncer.current.cancel()
-        setSearchSuggestions([])
+    onInputValueChange: ({ inputValue, isOpen }) => {
+      inputDebouncer.current({ inputValue, isOpen })
 
-        if (selectedItem) {
-          setInputValue(selectedItem.name)
-          dispatchDeployments({
-            type: 'modify',
-            index,
-            key: 'base',
-            value: selectedItem,
-          })
+      if (isOpen) {
+        // The debouncer should also be flushed when !isOpen
+        // (i.e., hitting <Esc> to cancel input),
+        // but that's currently handled by onIsOpenChange(),
+        // which also covers other blur events.
+        if (inputValue === '') {
+          inputDebouncer.current.flush()
         } else {
-          setInputValue(selection ? selection.name : '')
+          setStatus('debouncing')
         }
+      }
+    },
+    onIsOpenChange: ({ isOpen, selectedItem }) => {
+      // This flushes the debouncer for both blur event triggers:
+      //   * hitting <Tab> or <Esc> to cancel input, and
+      //   * clicking outside the form element.
+      //
+      // It doesn't cover when the input field is reset but stays in focus;
+      // that's up to onInputValueChange().
+      if (!isOpen) {
+        inputDebouncer.current({ inputValue: '', isOpen })
+        inputDebouncer.current.flush()
+
+        setInputValue((selectedItem || selection || { name: '' }).name)
       }
     },
     onHighlightedIndexChange: ({ highlightedIndex }) => {
       setFocusedSuggestion(highlightedIndex)
+    },
+    onSelectedItemChange: ({ selectedItem }) => {
+      if (selectedItem) {
+        dispatchDeployments({
+          type: 'modify',
+          index,
+          key: 'base',
+          value: selectedItem,
+        })
+      }
     },
   })
 
@@ -97,8 +124,10 @@ export default function Combobox({
         </button>
       )}
       <ul {...ds.getMenuProps()}>
-        {ds.isOpen &&
-          searchSuggestions.map((item, i) => (
+        {status === 'debouncing' && <li>Searching...</li>}
+        {status === 'no results' && <li>No results.</li>}
+        {status === 'success'
+          && searchSuggestions.map((item, i) => (
             <li
               {...ds.getItemProps({ item, i })}
               key={`${item.name}${item.latitude}`}
