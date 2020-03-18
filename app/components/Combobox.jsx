@@ -1,28 +1,26 @@
 import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useCombobox } from 'downshift'
-import Fuse from 'fuse.js'
 import debounce from 'lodash.debounce'
 import SearchResults from './SearchResults'
 
-function useFuse(values) {
-  return useRef(
-    new Fuse(values, {
-      shouldSort: true,
-      threshold: 0.25,
-      location: 0,
-      distance: 100,
-      maxPatternLength: 32,
-      minMatchCharLength: 1,
-      keys: ['name'],
-    }),
-  )
-}
+const DEBOUNCE_WAIT = 300
 
-function useInputDebounce(fuse, setSearchResults, setStatus) {
-  return useRef(
+export default function Combobox({
+  fuse,
+  index,
+  selection,
+  dispatchDeployments,
+  searchResults,
+  setSearchResults,
+  setFocusedResult,
+}) {
+  const [status, setStatus] = useState('ready')
+  const [controlledInput, setControlledInput] = useState(selection.name || '')
+
+  const inputDebouncer = useRef(
     debounce(({ inputValue, isOpen }) => {
-      const results = fuse.current.search(inputValue)
+      const results = fuse.search(inputValue)
 
       if (!isOpen || inputValue === '') {
         setSearchResults([])
@@ -34,27 +32,13 @@ function useInputDebounce(fuse, setSearchResults, setStatus) {
         setSearchResults(results)
         setStatus('success')
       }
-    }, 300),
+    }, DEBOUNCE_WAIT),
   )
-}
 
-export default function Combobox({
-  values,
-  index,
-  selection,
-  dispatchDeployments,
-  searchResults,
-  setSearchResults,
-  setFocusedResult,
-}) {
-  const [status, setStatus] = useState('ready')
-  const [inputValue, setInputValue] = useState(selection.name || '')
-  const fuse = useFuse(values)
-  const inputDebouncer = useInputDebounce(fuse, setSearchResults, setStatus)
   const ds = useCombobox({
     items: searchResults,
     itemToString: (item) => (item ? item.name : ''),
-    inputValue,
+    inputValue: controlledInput,
     onInputValueChange: ({ inputValue, isOpen }) => {
       inputDebouncer.current({ inputValue, isOpen })
 
@@ -81,7 +65,7 @@ export default function Combobox({
         inputDebouncer.current({ inputValue: '', isOpen })
         inputDebouncer.current.flush()
 
-        setInputValue((selectedItem || selection).name || '')
+        setControlledInput((selectedItem || selection).name || '')
       }
     },
     onHighlightedIndexChange: ({ highlightedIndex }) => {
@@ -109,7 +93,7 @@ export default function Combobox({
         <div {...ds.getComboboxProps()}>
           <input
             {...ds.getInputProps({
-              onChange: (event) => setInputValue(event.target.value),
+              onChange: (event) => setControlledInput(event.target.value),
             })}
             id="military-base"
             placeholder="Search bases"
@@ -126,11 +110,11 @@ export default function Combobox({
       )}
       <ul {...ds.getMenuProps()}>
         <SearchResults status={status}>
-          {searchResults.map((item, i) => (
+          {searchResults.map((item, index) => (
             <li
-              {...ds.getItemProps({ item, i })}
+              {...ds.getItemProps({ item, index })}
               key={`${item.id}`}
-              className={ds.highlightedIndex === i ? 'highlight' : null}
+              className={ds.highlightedIndex === index ? 'highlight' : null}
             >
               {item.name}
             </li>
@@ -142,25 +126,22 @@ export default function Combobox({
 }
 
 Combobox.propTypes = {
-  values: PropTypes.arrayOf(
-    PropTypes.shape({
-      latitude: PropTypes.string,
-      longitude: PropTypes.string,
-    }),
-  ).isRequired,
+  fuse: PropTypes.shape({
+    search: PropTypes.func.isRequired,
+  }).isRequired,
   index: PropTypes.number.isRequired,
   selection: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
-    latitude: PropTypes.string,
-    longitude: PropTypes.string,
   }).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
   searchResults: PropTypes.arrayOf(
     PropTypes.shape({
-      latitude: PropTypes.string,
-      longitude: PropTypes.string,
-    }),
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      latitude: PropTypes.string.isRequired,
+      longitude: PropTypes.string.isRequired,
+    }).isRequired,
   ).isRequired,
   setSearchResults: PropTypes.func.isRequired,
   setFocusedResult: PropTypes.func.isRequired,

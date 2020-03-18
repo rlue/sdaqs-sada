@@ -19,6 +19,8 @@ export default function App() {
           if (state.every(({ base }) => base))
             state.push({ id: uid(), base: {}, period: null })
           return state.slice(0)
+        default:
+          return state.slice(0)
       }
     },
     [{ id: uid(), base: {}, period: null }],

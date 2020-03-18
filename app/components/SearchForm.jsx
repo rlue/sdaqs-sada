@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
+import Fuse from 'fuse.js'
 import Combobox from './Combobox'
 import sites from '../../assets/data/sites.json'
 
@@ -10,17 +11,29 @@ export default function SearchForm({
   setSearchResults,
   setFocusedResult,
 }) {
+  const fuse = useRef(
+    new Fuse(sites, {
+      shouldSort: true,
+      threshold: 0.25,
+      location: 0,
+      distance: 100,
+      maxPatternLength: 32,
+      minMatchCharLength: 1,
+      keys: ['name'],
+    }),
+  )
+
   return (
     <div className="item__bifold-left">
       <h1>Look up exposure history</h1>
       <div>
-        {deployments.map((deployment, i) => (
+        {deployments.map((deployment, index) => (
           <div key={deployment.id}>
             <Combobox
-              values={sites}
-              index={i}
               selection={deployment.base}
+              fuse={fuse.current}
               {...{
+                index,
                 dispatchDeployments,
                 searchResults,
                 setSearchResults,
@@ -39,9 +52,11 @@ SearchForm.propTypes = {
   dispatchDeployments: PropTypes.func.isRequired,
   searchResults: PropTypes.arrayOf(
     PropTypes.shape({
-      latitude: PropTypes.string,
-      longitude: PropTypes.string,
-    }),
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      latitude: PropTypes.string.isRequired,
+      longitude: PropTypes.string.isRequired,
+    }).isRequired,
   ).isRequired,
   setSearchResults: PropTypes.func.isRequired,
   setFocusedResult: PropTypes.func.isRequired,
