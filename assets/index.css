@@ -28,3 +28,7 @@ body {
   grid-column: 2 / span 1;
   grid-row: 1 / span 1;
 }
+
+li.highlight {
+  background-color: #bde4ff;
+}

@@ -130,9 +130,7 @@ export default function Combobox({
             <li
               {...ds.getItemProps({ item, i })}
               key={`${item.id}`}
-              style={
-                ds.highlightedIndex === i ? { backgroundColor: '#bde4ff' } : {}
-              }
+              className={ds.highlightedIndex === i ? 'highlight' : null}
             >
               {item.name}
             </li>
