@@ -122,7 +122,7 @@ function usePopup(map, searchResults, focusedResult, popup) {
 function useSelectionMarkers(map, deployments, selectionMarkers) {
   useEffect(() => {
     selectionMarkers.current = deployments
-      .filter(({ base }) => base)
+      .filter(({ base }) => base.id)
       .map(({ base }) =>
         new mapboxgl.Marker({ color: '#ce2c69' })
           .setLngLat([base.longitude, base.latitude])

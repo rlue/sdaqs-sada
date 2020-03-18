@@ -47,7 +47,7 @@ export default function Combobox({
   setFocusedResult,
 }) {
   const [status, setStatus] = useState('ready')
-  const [inputValue, setInputValue] = useState(selection ? selection.name : '')
+  const [inputValue, setInputValue] = useState(selection.name || '')
   const fuse = useFuse(values)
   const inputDebouncer = useInputDebounce(fuse, setSearchResults, setStatus)
   const ds = useCombobox({
@@ -80,7 +80,7 @@ export default function Combobox({
         inputDebouncer.current({ inputValue: '', isOpen })
         inputDebouncer.current.flush()
 
-        setInputValue((selectedItem || selection || { name: '' }).name)
+        setInputValue((selectedItem || selection).name || '')
       }
     },
     onHighlightedIndexChange: ({ highlightedIndex }) => {
@@ -115,7 +115,7 @@ export default function Combobox({
           />
         </div>
       </label>
-      {selection && (
+      {selection.id && (
         <button
           type="button"
           onClick={() => dispatchDeployments({ type: 'remove', index })}
@@ -156,7 +156,7 @@ Combobox.propTypes = {
     name: PropTypes.string,
     latitude: PropTypes.string,
     longitude: PropTypes.string,
-  }),
+  }).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
   searchResults: PropTypes.arrayOf(
     PropTypes.shape({

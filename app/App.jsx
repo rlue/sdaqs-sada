@@ -17,11 +17,11 @@ export default function App() {
         case 'modify':
           state[action.index][action.key] = action.value
           if (state.every(({ base }) => base))
-            state.push({ id: uid(), base: null, period: null })
+            state.push({ id: uid(), base: {}, period: null })
           return state.slice(0)
       }
     },
-    [{ id: uid(), base: null, period: null }],
+    [{ id: uid(), base: {}, period: null }],
   )
 
   return (
