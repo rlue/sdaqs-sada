@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Combobox from './Combobox'
-import sites from '../data/sites.json'
+import sites from '../../assets/data/sites.json'
 
 export default function SearchForm({
   deployments,
