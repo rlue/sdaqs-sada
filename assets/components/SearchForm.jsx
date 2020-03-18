@@ -6,9 +6,9 @@ import sites from '../data/sites.json'
 export default function SearchForm({
   deployments,
   dispatchDeployments,
-  searchSuggestions,
-  setSearchSuggestions,
-  setFocusedSuggestion,
+  searchResults,
+  setSearchResults,
+  setFocusedResult,
 }) {
   return (
     <div className="item__bifold-left">
@@ -22,9 +22,9 @@ export default function SearchForm({
               selection={deployment.base}
               {...{
                 dispatchDeployments,
-                searchSuggestions,
-                setSearchSuggestions,
-                setFocusedSuggestion,
+                searchResults,
+                setSearchResults,
+                setFocusedResult,
               }}
             />
           </div>
@@ -37,12 +37,12 @@ export default function SearchForm({
 SearchForm.propTypes = {
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
-  searchSuggestions: PropTypes.arrayOf(
+  searchResults: PropTypes.arrayOf(
     PropTypes.shape({
       latitude: PropTypes.string,
       longitude: PropTypes.string,
     }),
   ).isRequired,
-  setSearchSuggestions: PropTypes.func.isRequired,
-  setFocusedSuggestion: PropTypes.func.isRequired,
+  setSearchResults: PropTypes.func.isRequired,
+  setFocusedResult: PropTypes.func.isRequired,
 }

@@ -7,8 +7,8 @@ import SearchForm from './components/SearchForm'
 import Map from './components/Map'
 
 function App() {
-  const [searchSuggestions, setSearchSuggestions] = React.useState([])
-  const [focusedSuggestion, setFocusedSuggestion] = React.useState(-1)
+  const [searchResults, setSearchResults] = React.useState([])
+  const [focusedResult, setFocusedResult] = React.useState(-1)
   const [deployments, dispatchDeployments] = React.useReducer(
     (state, action) => {
       switch (action.type) {
@@ -31,12 +31,12 @@ function App() {
         {...{
           deployments,
           dispatchDeployments,
-          searchSuggestions,
-          setSearchSuggestions,
-          setFocusedSuggestion,
+          searchResults,
+          setSearchResults,
+          setFocusedResult,
         }}
       />
-      <Map {...{ searchSuggestions, focusedSuggestion, deployments }} />
+      <Map {...{ searchResults, focusedResult, deployments }} />
     </div>
   )
 }

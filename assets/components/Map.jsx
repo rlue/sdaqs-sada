@@ -6,32 +6,32 @@ mapboxgl.accessToken =
   'pk.eyJ1Ijoicmx1ZSIsImEiOiJjazZwOHIwdXcwNzg1M2xuejVkbGNkaGEwIn0.S0KbmonSFTp9xI5J2ZGANQ'
 
 export default function Map({
-  searchSuggestions,
-  focusedSuggestion,
+  searchResults,
+  focusedResult,
   deployments,
 }) {
   const mapContainer = useRef()
   const map = useRef()
-  const suggestionMarkers = useRef([])
+  const resultMarkers = useRef([])
   const popup = useRef()
   const selectionMarkers = useRef([])
 
   useMap(map, mapContainer)
-  useSuggestionMarkers(map, searchSuggestions, suggestionMarkers)
-  usePopup(map, searchSuggestions, focusedSuggestion, popup)
+  useResultMarkers(map, searchResults, resultMarkers)
+  usePopup(map, searchResults, focusedResult, popup)
   useSelectionMarkers(map, deployments, selectionMarkers)
 
   return <div className="item__bifold-right" ref={mapContainer} />
 }
 
 Map.propTypes = {
-  searchSuggestions: PropTypes.arrayOf(
+  searchResults: PropTypes.arrayOf(
     PropTypes.shape({
       latitude: PropTypes.string,
       longitude: PropTypes.string,
     }),
   ).isRequired,
-  focusedSuggestion: PropTypes.number,
+  focusedResult: PropTypes.number,
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
@@ -53,18 +53,18 @@ function useMap(map, mapContainer) {
   }, [])
 }
 
-function useSuggestionMarkers(map, searchSuggestions, suggestionMarkers) {
+function useResultMarkers(map, searchResults, resultMarkers) {
   useEffect(() => {
-    suggestionMarkers.current = searchSuggestions.map(
+    resultMarkers.current = searchResults.map(
       ({ longitude, latitude }) =>
         new mapboxgl.Marker()
           .setLngLat([longitude, latitude])
           .addTo(map.current),
     )
 
-    if (searchSuggestions.length) {
-      const longitudes = searchSuggestions.map(({ longitude }) => longitude)
-      const latitudes = searchSuggestions.map(({ latitude }) => latitude)
+    if (searchResults.length) {
+      const longitudes = searchResults.map(({ longitude }) => longitude)
+      const latitudes = searchResults.map(({ latitude }) => latitude)
       const swBound = [Math.min(...longitudes), Math.min(...latitudes)]
       const neBound = [Math.max(...longitudes), Math.max(...latitudes)]
 
@@ -78,15 +78,15 @@ function useSuggestionMarkers(map, searchSuggestions, suggestionMarkers) {
     }
 
     return () => {
-      suggestionMarkers.current.forEach((marker) => marker.remove())
+      resultMarkers.current.forEach((marker) => marker.remove())
     }
-  }, [searchSuggestions])
+  }, [searchResults])
 }
 
-function usePopup(map, searchSuggestions, focusedSuggestion, popup) {
+function usePopup(map, searchResults, focusedResult, popup) {
   useEffect(() => {
-    if (searchSuggestions[focusedSuggestion]) {
-      const match = searchSuggestions[focusedSuggestion]
+    if (searchResults[focusedResult]) {
+      const match = searchResults[focusedResult]
 
       const markerHeight = 50,
         markerRadius = 10,
@@ -116,7 +116,7 @@ function usePopup(map, searchSuggestions, focusedSuggestion, popup) {
     return () => {
       popup.current && popup.current.remove()
     }
-  }, [searchSuggestions, focusedSuggestion])
+  }, [searchResults, focusedResult])
 }
 
 function useSelectionMarkers(map, deployments, selectionMarkers) {

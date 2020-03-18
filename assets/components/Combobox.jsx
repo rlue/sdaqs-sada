@@ -18,19 +18,19 @@ function useFuse(values) {
   )
 }
 
-function useInputDebounce(fuse, setSearchSuggestions, setStatus) {
+function useInputDebounce(fuse, setSearchResults, setStatus) {
   return useRef(
     debounce(({ inputValue, isOpen }) => {
       const results = fuse.current.search(inputValue)
 
       if (!isOpen || inputValue === '') {
-        setSearchSuggestions([])
+        setSearchResults([])
         setStatus('ready')
       } else if (!results.length) {
-        setSearchSuggestions([])
+        setSearchResults([])
         setStatus('no results')
       } else {
-        setSearchSuggestions(results)
+        setSearchResults(results)
         setStatus('success')
       }
     }, 300),
@@ -42,16 +42,16 @@ export default function Combobox({
   index,
   selection,
   dispatchDeployments,
-  searchSuggestions,
-  setSearchSuggestions,
-  setFocusedSuggestion,
+  searchResults,
+  setSearchResults,
+  setFocusedResult,
 }) {
   const [status, setStatus] = useState('ready')
   const [inputValue, setInputValue] = useState(selection ? selection.name : '')
   const fuse = useFuse(values)
-  const inputDebouncer = useInputDebounce(fuse, setSearchSuggestions, setStatus)
+  const inputDebouncer = useInputDebounce(fuse, setSearchResults, setStatus)
   const ds = useCombobox({
-    items: searchSuggestions,
+    items: searchResults,
     itemToString: (item) => (item ? item.name : ''),
     inputValue,
     onInputValueChange: ({ inputValue, isOpen }) => {
@@ -84,7 +84,7 @@ export default function Combobox({
       }
     },
     onHighlightedIndexChange: ({ highlightedIndex }) => {
-      setFocusedSuggestion(highlightedIndex)
+      setFocusedResult(highlightedIndex)
     },
     onSelectedItemChange: ({ selectedItem }) => {
       if (selectedItem) {
@@ -127,7 +127,7 @@ export default function Combobox({
         {status === 'debouncing' && <li>Searching...</li>}
         {status === 'no results' && <li>No results.</li>}
         {status === 'success'
-          && searchSuggestions.map((item, i) => (
+          && searchResults.map((item, i) => (
             <li
               {...ds.getItemProps({ item, i })}
               key={`${item.name}${item.latitude}`}
@@ -157,12 +157,12 @@ Combobox.propTypes = {
     longitude: PropTypes.string,
   }),
   dispatchDeployments: PropTypes.func.isRequired,
-  searchSuggestions: PropTypes.arrayOf(
+  searchResults: PropTypes.arrayOf(
     PropTypes.shape({
       latitude: PropTypes.string,
       longitude: PropTypes.string,
     }),
   ).isRequired,
-  setSearchSuggestions: PropTypes.func.isRequired,
-  setFocusedSuggestion: PropTypes.func.isRequired,
+  setSearchResults: PropTypes.func.isRequired,
+  setFocusedResult: PropTypes.func.isRequired,
 }
