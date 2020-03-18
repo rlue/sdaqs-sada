@@ -130,7 +130,7 @@ export default function Combobox({
           && searchResults.map((item, i) => (
             <li
               {...ds.getItemProps({ item, i })}
-              key={`${item.name}${item.latitude}`}
+              key={`${item.id}`}
               style={
                 ds.highlightedIndex === i ? { backgroundColor: '#bde4ff' } : {}
               }
@@ -152,6 +152,7 @@ Combobox.propTypes = {
   ).isRequired,
   index: PropTypes.number.isRequired,
   selection: PropTypes.shape({
+    id: PropTypes.number,
     name: PropTypes.string,
     latitude: PropTypes.string,
     longitude: PropTypes.string,
