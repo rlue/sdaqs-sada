@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useCombobox } from 'downshift'
 import Fuse from 'fuse.js'
 import debounce from 'lodash.debounce'
+import SearchResults from './SearchResults'
 
 function useFuse(values) {
   return useRef(
@@ -124,10 +125,8 @@ export default function Combobox({
         </button>
       )}
       <ul {...ds.getMenuProps()}>
-        {status === 'debouncing' && <li>Searching...</li>}
-        {status === 'no results' && <li>No results.</li>}
-        {status === 'success'
-          && searchResults.map((item, i) => (
+        <SearchResults status={status}>
+          {searchResults.map((item, i) => (
             <li
               {...ds.getItemProps({ item, i })}
               key={`${item.id}`}
@@ -138,6 +137,7 @@ export default function Combobox({
               {item.name}
             </li>
           ))}
+        </SearchResults>
       </ul>
     </>
   )
