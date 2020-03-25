@@ -22,7 +22,7 @@ export default function Combobox({
     debounce(({ inputValue, isOpen }) => {
       const results = fuse.search(inputValue)
 
-      if (!isOpen || inputValue === '') {
+      if (!isOpen || inputValue.match(/^\s*$/)) {
         setSearchResults([])
         setStatus('ready')
       } else if (!results.length) {
@@ -42,7 +42,7 @@ export default function Combobox({
     onInputValueChange: ({ inputValue, isOpen }) => {
       inputDebouncer.current({ inputValue, isOpen })
 
-      if (isOpen && inputValue !== '') {
+      if (isOpen && inputValue.match(/\S/)) {
         setStatus('debouncing')
       } else {
         inputDebouncer.current.flush()
