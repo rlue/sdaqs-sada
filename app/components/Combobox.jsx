@@ -42,29 +42,16 @@ export default function Combobox({
     onInputValueChange: ({ inputValue, isOpen }) => {
       inputDebouncer.current({ inputValue, isOpen })
 
-      if (isOpen) {
-        // The debouncer should also be flushed when !isOpen
-        // (i.e., hitting <Esc> to cancel input),
-        // but that's currently handled by onIsOpenChange(),
-        // which also covers other blur events.
-        if (inputValue === '') {
-          inputDebouncer.current.flush()
-        } else {
-          setStatus('debouncing')
-        }
+      if (isOpen && inputValue !== '') {
+        setStatus('debouncing')
+      } else {
+        inputDebouncer.current.flush()
       }
     },
     onIsOpenChange: ({ isOpen, selectedItem }) => {
-      // This flushes the debouncer for both blur event triggers:
-      //   * hitting <Tab> or <Esc> to cancel input, and
-      //   * clicking outside the form element.
-      //
-      // It doesn't cover when the input field is reset but stays in focus;
-      // that's up to onInputValueChange().
+      // closing the combobox should always flush the inputDebouncer;
+      // setControlledInput does this implicitly via onInputValueChange.
       if (!isOpen) {
-        inputDebouncer.current({ inputValue: '', isOpen })
-        inputDebouncer.current.flush()
-
         setControlledInput((selectedItem || selection).name || '')
       }
     },

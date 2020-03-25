@@ -91,7 +91,7 @@ export default function Map({ searchResults, focusedResult, deployments }) {
     return () => {
       if (popup.current) popup.current.remove()
     }
-  }, [searchResults, focusedResult])
+  }, [focusedResult])
 
   // manage selected-deployment markers
   useEffect(() => {
