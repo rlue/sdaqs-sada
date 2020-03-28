@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import mapboxgl from 'mapbox-gl'
 
@@ -8,6 +8,10 @@ mapboxgl.accessToken =
 const markerHeight = 50
 const markerRadius = 10
 const linearOffset = 25
+const DEFAULT_MAP_BOUNDS = [
+  [38.9269981, 11.1166666],
+  [78.35, 43.061306],
+]
 const POPUP_OFFSETS = {
   top: [0, 0],
   'top-left': [0, 0],
@@ -28,6 +32,7 @@ const POPUP_OFFSETS = {
 export default function Map({ searchResults, focusedResult, deployments }) {
   const mapContainer = useRef()
   const map = useRef()
+  const [mapFit, setMapFit] = useState(DEFAULT_MAP_BOUNDS)
   const resultMarkers = useRef([])
   const popup = useRef()
   const selectionMarkers = useRef([])
@@ -40,14 +45,32 @@ export default function Map({ searchResults, focusedResult, deployments }) {
     })
 
     map.current.addControl(new mapboxgl.NavigationControl())
-    map.current.fitBounds([
-      [38.9269981, 11.1166666],
-      [78.35, 43.061306],
-      { padding: 120 },
-    ])
 
     return () => map.current.remove()
   }, [])
+
+  // refit map
+  useEffect(() => {
+    // TODO: Do I need better validation at each of these branches?
+    switch (true) {
+      case mapFit instanceof Object && mapFit.longitude && mapFit.latitude:
+        map.current.easeTo({
+          center: [mapFit.longitude, mapFit.latitude],
+          padding: 120,
+          zoom: 9,
+        })
+        break
+      case mapFit instanceof Array && /^[\d.]+ [\d.]+$/.test(mapFit.join(' ')):
+        map.current.easeTo({ center: mapFit, padding: 120, zoom: 9 })
+        break
+      case mapFit instanceof Array && /^[\d.,]+ [\d.,]+$/.test(mapFit.join(' ')):
+        map.current.fitBounds(mapFit, { padding: 120, maxZoom: 9 })
+        break
+      default:
+        map.current.fitBounds(DEFAULT_MAP_BOUNDS, { padding: 120, maxZoom: 9 })
+        break
+    }
+  }, [mapFit])
 
   // manage result markers
   useEffect(() => {
@@ -63,13 +86,9 @@ export default function Map({ searchResults, focusedResult, deployments }) {
       const swBound = [Math.min(...longitudes), Math.min(...latitudes)]
       const neBound = [Math.max(...longitudes), Math.max(...latitudes)]
 
-      map.current.fitBounds([swBound, neBound], { padding: 120, maxZoom: 9 })
-    } else {
-      map.current.fitBounds([
-        [38.9269981, 11.1166666],
-        [78.35, 43.061306],
-        { padding: 120 },
-      ])
+      setMapFit([swBound, neBound])
+    } else if (!prompt.for && mapFit !== DEFAULT_MAP_BOUNDS) {
+      setMapFit(DEFAULT_MAP_BOUNDS)
     }
 
     return () => {
