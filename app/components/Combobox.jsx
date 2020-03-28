@@ -82,6 +82,11 @@ export default function Combobox({
     },
   })
 
+  function removeHandler() {
+    setPrompt({})
+    dispatchDeployments({ type: 'remove', id: deployment.id })
+  }
+
   return (
     <>
       <label
@@ -93,20 +98,28 @@ export default function Combobox({
           <input
             {...ds.getInputProps({
               onChange: (event) => setControlledInput(event.target.value),
+              // FIXME: popup lingers on page when user clicks elsewhere on the SearchForm
+              onFocus: () => {
+                if (deployment.base.id) {
+                  setPrompt({ for: 'period', id: deployment.id })
+                } else {
+                  setPrompt({})
+                }
+              },
             })}
             id="military-base"
             placeholder="Search bases"
           />
         </div>
       </label>
-      {deployment.base.id && (
-        <button
-          type="button"
-          onClick={() => dispatchDeployments({ type: 'remove', id: deployment.id })}
-        >
-          x
-        </button>
-      )}
+      <span className="combobox__period">
+        {deployment.base.id
+          && (deployment.period
+            ? deployment.period.map((date) => date.format('MMM YYYY')).join('–')
+            : 'No dates selected')}
+      </span>
+      {deployment.base.id
+        && <button type="button" onClick={removeHandler}>x</button>}
       <ul {...ds.getMenuProps()}>
         <SearchResults status={status}>
           {searchResults.map((item, index) => (
@@ -134,6 +147,7 @@ Combobox.propTypes = {
       id: PropTypes.number,
       name: PropTypes.string,
     }).isRequired,
+    period: PropTypes.array,
   }).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
   searchResults: PropTypes.arrayOf(

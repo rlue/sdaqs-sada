@@ -50,7 +50,9 @@ export default function App() {
           searchResults,
           focusedResult,
           deployments,
+          dispatchDeployments,
           prompt,
+          setPrompt,
         }}
       />
     </div>

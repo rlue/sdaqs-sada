@@ -32,3 +32,8 @@ body {
 li.highlight {
   background-color: #bde4ff;
 }
+
+span.combobox__period {
+  display: inline-block;
+  width: 10rem;
+}

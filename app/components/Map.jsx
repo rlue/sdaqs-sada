@@ -16,7 +16,9 @@ export default function Map({
   searchResults,
   focusedResult,
   deployments,
+  dispatchDeployments,
   prompt,
+  setPrompt,
 }) {
   const mapContainer = useRef()
   const map = useRef()
@@ -74,7 +76,7 @@ export default function Map({
     if (searchResults[focusedResult]) {
       const base = searchResults[focusedResult]
 
-      popup.current = addPopup(map.current, <ResultPopup {...{ base }} />, base)
+      popup.current = addPopup(map.current, base, <ResultPopup {...{ base }} />)
     }
 
     return () => {
@@ -100,19 +102,34 @@ export default function Map({
   // manage date picker
   useEffect(() => {
     if (prompt.for === 'period') {
-      const target = deployments.find((deployment) => deployment.id === prompt.id)
+      const deployment = deployments.find((d) => d.id === prompt.id)
+      const target = new mapboxgl.LngLat(
+        deployment.base.lng,
+        deployment.base.lat,
+      )
 
-      setMapFit(new mapboxgl.LngLat(target.base.lng, target.base.lat))
+      setMapFit(target)
 
       popup.current = addPopup(
         map.current,
-        <DatePickerPopup base={target.base} />,
-        target.base
+        deployment.base,
+        <DatePickerPopup
+          {...{
+            deployment,
+            deployments,
+            dispatchDeployments,
+            setPrompt,
+          }}
+        />,
+        { closeOnClick: false },
       )
     }
 
     return () => {
-      if (popup.current) popup.current.remove()
+      if (popup.current) {
+        popup.current.remove()
+        setMapFit(DEFAULT_MAP_BOUNDS)
+      }
     }
   }, [prompt])
 
@@ -130,8 +147,10 @@ Map.propTypes = {
   ).isRequired,
   focusedResult: PropTypes.number,
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
+  dispatchDeployments: PropTypes.func.isRequired,
   prompt: PropTypes.shape({
     for: PropTypes.string,
     id: PropTypes.string,
   }).isRequired,
+  setPrompt: PropTypes.func.isRequired,
 }
