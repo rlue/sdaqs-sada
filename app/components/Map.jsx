@@ -52,17 +52,7 @@ export default function Map({ searchResults, focusedResult, deployments }) {
   useEffect(() => {
     // TODO: Do I need better validation at each of these branches?
     switch (true) {
-      case mapFit instanceof Object && mapFit.longitude && mapFit.latitude:
-        map.current.easeTo({
-          center: [mapFit.longitude, mapFit.latitude],
-          padding: 120,
-          zoom: 9,
-        })
-        break
-      case mapFit instanceof Array && /^[\d.]+ [\d.]+$/.test(mapFit.join(' ')):
-        map.current.easeTo({ center: mapFit, padding: 120, zoom: 9 })
-        break
-      case mapFit instanceof Array && /^[\d.,]+ [\d.,]+$/.test(mapFit.join(' ')):
+      case mapFit instanceof mapboxgl.LngLatBounds:
         map.current.fitBounds(mapFit, { padding: 120, maxZoom: 9 })
         break
       default:
@@ -73,11 +63,9 @@ export default function Map({ searchResults, focusedResult, deployments }) {
 
   // manage result markers
   useEffect(() => {
-    resultMarkers.current = searchResults.map(
-      ({ longitude, latitude }) => (
-        new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map.current)
-      ),
-    )
+    resultMarkers.current = searchResults.map((base) => (
+      new mapboxgl.Marker().setLngLat(base).addTo(map.current)
+    ))
 
     if (searchResults.length) {
       setMapFit(collectionBounds(searchResults))
@@ -93,11 +81,11 @@ export default function Map({ searchResults, focusedResult, deployments }) {
   // manage popup for currently-highlighted result
   useEffect(() => {
     if (searchResults[focusedResult]) {
-      const { name, longitude, latitude } = searchResults[focusedResult]
+      const base = searchResults[focusedResult]
 
       popup.current = new mapboxgl.Popup({ offset: POPUP_OFFSETS })
-        .setLngLat([longitude, latitude])
-        .setHTML(`<h1>${name}</h1>`)
+        .setLngLat(base)
+        .setHTML(`<h1>${base.name}</h1>`)
         .addTo(map.current)
     }
 
@@ -112,7 +100,7 @@ export default function Map({ searchResults, focusedResult, deployments }) {
       .filter(({ base }) => base.id)
       .map(({ base }) => (
         new mapboxgl.Marker({ color: '#ce2c69' })
-          .setLngLat([base.longitude, base.latitude])
+          .setLngLat(base)
           .addTo(map.current)
       ))
 
@@ -127,8 +115,8 @@ export default function Map({ searchResults, focusedResult, deployments }) {
 Map.propTypes = {
   searchResults: PropTypes.arrayOf(
     PropTypes.shape({
-      latitude: PropTypes.string,
-      longitude: PropTypes.string,
+      lat: PropTypes.string,
+      lng: PropTypes.string,
     }),
   ).isRequired,
   focusedResult: PropTypes.number,

@@ -15,13 +15,13 @@ Sequel.migration do
     create_table(:military_bases) do
       primary_key :id
       String :name, null: false, index: { unique: true }
-      Float :latitude, null: false
-      Float :longitude, null: false
+      Float :lat, null: false
+      Float :lng, null: false
       Country :country, null: false
       String :base_fob_name
 
-      constraint(:latitude_range, latitude: (-90..90))
-      constraint(:longitude_range, longitude: (-180..180))
+      constraint(:lat_range, lat: (-90..90))
+      constraint(:lng_range, lng: (-180..180))
     end
   end
 

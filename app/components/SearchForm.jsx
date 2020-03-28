@@ -54,8 +54,8 @@ SearchForm.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      latitude: PropTypes.string.isRequired,
-      longitude: PropTypes.string.isRequired,
+      lat: PropTypes.string.isRequired,
+      lng: PropTypes.string.isRequired,
     }).isRequired,
   ).isRequired,
   setSearchResults: PropTypes.func.isRequired,
