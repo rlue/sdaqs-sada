@@ -11,6 +11,7 @@ const markerHeight = 50
 const markerRadius = 10
 const linearOffset = 25
 const DEFAULT_MAP_BOUNDS = collectionBounds(sites)
+const MAP_FIT_CONFIG = { padding: 120, maxZoom: 9 }
 const POPUP_OFFSETS = {
   top: [0, 0],
   'top-left': [0, 0],
@@ -53,10 +54,10 @@ export default function Map({ searchResults, focusedResult, deployments }) {
     // TODO: Do I need better validation at each of these branches?
     switch (true) {
       case mapFit instanceof mapboxgl.LngLatBounds:
-        map.current.fitBounds(mapFit, { padding: 120, maxZoom: 9 })
+        map.current.fitBounds(mapFit, MAP_FIT_CONFIG)
         break
       default:
-        map.current.fitBounds(DEFAULT_MAP_BOUNDS, { padding: 120, maxZoom: 9 })
+        map.current.fitBounds(DEFAULT_MAP_BOUNDS, MAP_FIT_CONFIG)
         break
     }
   }, [mapFit])
