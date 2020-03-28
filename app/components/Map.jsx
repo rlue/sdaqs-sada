@@ -29,7 +29,12 @@ const POPUP_OFFSETS = {
   right: [-markerRadius, (markerHeight - markerRadius) * -1],
 }
 
-export default function Map({ searchResults, focusedResult, deployments }) {
+export default function Map({
+  searchResults,
+  focusedResult,
+  deployments,
+  prompt,
+}) {
   const mapContainer = useRef()
   const map = useRef()
   const [mapFit, setMapFit] = useState(DEFAULT_MAP_BOUNDS)
@@ -110,6 +115,24 @@ export default function Map({ searchResults, focusedResult, deployments }) {
     }
   }, [deployments])
 
+  // manage date picker
+  useEffect(() => {
+    if (prompt.for === 'period') {
+      const target = deployments[prompt.targetIndex]
+
+      setMapFit(target.base)
+
+      popup.current = new mapboxgl.Popup({ offset: POPUP_OFFSETS })
+        .setLngLat(target.base)
+        .setHTML('<h1>WHEN WERE YOU THERE???</h1>')
+        .addTo(map.current)
+    }
+
+    return () => {
+      if (popup.current) popup.current.remove()
+    }
+  }, [prompt])
+
   return <div className="item__bifold-right" ref={mapContainer} />
 }
 
@@ -122,4 +145,8 @@ Map.propTypes = {
   ).isRequired,
   focusedResult: PropTypes.number,
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
+  prompt: PropTypes.shape({
+    for: PropTypes.string,
+    targetIndex: PropTypes.number,
+  }).isRequired,
 }
