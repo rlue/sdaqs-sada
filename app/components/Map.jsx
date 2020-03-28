@@ -139,6 +139,8 @@ export default function Map({
 Map.propTypes = {
   searchResults: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
       lat: PropTypes.string,
       lng: PropTypes.string,
     }),
