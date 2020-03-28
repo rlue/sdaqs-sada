@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import mapboxgl from 'mapbox-gl'
+import { collectionBounds } from '../utils/mapboxglHelper'
+import sites from '../../assets/data/sites.json'
 
 mapboxgl.accessToken =
   'pk.eyJ1Ijoicmx1ZSIsImEiOiJjazZwOHIwdXcwNzg1M2xuejVkbGNkaGEwIn0.S0KbmonSFTp9xI5J2ZGANQ'
@@ -8,10 +10,7 @@ mapboxgl.accessToken =
 const markerHeight = 50
 const markerRadius = 10
 const linearOffset = 25
-const DEFAULT_MAP_BOUNDS = [
-  [38.9269981, 11.1166666],
-  [78.35, 43.061306],
-]
+const DEFAULT_MAP_BOUNDS = collectionBounds(sites)
 const POPUP_OFFSETS = {
   top: [0, 0],
   'top-left': [0, 0],
@@ -81,12 +80,7 @@ export default function Map({ searchResults, focusedResult, deployments }) {
     )
 
     if (searchResults.length) {
-      const longitudes = searchResults.map(({ longitude }) => longitude)
-      const latitudes = searchResults.map(({ latitude }) => latitude)
-      const swBound = [Math.min(...longitudes), Math.min(...latitudes)]
-      const neBound = [Math.max(...longitudes), Math.max(...latitudes)]
-
-      setMapFit([swBound, neBound])
+      setMapFit(collectionBounds(searchResults))
     } else if (!prompt.for && mapFit !== DEFAULT_MAP_BOUNDS) {
       setMapFit(DEFAULT_MAP_BOUNDS)
     }
