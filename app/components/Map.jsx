@@ -1,33 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import mapboxgl from 'mapbox-gl'
-import { collectionBounds } from '../utils/mapboxglHelper'
+import { addPopup, collectionBounds } from '../utils/mapboxglHelper'
 import sites from '../../assets/data/sites.json'
+import DatePickerPopup from './DatePickerPopup'
+import ResultPopup from './ResultPopup'
 
 mapboxgl.accessToken =
   'pk.eyJ1Ijoicmx1ZSIsImEiOiJjazZwOHIwdXcwNzg1M2xuejVkbGNkaGEwIn0.S0KbmonSFTp9xI5J2ZGANQ'
 
-const markerHeight = 50
-const markerRadius = 10
-const linearOffset = 25
 const DEFAULT_MAP_BOUNDS = collectionBounds(sites)
 const MAP_FIT_CONFIG = { padding: 120, maxZoom: 9 }
-const POPUP_OFFSETS = {
-  top: [0, 0],
-  'top-left': [0, 0],
-  'top-right': [0, 0],
-  bottom: [0, -markerHeight],
-  'bottom-left': [
-    linearOffset,
-    (markerHeight - markerRadius + linearOffset) * -1,
-  ],
-  'bottom-right': [
-    -linearOffset,
-    (markerHeight - markerRadius + linearOffset) * -1,
-  ],
-  left: [markerRadius, (markerHeight - markerRadius) * -1],
-  right: [-markerRadius, (markerHeight - markerRadius) * -1],
-}
 
 export default function Map({
   searchResults,
@@ -91,10 +74,7 @@ export default function Map({
     if (searchResults[focusedResult]) {
       const base = searchResults[focusedResult]
 
-      popup.current = new mapboxgl.Popup({ offset: POPUP_OFFSETS })
-        .setLngLat(base)
-        .setHTML(`<h1>${base.name}</h1>`)
-        .addTo(map.current)
+      popup.current = addPopup(map.current, <ResultPopup {...{ base }} />, base)
     }
 
     return () => {
@@ -124,10 +104,11 @@ export default function Map({
 
       setMapFit(new mapboxgl.LngLat(target.base.lng, target.base.lat))
 
-      popup.current = new mapboxgl.Popup({ offset: POPUP_OFFSETS })
-        .setLngLat(target.base)
-        .setHTML('<h1>WHEN WERE YOU THERE???</h1>')
-        .addTo(map.current)
+      popup.current = addPopup(
+        map.current,
+        <DatePickerPopup base={target.base} />,
+        target.base
+      )
     }
 
     return () => {
