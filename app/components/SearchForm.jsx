@@ -27,13 +27,12 @@ export default function SearchForm({
     <div className="item__bifold-left">
       <h1>Look up exposure history</h1>
       <div>
-        {deployments.map((deployment, index) => (
+        {deployments.map((deployment) => (
           <div key={deployment.id}>
             <Combobox
-              selection={deployment.base}
               fuse={fuse.current}
+              deployment={deployment}
               {...{
-                index,
                 dispatchDeployments,
                 searchResults,
                 setSearchResults,

@@ -11,17 +11,16 @@ export default function App() {
   const [focusedResult, setFocusedResult] = React.useState(-1)
   const [deployments, dispatchDeployments] = React.useReducer(
     (state, action) => {
-      const target = state[action.index]
+      const target = state.find((el) => el.id === action.id)
 
       switch (action.type) {
         case 'remove':
-          state.splice(action.index, 1)
-          return state.slice(0)
+          return state.filter((deployment) => deployment.id !== action.id)
         case 'modify':
           target[action.key] = action.value
 
           if (action.key === 'base' && !target.period) {
-            setPrompt({ for: 'period', targetIndex: action.index })
+            setPrompt({ for: 'period', id: target.id })
           }
 
           if (state.every(({ base }) => base.id)) {

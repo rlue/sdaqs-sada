@@ -56,8 +56,10 @@ export default function Map({
 
   // refit map
   useEffect(() => {
-    // TODO: Do I need better validation at each of these branches?
     switch (true) {
+      case mapFit instanceof mapboxgl.LngLat:
+        map.current.flyTo({ center: mapFit, padding: 120, zoom: 9 }) // TODO: unify with MAP_FIT_CONFIG?
+        break
       case mapFit instanceof mapboxgl.LngLatBounds:
         map.current.fitBounds(mapFit, MAP_FIT_CONFIG)
         break
@@ -118,9 +120,9 @@ export default function Map({
   // manage date picker
   useEffect(() => {
     if (prompt.for === 'period') {
-      const target = deployments[prompt.targetIndex]
+      const target = deployments.find((deployment) => deployment.id === prompt.id)
 
-      setMapFit(target.base)
+      setMapFit(new mapboxgl.LngLat(target.base.lng, target.base.lat))
 
       popup.current = new mapboxgl.Popup({ offset: POPUP_OFFSETS })
         .setLngLat(target.base)
@@ -149,6 +151,6 @@ Map.propTypes = {
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
   prompt: PropTypes.shape({
     for: PropTypes.string,
-    targetIndex: PropTypes.number,
+    id: PropTypes.string,
   }).isRequired,
 }

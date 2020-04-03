@@ -8,15 +8,14 @@ const DEBOUNCE_WAIT = 300
 
 export default function Combobox({
   fuse,
-  index,
-  selection,
+  deployment,
   dispatchDeployments,
   searchResults,
   setSearchResults,
   setFocusedResult,
 }) {
   const [status, setStatus] = useState('ready')
-  const [controlledInput, setControlledInput] = useState(selection.name || '')
+  const [controlledInput, setControlledInput] = useState(deployment.base.name || '')
 
   const inputDebouncer = useRef(
     debounce(({ inputValue, isOpen }) => {
@@ -54,7 +53,7 @@ export default function Combobox({
     onIsOpenChange: ({ isOpen, selectedItem, inputValue }) => {
       if (!isOpen) {
         const blur = !!inputValue.length // <Tab>/<S-Tab>/click-out, but not <Esc>
-        const inputAbandoned = (selectedItem || {}).id === selection.id
+        const inputAbandoned = (selectedItem || {}).id === deployment.base.id
 
         // We must handle <Esc> here (because of our controlled input)...
         setControlledInput((selectedItem || deployment.base).name || '')
@@ -73,7 +72,7 @@ export default function Combobox({
       if (selectedItem) {
         dispatchDeployments({
           type: 'modify',
-          index,
+          id: deployment.id,
           key: 'base',
           value: selectedItem,
         })
@@ -98,10 +97,10 @@ export default function Combobox({
           />
         </div>
       </label>
-      {selection.id && (
+      {deployment.base.id && (
         <button
           type="button"
-          onClick={() => dispatchDeployments({ type: 'remove', index })}
+          onClick={() => dispatchDeployments({ type: 'remove', id: deployment.id })}
         >
           x
         </button>
@@ -127,10 +126,12 @@ Combobox.propTypes = {
   fuse: PropTypes.shape({
     search: PropTypes.func.isRequired,
   }).isRequired,
-  index: PropTypes.number.isRequired,
-  selection: PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
+  deployment: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    base: PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+    }).isRequired,
   }).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
   searchResults: PropTypes.arrayOf(
