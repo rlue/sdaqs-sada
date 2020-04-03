@@ -13,6 +13,7 @@ export default function Combobox({
   searchResults,
   setSearchResults,
   setFocusedResult,
+  setPrompt,
 }) {
   const [status, setStatus] = useState('ready')
   const [controlledInput, setControlledInput] = useState(deployment.base.name || '')
@@ -76,6 +77,7 @@ export default function Combobox({
           key: 'base',
           value: selectedItem,
         })
+        setPrompt({ for: 'period', id: deployment.id }) // TODO: Make this idempotent?
       }
     },
   })
@@ -144,4 +146,5 @@ Combobox.propTypes = {
   ).isRequired,
   setSearchResults: PropTypes.func.isRequired,
   setFocusedResult: PropTypes.func.isRequired,
+  setPrompt: PropTypes.func.isRequired,
 }

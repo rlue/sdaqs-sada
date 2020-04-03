@@ -10,6 +10,7 @@ export default function SearchForm({
   searchResults,
   setSearchResults,
   setFocusedResult,
+  setPrompt,
 }) {
   const fuse = useRef(
     new Fuse(sites, {
@@ -37,6 +38,7 @@ export default function SearchForm({
                 searchResults,
                 setSearchResults,
                 setFocusedResult,
+                setPrompt,
               }}
             />
           </div>
@@ -59,4 +61,5 @@ SearchForm.propTypes = {
   ).isRequired,
   setSearchResults: PropTypes.func.isRequired,
   setFocusedResult: PropTypes.func.isRequired,
+  setPrompt: PropTypes.func.isRequired,
 }
