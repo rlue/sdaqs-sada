@@ -13,7 +13,6 @@ const DEFAULT_MAP_BOUNDS = collectionBounds(sites)
 const MAP_FIT_CONFIG = { padding: 120, maxZoom: 9 }
 
 export default function Map({
-  searchResults,
   focusedResult,
   deployments,
   dispatchDeployments,
@@ -54,27 +53,10 @@ export default function Map({
     }
   }, [mapFit])
 
-  // manage result markers
-  useEffect(() => {
-    resultMarkers.current = searchResults.map((base) => (
-      new mapboxgl.Marker().setLngLat(base).addTo(map.current)
-    ))
-
-    if (searchResults.length) {
-      setMapFit(collectionBounds(searchResults))
-    } else if (!prompt.for && mapFit !== DEFAULT_MAP_BOUNDS) {
-      setMapFit(DEFAULT_MAP_BOUNDS)
-    }
-
-    return () => {
-      resultMarkers.current.forEach((marker) => marker.remove())
-    }
-  }, [searchResults])
-
   // manage popup for currently-highlighted result
   useEffect(() => {
-    if (searchResults[focusedResult]) {
-      const base = searchResults[focusedResult]
+    if (prompt.results && prompt.results[focusedResult]) {
+      const base = prompt.results[focusedResult]
 
       popup.current = addPopup(map.current, base, <ResultPopup {...{ base }} />)
     }
@@ -99,58 +81,66 @@ export default function Map({
     }
   }, [deployments])
 
-  // manage date picker
+  // manage current UI task
   useEffect(() => {
-    if (prompt.for === 'period') {
-      const deployment = deployments.find((d) => d.id === prompt.id)
-      const target = new mapboxgl.LngLat(
-        deployment.base.lng,
-        deployment.base.lat,
-      )
+    let deployment
 
-      setMapFit(target)
+    switch (prompt.for) {
+      case 'search results':
+        resultMarkers.current = prompt.results.map((base) => (
+          new mapboxgl.Marker().setLngLat(base).addTo(map.current)
+        ))
 
-      popup.current = addPopup(
-        map.current,
-        deployment.base,
-        <DatePickerPopup
-          {...{
-            deployment,
-            deployments,
-            dispatchDeployments,
-            setPrompt,
-          }}
-        />,
-        { closeOnClick: false },
-      )
+        if (prompt.results.length) setMapFit(collectionBounds(prompt.results))
+        break
+      case 'period':
+        deployment = deployments.find((d) => d.id === prompt.id)
+
+        setMapFit(new mapboxgl.LngLat(deployment.base.lng, deployment.base.lat))
+
+        popup.current = addPopup(
+          map.current,
+          deployment.base,
+          <DatePickerPopup
+            {...{
+              deployment,
+              deployments,
+              dispatchDeployments,
+              setPrompt,
+            }}
+          />,
+          { closeOnClick: false },
+        )
+        break
+      default:
+        setMapFit(DEFAULT_MAP_BOUNDS)
+        break
     }
 
     return () => {
-      if (popup.current) {
-        popup.current.remove()
-        setMapFit(DEFAULT_MAP_BOUNDS)
-      }
+      resultMarkers.current.forEach((marker) => marker.remove())
+      if (popup.current) popup.current.remove()
     }
-  }, [prompt])
+  }, [prompt.for, prompt.id, prompt.results && prompt.results.map((r) => r.id).join('')])
 
   return <div className="item__bifold-right" ref={mapContainer} />
 }
 
 Map.propTypes = {
-  searchResults: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      lat: PropTypes.string,
-      lng: PropTypes.string,
-    }),
-  ).isRequired,
   focusedResult: PropTypes.number,
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
   prompt: PropTypes.shape({
     for: PropTypes.string,
     id: PropTypes.string,
+    results: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        lat: PropTypes.string,
+        lng: PropTypes.string,
+      }),
+    ),
   }).isRequired,
   setPrompt: PropTypes.func.isRequired,
 }

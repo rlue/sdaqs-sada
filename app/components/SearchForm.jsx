@@ -7,9 +7,8 @@ import sites from '../../assets/data/sites.json'
 export default function SearchForm({
   deployments,
   dispatchDeployments,
-  searchResults,
-  setSearchResults,
   setFocusedResult,
+  prompt,
   setPrompt,
 }) {
   const fuse = useRef(
@@ -35,9 +34,8 @@ export default function SearchForm({
               deployment={deployment}
               {...{
                 dispatchDeployments,
-                searchResults,
-                setSearchResults,
                 setFocusedResult,
+                prompt,
                 setPrompt,
               }}
             />
@@ -51,15 +49,17 @@ export default function SearchForm({
 SearchForm.propTypes = {
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
-  searchResults: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      lat: PropTypes.string.isRequired,
-      lng: PropTypes.string.isRequired,
-    }).isRequired,
-  ).isRequired,
-  setSearchResults: PropTypes.func.isRequired,
   setFocusedResult: PropTypes.func.isRequired,
+  prompt: PropTypes.shape({
+    for: PropTypes.string,
+    results: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        lat: PropTypes.string,
+        lng: PropTypes.string,
+      }),
+    ),
+  }).isRequired,
   setPrompt: PropTypes.func.isRequired,
 }

@@ -26,7 +26,6 @@ function deploymentsReducer(state, action) {
 
 export default function App() {
   const [prompt, setPrompt] = React.useState({})
-  const [searchResults, setSearchResults] = React.useState([])
   const [focusedResult, setFocusedResult] = React.useState(-1)
   const [deployments, dispatchDeployments] = React.useReducer(
     deploymentsReducer,
@@ -39,15 +38,13 @@ export default function App() {
         {...{
           deployments,
           dispatchDeployments,
-          searchResults,
-          setSearchResults,
           setFocusedResult,
+          prompt,
           setPrompt,
         }}
       />
       <Map
         {...{
-          searchResults,
           focusedResult,
           deployments,
           dispatchDeployments,

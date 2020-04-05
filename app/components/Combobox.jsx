@@ -10,37 +10,39 @@ export default function Combobox({
   fuse,
   deployment,
   dispatchDeployments,
-  searchResults,
-  setSearchResults,
   setFocusedResult,
+  prompt,
   setPrompt,
 }) {
   const [status, setStatus] = useState('ready')
   const [controlledInput, setControlledInput] = useState(deployment.base.name || '')
 
   const inputDebouncer = useRef(
-    debounce(({ inputValue, isOpen }) => {
+    debounce(({ inputValue, isOpen, selectedItem }) => {
       const results = fuse.search(inputValue)
 
-      if (!isOpen || inputValue.match(/^\s*$/)) {
-        setSearchResults([])
+      if (!isOpen && selectedItem && selectedItem.id) {
+        setStatus('complete')
+        setPrompt({ for: 'period', id: deployment.id })
+      } else if (!isOpen || inputValue.match(/^\s*$/)) {
         setStatus('ready')
+        setPrompt({})
       } else if (!results.length) {
-        setSearchResults([])
         setStatus('no results')
+        setPrompt({})
       } else {
-        setSearchResults(results)
         setStatus('success')
+        setPrompt({ for: 'search results', results })
       }
     }, DEBOUNCE_WAIT),
   )
 
   const ds = useCombobox({
-    items: searchResults,
+    items: prompt.results || [],
     itemToString: (item) => (item ? item.name : ''),
     inputValue: controlledInput,
-    onInputValueChange: ({ isOpen, inputValue }) => {
-      inputDebouncer.current({ inputValue, isOpen })
+    onInputValueChange: ({ isOpen, inputValue, selectedItem }) => {
+      inputDebouncer.current({ inputValue, isOpen, selectedItem })
 
       if (isOpen && inputValue.match(/\S/)) {
         setStatus('debouncing')
@@ -77,7 +79,6 @@ export default function Combobox({
           key: 'base',
           value: selectedItem,
         })
-        setPrompt({ for: 'period', id: deployment.id }) // TODO: Make this idempotent?
       }
     },
   })
@@ -122,7 +123,7 @@ export default function Combobox({
         && <button type="button" onClick={removeHandler}>x</button>}
       <ul {...ds.getMenuProps()}>
         <SearchResults status={status}>
-          {searchResults.map((item, index) => (
+          {(prompt.results || []).map((item, index) => (
             <li
               {...ds.getItemProps({ item, index })}
               key={`${item.id}`}
@@ -150,15 +151,17 @@ Combobox.propTypes = {
     period: PropTypes.array,
   }).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
-  searchResults: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      lat: PropTypes.string.isRequired,
-      lng: PropTypes.string.isRequired,
-    }).isRequired,
-  ).isRequired,
-  setSearchResults: PropTypes.func.isRequired,
   setFocusedResult: PropTypes.func.isRequired,
+  prompt: PropTypes.shape({
+    for: PropTypes.string,
+    results: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        lat: PropTypes.string,
+        lng: PropTypes.string,
+      }),
+    ),
+  }).isRequired,
   setPrompt: PropTypes.func.isRequired,
 }
