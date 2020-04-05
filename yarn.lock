@@ -8079,6 +8079,7 @@ fsevents@^1.2.7:
     fuse.js: ^3.4.6
     lodash.debounce: ^4.0.8
     mapbox-gl: ^1.8.0
+    moment: ^2.24.0
     pnp-webpack-plugin: ^1.6.4
     prettier: ^1.19.1
     prop-types: ^15.7.2

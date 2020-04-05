@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useCombobox } from 'downshift'
 import debounce from 'lodash.debounce'
+import { humanMonthRange } from '../utils/dateHelper'
 import SearchResults from './SearchResults'
 
 const DEBOUNCE_WAIT = 300
@@ -114,10 +115,7 @@ export default function Combobox({
         </div>
       </label>
       <span className="combobox__period">
-        {deployment.base.id
-          && (deployment.period
-            ? deployment.period.map((date) => date.format('MMM YYYY')).join('–')
-            : 'No dates selected')}
+        {deployment.base.id && humanMonthRange(deployment.period)}
       </span>
       {deployment.base.id
         && <button type="button" onClick={removeHandler}>x</button>}
