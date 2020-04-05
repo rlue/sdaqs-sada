@@ -39,7 +39,7 @@ export default function Combobox({
     items: searchResults,
     itemToString: (item) => (item ? item.name : ''),
     inputValue: controlledInput,
-    onInputValueChange: ({ inputValue, isOpen }) => {
+    onInputValueChange: ({ isOpen, inputValue }) => {
       inputDebouncer.current({ inputValue, isOpen })
 
       if (isOpen && inputValue.match(/\S/)) {
@@ -48,11 +48,22 @@ export default function Combobox({
         inputDebouncer.current.flush()
       }
     },
-    onIsOpenChange: ({ isOpen, selectedItem }) => {
-      // closing the combobox should always flush the inputDebouncer;
-      // setControlledInput does this implicitly via onInputValueChange.
+    // ENFORCE NON-DEFAULT BEHAVIOR:
+    // Reset inputValue/items any time user abandons input
+    // (<Esc>/<Tab>/<S-Tab>/click-out instead of making a selection)
+    onIsOpenChange: ({ isOpen, selectedItem, inputValue }) => {
       if (!isOpen) {
-        setControlledInput((selectedItem || selection).name || '')
+        const blur = !!inputValue.length // <Tab>/<S-Tab>/click-out, but not <Esc>
+        const inputAbandoned = (selectedItem || {}).id === selection.id
+
+        // We must handle <Esc> here (because of our controlled input)...
+        setControlledInput((selectedItem || deployment.base).name || '')
+
+        // ...but not here (it triggers onInputValueChange, and blur does not).
+        if (blur && inputAbandoned) {
+          inputDebouncer.current({ inputValue: '', isOpen: false })
+          inputDebouncer.current.flush()
+        }
       }
     },
     onHighlightedIndexChange: ({ highlightedIndex }) => {
