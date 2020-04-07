@@ -20,13 +20,10 @@ export default function SearchUnit({
   const [controlledInput, setControlledInput] = useState(deployment.base.name || '')
 
   const inputDebouncer = useRef(
-    debounce(({ inputValue, isOpen, selectedItem }) => {
-      const results = fuse.search(inputValue)
+    debounce(({ query }) => {
+      const results = fuse.search(query)
 
-      if (!isOpen && selectedItem && selectedItem.id) {
-        setStatus('complete')
-        setUIFocus({ on: 'date picker', id: deployment.id })
-      } else if (!isOpen || inputValue.match(/^\s*$/)) {
+      if (!query.trim().length) {
         setStatus('ready')
         setUIFocus({})
       } else if (!results.length) {
@@ -46,41 +43,42 @@ export default function SearchUnit({
     onStateChange: setComboboxState,
   })
 
-  // onInputValueChange
+  // ENFORCE NON-DEFAULT BEHAVIOR: Reset inputValue any time user leaves input
   useEffect(() => {
-    const { isOpen, inputValue, selectedItem } = comboboxState
+    const { isOpen, selectedItem } = comboboxState
+    const originalSelection = (selectedItem || deployment.base).name || ''
 
-    inputDebouncer.current({ inputValue, isOpen, selectedItem })
+    if (!isOpen) setControlledInput(originalSelection)
+  }, [comboboxState.isOpen])
 
-    if (isOpen && inputValue.match(/\S/)) {
-      setStatus('debouncing')
-    } else {
-      inputDebouncer.current.flush()
-    }
-  }, [comboboxState.inputValue])
-
-  // onIsOpenChange
-  //
-  // ENFORCE NON-DEFAULT BEHAVIOR:
-  // Reset inputValue/items any time user abandons input
-  // (<Esc>/<Tab>/<S-Tab>/click-out instead of making a selection)
   useEffect(() => {
-    const { isOpen, inputValue, selectedItem } = comboboxState
+    const { inputValue, isOpen, selectedItem } = comboboxState
+    const selectionMade = selectedItem && selectedItem.id !== deployment.base.id
+    const inputAbandoned = !isOpen && !selectionMade
 
-    if (!isOpen) {
-      const blur = !!inputValue.length // <Tab>/<S-Tab>/click-out, but not <Esc>
-      const inputAbandoned = (selectedItem || {}).id === deployment.base.id
+    // FIXME? Selecting an item triggers this effect hook TWICE:
+    //
+    // * onSelectedItemChange (with { inputValue, isOpen, highlightedIndex, selectedItem })
+    // * when dispatchDeployments triggers re-render (with only { inputValue })
+    //
+    // Ignore this second state change.
+    if ('isOpen' in comboboxState) {
+      if (selectionMade) {
+        setStatus('complete')
+        setUIFocus({ on: 'date picker', id: deployment.id })
+      } else {
+        // inputValue may be non-empty when blurring via <Tab>/click
+        inputDebouncer.current({ query: inputAbandoned ? '' : inputValue })
 
-      // We must handle <Esc> here (because of our controlled input)...
-      setControlledInput((selectedItem || deployment.base).name || '')
-
-      // ...but not here (it triggers onInputValueChange, and blur does not).
-      if (blur && inputAbandoned) {
-        inputDebouncer.current({ inputValue: '', isOpen: false })
-        inputDebouncer.current.flush()
+        // active UI feedback for debouncer
+        if (isOpen && inputValue.trim().length) {
+          setStatus('debouncing')
+        } else {
+          inputDebouncer.current.flush()
+        }
       }
     }
-  }, [comboboxState.isOpen])
+  }, [comboboxState.inputValue, comboboxState.isOpen])
 
   // onHighlightedIndexChange
   useEffect(() => {
