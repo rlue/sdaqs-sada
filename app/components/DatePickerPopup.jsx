@@ -9,7 +9,7 @@ function disabledDate(current) {
 export default function DatePickerPopup({
   deployment,
   dispatchDeployments,
-  setPrompt,
+  setUIFocus,
 }) {
   return (
     <div>
@@ -28,7 +28,7 @@ export default function DatePickerPopup({
           })
 
           if (dates) {
-            setPrompt({})
+            setUIFocus({})
           }
         }}
       />
@@ -46,5 +46,5 @@ DatePickerPopup.propTypes = {
     period: PropTypes.array,
   }).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
-  setPrompt: PropTypes.func.isRequired,
+  setUIFocus: PropTypes.func.isRequired,
 }

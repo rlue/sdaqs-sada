@@ -8,8 +8,8 @@ export default function SearchPanel({
   deployments,
   dispatchDeployments,
   setFocusedResult,
-  prompt,
-  setPrompt,
+  uiFocus,
+  setUIFocus,
 }) {
   const fuse = useRef(
     new Fuse(sites, {
@@ -35,8 +35,8 @@ export default function SearchPanel({
             {...{
               dispatchDeployments,
               setFocusedResult,
-              prompt,
-              setPrompt,
+              uiFocus,
+              setUIFocus,
             }}
           />
         ))}
@@ -49,7 +49,7 @@ SearchPanel.propTypes = {
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
   setFocusedResult: PropTypes.func.isRequired,
-  prompt: PropTypes.shape({
+  uiFocus: PropTypes.shape({
     for: PropTypes.string,
     results: PropTypes.arrayOf(
       PropTypes.shape({
@@ -60,5 +60,5 @@ SearchPanel.propTypes = {
       }),
     ),
   }).isRequired,
-  setPrompt: PropTypes.func.isRequired,
+  setUIFocus: PropTypes.func.isRequired,
 }

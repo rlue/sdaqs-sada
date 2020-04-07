@@ -25,7 +25,7 @@ function deploymentsReducer(state, action) {
 }
 
 export default function App() {
-  const [prompt, setPrompt] = React.useState({})
+  const [uiFocus, setUIFocus] = React.useState({})
   const [focusedResult, setFocusedResult] = React.useState(-1)
   const [deployments, dispatchDeployments] = React.useReducer(
     deploymentsReducer,
@@ -39,8 +39,8 @@ export default function App() {
           deployments,
           dispatchDeployments,
           setFocusedResult,
-          prompt,
-          setPrompt,
+          uiFocus,
+          setUIFocus,
         }}
       />
       <Map
@@ -48,8 +48,8 @@ export default function App() {
           focusedResult,
           deployments,
           dispatchDeployments,
-          prompt,
-          setPrompt,
+          uiFocus,
+          setUIFocus,
         }}
       />
     </div>

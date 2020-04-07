@@ -12,8 +12,8 @@ export default function SearchUnit({
   deployment,
   dispatchDeployments,
   setFocusedResult,
-  prompt,
-  setPrompt,
+  uiFocus,
+  setUIFocus,
 }) {
   const [status, setStatus] = useState('ready')
   const [controlledInput, setControlledInput] = useState(deployment.base.name || '')
@@ -24,22 +24,22 @@ export default function SearchUnit({
 
       if (!isOpen && selectedItem && selectedItem.id) {
         setStatus('complete')
-        setPrompt({ for: 'period', id: deployment.id })
+        setUIFocus({ on: 'date picker', id: deployment.id })
       } else if (!isOpen || inputValue.match(/^\s*$/)) {
         setStatus('ready')
-        setPrompt({})
+        setUIFocus({})
       } else if (!results.length) {
         setStatus('no results')
-        setPrompt({})
+        setUIFocus({})
       } else {
         setStatus('success')
-        setPrompt({ for: 'search results', results })
+        setUIFocus({ on: 'search results', results })
       }
     }, DEBOUNCE_WAIT),
   )
 
   const ds = useCombobox({
-    items: prompt.results || [],
+    items: uiFocus.results || [],
     itemToString: (item) => (item ? item.name : ''),
     inputValue: controlledInput,
     onInputValueChange: ({ isOpen, inputValue, selectedItem }) => {
@@ -85,7 +85,7 @@ export default function SearchUnit({
   })
 
   function removeHandler() {
-    setPrompt({})
+    setUIFocus({})
     dispatchDeployments({ type: 'remove', id: deployment.id })
   }
 
@@ -103,9 +103,9 @@ export default function SearchUnit({
               // FIXME: popup lingers on page when user clicks elsewhere on the SearchPanel
               onFocus: () => {
                 if (deployment.base.id) {
-                  setPrompt({ for: 'period', id: deployment.id })
+                  setUIFocus({ on: 'date picker', id: deployment.id })
                 } else {
-                  setPrompt({})
+                  setUIFocus({})
                 }
               },
             })}
@@ -121,7 +121,7 @@ export default function SearchUnit({
         && <button type="button" onClick={removeHandler}>x</button>}
       <ul {...ds.getMenuProps()}>
         <SearchResults status={status}>
-          {(prompt.results || []).map((item, index) => (
+          {(uiFocus.results || []).map((item, index) => (
             <li
               {...ds.getItemProps({ item, index })}
               key={`${item.id}`}
@@ -150,8 +150,8 @@ SearchUnit.propTypes = {
   }).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
   setFocusedResult: PropTypes.func.isRequired,
-  prompt: PropTypes.shape({
-    for: PropTypes.string,
+  uiFocus: PropTypes.shape({
+    on: PropTypes.string,
     results: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number,
@@ -161,5 +161,5 @@ SearchUnit.propTypes = {
       }),
     ),
   }).isRequired,
-  setPrompt: PropTypes.func.isRequired,
+  setUIFocus: PropTypes.func.isRequired,
 }

@@ -16,8 +16,8 @@ export default function Map({
   focusedResult,
   deployments,
   dispatchDeployments,
-  prompt,
-  setPrompt,
+  uiFocus,
+  setUIFocus,
 }) {
   const mapContainer = useRef()
   const map = useRef()
@@ -55,8 +55,8 @@ export default function Map({
 
   // manage popup for currently-highlighted result
   useEffect(() => {
-    if (prompt.results && prompt.results[focusedResult]) {
-      const base = prompt.results[focusedResult]
+    if (uiFocus.results && uiFocus.results[focusedResult]) {
+      const base = uiFocus.results[focusedResult]
 
       popup.current = addPopup(map.current, base, <ResultPopup {...{ base }} />)
     }
@@ -81,20 +81,20 @@ export default function Map({
     }
   }, [deployments])
 
-  // manage current UI task
+  // manage current UI focus
   useEffect(() => {
     let deployment
 
-    switch (prompt.for) {
+    switch (uiFocus.on) {
       case 'search results':
-        resultMarkers.current = prompt.results.map((base) => (
+        resultMarkers.current = uiFocus.results.map((base) => (
           new mapboxgl.Marker().setLngLat(base).addTo(map.current)
         ))
 
-        if (prompt.results.length) setMapFit(collectionBounds(prompt.results))
+        if (uiFocus.results.length) setMapFit(collectionBounds(uiFocus.results))
         break
-      case 'period':
-        deployment = deployments.find((d) => d.id === prompt.id)
+      case 'date picker':
+        deployment = deployments.find((d) => d.id === uiFocus.id)
 
         setMapFit(new mapboxgl.LngLat(deployment.base.lng, deployment.base.lat))
 
@@ -106,7 +106,7 @@ export default function Map({
               deployment,
               deployments,
               dispatchDeployments,
-              setPrompt,
+              setUIFocus,
             }}
           />,
           { closeOnClick: false },
@@ -121,7 +121,7 @@ export default function Map({
       resultMarkers.current.forEach((marker) => marker.remove())
       if (popup.current) popup.current.remove()
     }
-  }, [prompt.for, prompt.id, prompt.results && prompt.results.map((r) => r.id).join('')])
+  }, [uiFocus.on, uiFocus.id, uiFocus.results && uiFocus.results.map((r) => r.id).join('')])
 
   return <div className="item__bifold-right" ref={mapContainer} />
 }
@@ -130,8 +130,8 @@ Map.propTypes = {
   focusedResult: PropTypes.number,
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
-  prompt: PropTypes.shape({
-    for: PropTypes.string,
+  uiFocus: PropTypes.shape({
+    on: PropTypes.string,
     id: PropTypes.string,
     results: PropTypes.arrayOf(
       PropTypes.shape({
@@ -142,5 +142,5 @@ Map.propTypes = {
       }),
     ),
   }).isRequired,
-  setPrompt: PropTypes.func.isRequired,
+  setUIFocus: PropTypes.func.isRequired,
 }
