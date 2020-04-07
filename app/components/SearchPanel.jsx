@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import Fuse from 'fuse.js'
-import Combobox from './Combobox'
+import SearchUnit from './SearchUnit'
 import sites from '../../assets/data/sites.json'
 
 export default function SearchPanel({
@@ -28,18 +28,17 @@ export default function SearchPanel({
       <h1>Look up exposure history</h1>
       <div>
         {deployments.map((deployment) => (
-          <div key={deployment.id}>
-            <Combobox
-              fuse={fuse.current}
-              deployment={deployment}
-              {...{
-                dispatchDeployments,
-                setFocusedResult,
-                prompt,
-                setPrompt,
-              }}
-            />
-          </div>
+          <SearchUnit
+            key={deployment.id}
+            fuse={fuse.current}
+            deployment={deployment}
+            {...{
+              dispatchDeployments,
+              setFocusedResult,
+              prompt,
+              setPrompt,
+            }}
+          />
         ))}
       </div>
     </div>

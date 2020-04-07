@@ -7,7 +7,7 @@ import SearchResults from './SearchResults'
 
 const DEBOUNCE_WAIT = 300
 
-export default function Combobox({
+export default function SearchUnit({
   fuse,
   deployment,
   dispatchDeployments,
@@ -90,7 +90,7 @@ export default function Combobox({
   }
 
   return (
-    <>
+    <div>
       <label
         {...ds.getLabelProps()}
         htmlFor="military-base"
@@ -132,11 +132,11 @@ export default function Combobox({
           ))}
         </SearchResults>
       </ul>
-    </>
+    </div>
   )
 }
 
-Combobox.propTypes = {
+SearchUnit.propTypes = {
   fuse: PropTypes.shape({
     search: PropTypes.func.isRequired,
   }).isRequired,
