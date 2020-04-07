@@ -22,9 +22,9 @@ export default function Map({
   const mapContainer = useRef()
   const map = useRef()
   const [mapFit, setMapFit] = useState(DEFAULT_MAP_BOUNDS)
-  const resultMarkers = useRef([])
+  const resultMarkers = useRef({})
+  const selectionMarkers = useRef({})
   const popup = useRef()
-  const selectionMarkers = useRef([])
 
   // mount map
   useEffect(() => {
@@ -70,14 +70,18 @@ export default function Map({
   useEffect(() => {
     selectionMarkers.current = deployments
       .filter(({ base }) => base.id)
-      .map(({ base }) => (
-        new mapboxgl.Marker({ color: '#ce2c69' })
-          .setLngLat(base)
-          .addTo(map.current)
-      ))
+      .reduce((markers, { base }) => {
+        if (!(base.id in markers)) {
+          markers[base.id] = new mapboxgl.Marker({ color: '#ce2c69' })
+            .setLngLat(base)
+            .addTo(map.current)
+        }
+
+        return markers
+      }, {})
 
     return () => {
-      selectionMarkers.current.forEach((marker) => marker.remove())
+      Object.values(selectionMarkers.current).forEach((marker) => marker.remove())
     }
   }, [deployments])
 
@@ -87,9 +91,16 @@ export default function Map({
 
     switch (uiFocus.on) {
       case 'search results':
-        resultMarkers.current = uiFocus.results.map((base) => (
-          new mapboxgl.Marker().setLngLat(base).addTo(map.current)
-        ))
+        resultMarkers.current = uiFocus.results
+          .reduce((markers, base) => {
+            if (!(base.id in markers)) {
+              markers[base.id] = new mapboxgl.Marker()
+                .setLngLat(base)
+                .addTo(map.current)
+            }
+
+            return markers
+          }, {})
 
         if (uiFocus.results.length) setMapFit(collectionBounds(uiFocus.results))
         break
@@ -118,7 +129,7 @@ export default function Map({
     }
 
     return () => {
-      resultMarkers.current.forEach((marker) => marker.remove())
+      Object.values(resultMarkers.current).forEach((marker) => marker.remove())
       if (popup.current) popup.current.remove()
     }
   }, [uiFocus.on, uiFocus.id, uiFocus.results && uiFocus.results.map((r) => r.id).join('')])
