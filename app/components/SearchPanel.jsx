@@ -7,7 +7,6 @@ import sites from '../../assets/data/sites.json'
 export default function SearchPanel({
   deployments,
   dispatchDeployments,
-  setFocusedResult,
   uiFocus,
   setUIFocus,
 }) {
@@ -34,7 +33,6 @@ export default function SearchPanel({
             deployment={deployment}
             {...{
               dispatchDeployments,
-              setFocusedResult,
               uiFocus,
               setUIFocus,
             }}
@@ -48,7 +46,6 @@ export default function SearchPanel({
 SearchPanel.propTypes = {
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
-  setFocusedResult: PropTypes.func.isRequired,
   uiFocus: PropTypes.shape({
     for: PropTypes.string,
     results: PropTypes.arrayOf(

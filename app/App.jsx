@@ -26,7 +26,6 @@ function deploymentsReducer(state, action) {
 
 export default function App() {
   const [uiFocus, setUIFocus] = useState({})
-  const [focusedResult, setFocusedResult] = useState(-1)
   const [deployments, dispatchDeployments] = useReducer(
     deploymentsReducer,
     [{ id: uid(), base: {}, period: null }],
@@ -38,14 +37,12 @@ export default function App() {
         {...{
           deployments,
           dispatchDeployments,
-          setFocusedResult,
           uiFocus,
           setUIFocus,
         }}
       />
       <Map
         {...{
-          focusedResult,
           deployments,
           dispatchDeployments,
           uiFocus,

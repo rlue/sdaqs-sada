@@ -4,7 +4,6 @@ import mapboxgl from 'mapbox-gl'
 import { addPopup, collectionBounds } from '../utils/mapboxglHelper'
 import sites from '../../assets/data/sites.json'
 import DatePickerPopup from './DatePickerPopup'
-import ResultPopup from './ResultPopup'
 
 mapboxgl.accessToken =
   'pk.eyJ1Ijoicmx1ZSIsImEiOiJjazZwOHIwdXcwNzg1M2xuejVkbGNkaGEwIn0.S0KbmonSFTp9xI5J2ZGANQ'
@@ -13,7 +12,6 @@ const DEFAULT_MAP_BOUNDS = collectionBounds(sites)
 const MAP_FIT_CONFIG = { padding: 120, maxZoom: 9 }
 
 export default function Map({
-  focusedResult,
   deployments,
   dispatchDeployments,
   uiFocus,
@@ -52,19 +50,6 @@ export default function Map({
         break
     }
   }, [mapFit])
-
-  // manage popup for currently-highlighted result
-  useEffect(() => {
-    if (uiFocus.results && uiFocus.results[focusedResult]) {
-      const base = uiFocus.results[focusedResult]
-
-      popup.current = addPopup(map.current, base, <ResultPopup {...{ base }} />)
-    }
-
-    return () => {
-      if (popup.current) popup.current.remove()
-    }
-  }, [focusedResult])
 
   // manage selected-deployment markers
   useEffect(() => {
@@ -131,7 +116,6 @@ export default function Map({
     return () => {
       switch (uiFocus.on) {
         case 'search results':
-          if (popup.current) popup.current.remove()
           Object.values(resultMarkers.current).forEach((marker) => marker.remove())
           break
         case 'date picker':
@@ -143,11 +127,25 @@ export default function Map({
     }
   }, [uiFocus.on, uiFocus.id, uiFocus.results && uiFocus.results.map((r) => r.id).join('')])
 
+  // manage popup for currently-highlighted result
+  useEffect(() => {
+    if (uiFocus.on === 'search results' && uiFocus.result) {
+      const resultMarker = resultMarkers.current[uiFocus.result.id]
+      resultMarker.getElement().classList.add('mapboxgl-marker--prominent')
+    }
+
+    return () => {
+      if (uiFocus.on === 'search results' && uiFocus.result) {
+        const resultMarker = resultMarkers.current[uiFocus.result.id]
+        resultMarker.getElement().classList.remove('mapboxgl-marker--prominent')
+      }
+    }
+  }, [uiFocus.on && uiFocus.result && uiFocus.result.id])
+
   return <div className="item__bifold-right" ref={mapContainer} />
 }
 
 Map.propTypes = {
-  focusedResult: PropTypes.number,
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
   uiFocus: PropTypes.shape({
@@ -161,6 +159,12 @@ Map.propTypes = {
         lng: PropTypes.string,
       }),
     ),
+    result: PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      lat: PropTypes.string,
+      lng: PropTypes.string,
+    }),
   }).isRequired,
   setUIFocus: PropTypes.func.isRequired,
 }

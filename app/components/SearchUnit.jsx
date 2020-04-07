@@ -11,7 +11,6 @@ export default function SearchUnit({
   fuse,
   deployment,
   dispatchDeployments,
-  setFocusedResult,
   uiFocus,
   setUIFocus,
 }) {
@@ -84,7 +83,13 @@ export default function SearchUnit({
   useEffect(() => {
     const { highlightedIndex, isOpen } = comboboxState
 
-    if (isOpen) setFocusedResult(highlightedIndex)
+    if (isOpen && highlightedIndex > -1) {
+      setUIFocus({
+        on: 'search results',
+        results: uiFocus.results,
+        result: uiFocus.results[highlightedIndex],
+      })
+    }
   }, [comboboxState.highlightedIndex, comboboxState.isOpen])
 
   // onSelectedItemChange
@@ -164,7 +169,6 @@ SearchUnit.propTypes = {
     period: PropTypes.array,
   }).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
-  setFocusedResult: PropTypes.func.isRequired,
   uiFocus: PropTypes.shape({
     on: PropTypes.string,
     results: PropTypes.arrayOf(
