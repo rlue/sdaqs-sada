@@ -129,8 +129,17 @@ export default function Map({
     }
 
     return () => {
-      Object.values(resultMarkers.current).forEach((marker) => marker.remove())
-      if (popup.current) popup.current.remove()
+      switch (uiFocus.on) {
+        case 'search results':
+          if (popup.current) popup.current.remove()
+          Object.values(resultMarkers.current).forEach((marker) => marker.remove())
+          break
+        case 'date picker':
+          if (popup.current) popup.current.remove()
+          break
+        default:
+          break
+      }
     }
   }, [uiFocus.on, uiFocus.id, uiFocus.results && uiFocus.results.map((r) => r.id).join('')])
 
