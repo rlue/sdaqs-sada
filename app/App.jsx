@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useReducer, useState } from 'react'
 import uid from 'uid'
 import '../assets/index.css'
 import 'antd/dist/antd.css'
@@ -25,9 +25,9 @@ function deploymentsReducer(state, action) {
 }
 
 export default function App() {
-  const [uiFocus, setUIFocus] = React.useState({})
-  const [focusedResult, setFocusedResult] = React.useState(-1)
-  const [deployments, dispatchDeployments] = React.useReducer(
+  const [uiFocus, setUIFocus] = useState({})
+  const [focusedResult, setFocusedResult] = useState(-1)
+  const [deployments, dispatchDeployments] = useReducer(
     deploymentsReducer,
     [{ id: uid(), base: {}, period: null }],
   )
