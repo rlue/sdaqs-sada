@@ -4,7 +4,7 @@ import Fuse from 'fuse.js'
 import Combobox from './Combobox'
 import sites from '../../assets/data/sites.json'
 
-export default function SearchForm({
+export default function SearchPanel({
   deployments,
   dispatchDeployments,
   setFocusedResult,
@@ -46,7 +46,7 @@ export default function SearchForm({
   )
 }
 
-SearchForm.propTypes = {
+SearchPanel.propTypes = {
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
   setFocusedResult: PropTypes.func.isRequired,

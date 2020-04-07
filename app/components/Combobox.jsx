@@ -100,7 +100,7 @@ export default function Combobox({
           <input
             {...ds.getInputProps({
               onChange: (event) => setControlledInput(event.target.value),
-              // FIXME: popup lingers on page when user clicks elsewhere on the SearchForm
+              // FIXME: popup lingers on page when user clicks elsewhere on the SearchPanel
               onFocus: () => {
                 if (deployment.base.id) {
                   setPrompt({ for: 'period', id: deployment.id })
