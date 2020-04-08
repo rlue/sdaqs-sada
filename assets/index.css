@@ -37,3 +37,61 @@ span.combobox__period {
   display: inline-block;
   width: 10rem;
 }
+
+.search-unit::marker {
+  font-family: monospace;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('/assets/fonts/lato-black.woff2') format('woff2'),
+       url('/assets/fonts/lato-black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+}
+
+svg.map-pin {
+  overflow: visible !important;
+  position: relative;
+  font-family: Lato;
+  font-weight: 900;
+  filter: url('/assets/svg/filters.svg#shadow');
+}
+
+svg.map-pin > path:first-of-type {
+  fill: hsl(0, 89%, 59%);
+  stroke: #fff;
+  stroke-width: 8px;
+}
+
+svg.map-pin > path:nth-of-type(2),
+svg.map-pin > text {
+  fill: #fff;
+  font-size: 72px;
+  stroke: hsl(0, 66%, 32%);
+  stroke-width: 1px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+svg.map-pin--search-result {
+  height: 1.5rem;
+  width: 1.5rem;
+  bottom: 0.75rem;
+}
+
+svg.map-pin--highlighted {
+  height: 2rem;
+  width: 2rem;
+  bottom: 1rem;
+}
+
+svg.map-pin--selection {
+  height: 2rem;
+  width: 2rem;
+  bottom: 1rem;
+}
+
+.mapboxgl-marker--highlighted {
+  z-index: 10;
+}

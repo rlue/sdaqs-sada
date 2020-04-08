@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import mapboxgl from 'mapbox-gl'
-import { addPopup, collectionBounds } from '../utils/mapboxglHelper'
+import { addMarker, addPopup, collectionBounds } from '../utils/mapboxglHelper'
 import sites from '../../assets/data/sites.json'
 import DatePickerPopup from './DatePickerPopup'
+import * as Icons from './Icons'
 
 mapboxgl.accessToken =
   'pk.eyJ1Ijoicmx1ZSIsImEiOiJjazZwOHIwdXcwNzg1M2xuejVkbGNkaGEwIn0.S0KbmonSFTp9xI5J2ZGANQ'
@@ -55,11 +56,13 @@ export default function Map({
   useEffect(() => {
     selectionMarkers.current = deployments
       .filter(({ base }) => base.id)
-      .reduce((markers, { base }) => {
+      .reduce((markers, { base }, i) => {
         if (!(base.id in markers)) {
-          markers[base.id] = new mapboxgl.Marker({ color: '#ce2c69' })
-            .setLngLat(base)
-            .addTo(map.current)
+          markers[base.id] = addMarker(
+            map.current,
+            base,
+            <Icons.MapPin label={i + 1} className="map-pin--selection"/>
+          )
         }
 
         return markers
@@ -79,9 +82,11 @@ export default function Map({
         resultMarkers.current = uiFocus.results
           .reduce((markers, base) => {
             if (!(base.id in markers)) {
-              markers[base.id] = new mapboxgl.Marker()
-                .setLngLat(base)
-                .addTo(map.current)
+              markers[base.id] = addMarker(
+                map.current,
+                base,
+                <Icons.MapPin className="map-pin--search-result" />
+              )
             }
 
             return markers
@@ -130,14 +135,16 @@ export default function Map({
   // manage popup for currently-highlighted result
   useEffect(() => {
     if (uiFocus.on === 'search results' && uiFocus.result) {
-      const resultMarker = resultMarkers.current[uiFocus.result.id]
-      resultMarker.getElement().classList.add('mapboxgl-marker--prominent')
+      const resultMarkerDiv = resultMarkers.current[uiFocus.result.id].getElement()
+      resultMarkerDiv.classList.add('mapboxgl-marker--highlighted')
+      resultMarkerDiv.children[0].classList.add('map-pin--highlighted')
     }
 
     return () => {
       if (uiFocus.on === 'search results' && uiFocus.result) {
-        const resultMarker = resultMarkers.current[uiFocus.result.id]
-        resultMarker.getElement().classList.remove('mapboxgl-marker--prominent')
+        const resultMarkerDiv = resultMarkers.current[uiFocus.result.id].getElement()
+        resultMarkerDiv.classList.remove('mapboxgl-marker--highlighted')
+        resultMarkerDiv.children[0].classList.remove('map-pin--highlighted')
       }
     }
   }, [uiFocus.on && uiFocus.result && uiFocus.result.id])

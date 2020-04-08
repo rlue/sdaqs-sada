@@ -21,6 +21,16 @@ const POPUP_OFFSETS = {
   right: [-markerRadius, (markerHeight - markerRadius) * -1],
 }
 
+export function addMarker(map, site, element) {
+  const placeholder = document.createElement('div')
+
+  ReactDOM.render(element, placeholder)
+
+  return new mapboxgl.Marker(placeholder)
+    .setLngLat(site)
+    .addTo(map)
+}
+
 export function addPopup(map, site, element, options) {
   const placeholder = document.createElement('div')
 

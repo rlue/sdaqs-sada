@@ -19,7 +19,7 @@ module.exports = {
   },
   plugins: [
     new AssetsPlugin({ path: path.resolve('assets') }),
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['*.js'] }),
   ],
   resolve: {
     extensions: ['.js', '.jsx'],

@@ -25,7 +25,7 @@ export default function SearchPanel({
   return (
     <div className="item__bifold-left">
       <h1>Look up exposure history</h1>
-      <div>
+      <ol>
         {deployments.map((deployment) => (
           <SearchUnit
             key={deployment.id}
@@ -38,7 +38,7 @@ export default function SearchPanel({
             }}
           />
         ))}
-      </div>
+      </ol>
     </div>
   )
 }

@@ -83,11 +83,13 @@ export default function SearchUnit({
   useEffect(() => {
     const { highlightedIndex, isOpen } = comboboxState
 
-    if (isOpen && highlightedIndex > -1) {
+    if (isOpen && uiFocus.on === 'search results') {
       setUIFocus({
         on: 'search results',
         results: uiFocus.results,
-        result: uiFocus.results[highlightedIndex],
+        result: highlightedIndex > -1
+          ? uiFocus.results[highlightedIndex]
+          : null,
       })
     }
   }, [comboboxState.highlightedIndex, comboboxState.isOpen])
@@ -110,7 +112,7 @@ export default function SearchUnit({
   }
 
   return (
-    <div>
+    <li className="search-unit">
       <label
         {...ds.getLabelProps()}
         htmlFor="military-base"
@@ -152,7 +154,7 @@ export default function SearchUnit({
           ))}
         </SearchResults>
       </ul>
-    </div>
+    </li>
   )
 }
 
