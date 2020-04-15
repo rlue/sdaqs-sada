@@ -1,3 +1,5 @@
+/tmp/
+
 # Compiled assets
 /public/assets/main*.js
 /assets/webpack-assets.json
