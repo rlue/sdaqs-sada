@@ -55,13 +55,14 @@ export default function Map({
   // manage selected-deployment markers
   useEffect(() => {
     selectionMarkers.current = deployments
+      .slice(0).reverse() // iterate backwards so that lower-numbered markers appear on top
       .filter(({ base }) => base.id)
       .reduce((markers, { id, base }, i) => {
         markers[id] = addMarker(
           map.current,
           base,
           <Icons.MapPin
-            label={i + 1}
+            label={deployments.length - (i + 1)}
             className="map-pin--selection"
             onClick={() => setUIFocus({ on: 'date picker', id })}
           />
