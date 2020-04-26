@@ -20,7 +20,7 @@ export default function SearchUnit({
 
   const inputDebouncer = useRef(
     debounce(({ query }) => {
-      const results = fuse.search(query)
+      const results = fuse.search(query).slice(0, 20)
 
       if (!query.trim().length) {
         setStatus('ready')
