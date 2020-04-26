@@ -60,7 +60,11 @@ export default function Map({
         markers[id] = addMarker(
           map.current,
           base,
-          <Icons.MapPin label={i + 1} className="map-pin--selection"/>
+          <Icons.MapPin
+            label={i + 1}
+            className="map-pin--selection"
+            onClick={() => setUIFocus({ on: 'date picker', id })}
+          />
         )
 
         return markers
