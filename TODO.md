@@ -1,4 +1,3 @@
-* Add country to search results / popups
 * Show more feedback on map when hovering over comboboxes
   (toggle popups??)
 * Make markers clickable

@@ -13,7 +13,8 @@ export default function DatePickerPopup({
 }) {
   return (
     <div>
-      <h1>{deployment.base.name}</h1>
+      <div className="date-picker__country">{deployment.base.country}</div>
+      <h1 className="date-picker__name">{deployment.base.name}</h1>
       <DatePicker.RangePicker
         picker="month"
         format="MMM YYYY"

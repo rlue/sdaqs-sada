@@ -141,7 +141,7 @@ export default function SearchUnit({
       </span>
       {deployment.base.id
         && <button type="button" onClick={removeHandler}>x</button>}
-      <ul {...ds.getMenuProps()}>
+      <ul className="search-results" {...ds.getMenuProps()}>
         <SearchResults status={status}>
           {(uiFocus.results || []).map((item, index) => (
             <li
@@ -149,7 +149,8 @@ export default function SearchUnit({
               key={`${item.id}`}
               className={ds.highlightedIndex === index ? 'highlight' : null}
             >
-              {item.name}
+              <div className="search-result__country">{item.country}</div>
+              <div className="search-result__name">{item.name}</div>
             </li>
           ))}
         </SearchResults>

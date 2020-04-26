@@ -8,6 +8,10 @@ body {
   font-family: sans-serif;
 }
 
+.item__bifold-left {
+  margin: 0 1rem;
+}
+
 .app {
   height: 100vh;
   width: 100vw;
@@ -36,6 +40,10 @@ li.highlight {
 span.combobox__period {
   display: inline-block;
   width: 10rem;
+}
+
+.search-list {
+  padding-left: 1.5rem;
 }
 
 .search-unit::marker {
@@ -94,4 +102,30 @@ svg.map-pin--selection {
 
 .mapboxgl-marker--highlighted {
   z-index: 10;
+}
+
+ul.search-results {
+  list-style: none;
+  padding: 0;
+}
+
+.search-result__name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.search-result__country {
+  float: right;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: #999;
+}
+
+.date-picker__country {
+  float: right;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: #999;
 }
