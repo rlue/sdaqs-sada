@@ -111,8 +111,24 @@ export default function SearchUnit({
     dispatchDeployments({ type: 'remove', id: deployment.id })
   }
 
+  function setHoveredSelection() {
+    if (deployment.base.id && !uiFocus.on) {
+      setUIFocus({ on: 'hovered deployment', deploymentId: deployment.id })
+    }
+  }
+
+  function unsetHoveredSelection() {
+    if (deployment.base.id && uiFocus.on === 'hovered deployment') {
+      setUIFocus({})
+    }
+  }
+
   return (
-    <li className="search-unit">
+    <li
+      className="search-unit"
+      onMouseOver={setHoveredSelection}
+      onMouseOut={unsetHoveredSelection}
+    >
       <label
         {...ds.getLabelProps()}
         htmlFor="military-base"

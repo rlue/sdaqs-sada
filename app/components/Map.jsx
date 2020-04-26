@@ -56,14 +56,12 @@ export default function Map({
   useEffect(() => {
     selectionMarkers.current = deployments
       .filter(({ base }) => base.id)
-      .reduce((markers, { base }, i) => {
-        if (!(base.id in markers)) {
-          markers[base.id] = addMarker(
-            map.current,
-            base,
-            <Icons.MapPin label={i + 1} className="map-pin--selection"/>
-          )
-        }
+      .reduce((markers, { id, base }, i) => {
+        markers[id] = addMarker(
+          map.current,
+          base,
+          <Icons.MapPin label={i + 1} className="map-pin--selection"/>
+        )
 
         return markers
       }, {})
@@ -132,7 +130,7 @@ export default function Map({
     }
   }, [uiFocus.on, uiFocus.id, uiFocus.results && uiFocus.results.map((r) => r.id).join('')])
 
-  // manage popup for currently-highlighted result
+  // manage visual feedback for currently-highlighted result
   useEffect(() => {
     if (uiFocus.on === 'search results' && uiFocus.result) {
       const resultMarkerDiv = resultMarkers.current[uiFocus.result.id].getElement()
@@ -148,6 +146,23 @@ export default function Map({
       }
     }
   }, [uiFocus.on && uiFocus.result && uiFocus.result.id])
+
+  // manage visual feedback for currently-hovered deployment
+  useEffect(() => {
+    if (uiFocus.on === 'hovered deployment') {
+      const selectionMarkerDiv = selectionMarkers.current[uiFocus.deploymentId].getElement()
+      selectionMarkerDiv.classList.add('mapboxgl-marker--highlighted')
+      selectionMarkerDiv.children[0].classList.add('map-pin--highlighted')
+    }
+
+    return () => {
+      if (uiFocus.on === 'hovered deployment') {
+        const selectionMarkerDiv = selectionMarkers.current[uiFocus.deploymentId].getElement()
+        selectionMarkerDiv.classList.remove('mapboxgl-marker--highlighted')
+        selectionMarkerDiv.children[0].classList.remove('map-pin--highlighted')
+      }
+    }
+  }, [uiFocus.on && uiFocus.deploymentId])
 
   return <div className="item__bifold-right" ref={mapContainer} />
 }
