@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
-import { useCombobox } from 'downshift'
-import debounce from 'lodash.debounce'
-import { humanMonthRange } from '../utils/dateHelper'
-import SearchResults from './SearchResults'
+import React, { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useCombobox } from 'downshift';
+import debounce from 'lodash.debounce';
+import { humanMonthRange } from '../utils/dateHelper';
+import SearchResults from './SearchResults';
 
-const DEBOUNCE_WAIT = 300
+const DEBOUNCE_WAIT = 300;
 
 export default function SearchUnit({
   fuse,
@@ -14,46 +14,46 @@ export default function SearchUnit({
   uiFocus,
   setUIFocus,
 }) {
-  const [status, setStatus] = useState('ready')
-  const [comboboxState, setComboboxState] = useState({ inputValue: '' })
-  const [controlledInput, setControlledInput] = useState(deployment.base.name || '')
+  const [status, setStatus] = useState('ready');
+  const [comboboxState, setComboboxState] = useState({ inputValue: '' });
+  const [controlledInput, setControlledInput] = useState(deployment.base.name || '');
 
   const inputDebouncer = useRef(
     debounce(({ query }) => {
-      const results = fuse.search(query).slice(0, 20)
+      const results = fuse.search(query).slice(0, 20);
 
       if (!query.trim().length) {
-        setStatus('ready')
-        setUIFocus({})
+        setStatus('ready');
+        setUIFocus({});
       } else if (!results.length) {
-        setStatus('no results')
-        setUIFocus({})
+        setStatus('no results');
+        setUIFocus({});
       } else {
-        setStatus('success')
-        setUIFocus({ on: 'search results', results })
+        setStatus('success');
+        setUIFocus({ on: 'search results', results });
       }
     }, DEBOUNCE_WAIT),
-  )
+  );
 
   const ds = useCombobox({
     items: uiFocus.results || [],
     itemToString: (item) => (item ? item.name : ''),
     inputValue: controlledInput,
     onStateChange: setComboboxState,
-  })
+  });
 
   // ENFORCE NON-DEFAULT BEHAVIOR: Reset inputValue any time user leaves input
   useEffect(() => {
-    const { isOpen, selectedItem } = comboboxState
-    const originalSelection = (selectedItem || deployment.base).name || ''
+    const { isOpen, selectedItem } = comboboxState;
+    const originalSelection = (selectedItem || deployment.base).name || '';
 
-    if (!isOpen) setControlledInput(originalSelection)
-  }, [comboboxState.isOpen])
+    if (!isOpen) setControlledInput(originalSelection);
+  }, [comboboxState.isOpen]);
 
   useEffect(() => {
-    const { inputValue, isOpen, selectedItem } = comboboxState
-    const selectionMade = selectedItem && selectedItem.id !== deployment.base.id
-    const inputAbandoned = !isOpen && !selectionMade
+    const { inputValue, isOpen, selectedItem } = comboboxState;
+    const selectionMade = selectedItem && selectedItem.id !== deployment.base.id;
+    const inputAbandoned = !isOpen && !selectionMade;
 
     // FIXME? Selecting an item triggers this effect hook TWICE:
     //
@@ -63,25 +63,25 @@ export default function SearchUnit({
     // Ignore this second state change.
     if ('isOpen' in comboboxState) {
       if (selectionMade) {
-        setStatus('complete')
-        setUIFocus({ on: 'date picker', id: deployment.id })
+        setStatus('complete');
+        setUIFocus({ on: 'date picker', id: deployment.id });
       } else {
         // inputValue may be non-empty when blurring via <Tab>/click
-        inputDebouncer.current({ query: inputAbandoned ? '' : inputValue })
+        inputDebouncer.current({ query: inputAbandoned ? '' : inputValue });
 
         // active UI feedback for debouncer
         if (isOpen && inputValue.trim().length) {
-          setStatus('debouncing')
+          setStatus('debouncing');
         } else {
-          inputDebouncer.current.flush()
+          inputDebouncer.current.flush();
         }
       }
     }
-  }, [comboboxState.inputValue, comboboxState.isOpen])
+  }, [comboboxState.inputValue, comboboxState.isOpen]);
 
   // onHighlightedIndexChange
   useEffect(() => {
-    const { highlightedIndex, isOpen } = comboboxState
+    const { highlightedIndex, isOpen } = comboboxState;
 
     if (isOpen && uiFocus.on === 'search results') {
       setUIFocus({
@@ -90,9 +90,9 @@ export default function SearchUnit({
         result: highlightedIndex > -1
           ? uiFocus.results[highlightedIndex]
           : null,
-      })
+      });
     }
-  }, [comboboxState.highlightedIndex, comboboxState.isOpen])
+  }, [comboboxState.highlightedIndex, comboboxState.isOpen]);
 
   // onSelectedItemChange
   useEffect(() => {
@@ -102,29 +102,29 @@ export default function SearchUnit({
         id: deployment.id,
         key: 'base',
         value: comboboxState.selectedItem,
-      })
+      });
     }
-  }, [(comboboxState.selectedItem || {}).id])
+  }, [(comboboxState.selectedItem || {}).id]);
 
   function removeHandler() {
-    setUIFocus({})
-    dispatchDeployments({ type: 'remove', id: deployment.id })
+    setUIFocus({});
+    dispatchDeployments({ type: 'remove', id: deployment.id });
   }
 
   function setHoveredSelection() {
     if (deployment.base.id && !uiFocus.on) {
-      setUIFocus({ on: 'hovered deployment', deploymentId: deployment.id })
+      setUIFocus({ on: 'hovered deployment', deploymentId: deployment.id });
     }
   }
 
   function unsetHoveredSelection() {
     if (deployment.base.id && uiFocus.on === 'hovered deployment') {
-      setUIFocus({})
+      setUIFocus({});
     }
   }
 
   return (
-    <li
+    <li // eslint-disable-line jsx-a11y/mouse-events-have-key-events
       className="search-unit"
       onMouseOver={setHoveredSelection}
       onMouseOut={unsetHoveredSelection}
@@ -141,9 +141,9 @@ export default function SearchUnit({
               // FIXME: popup lingers on page when user clicks elsewhere on the SearchPanel
               onFocus: () => {
                 if (deployment.base.id) {
-                  setUIFocus({ on: 'date picker', id: deployment.id })
+                  setUIFocus({ on: 'date picker', id: deployment.id });
                 } else {
-                  setUIFocus({})
+                  setUIFocus({});
                 }
               },
             })}
@@ -172,7 +172,7 @@ export default function SearchUnit({
         </SearchResults>
       </ul>
     </li>
-  )
+  );
 }
 
 SearchUnit.propTypes = {
@@ -200,4 +200,4 @@ SearchUnit.propTypes = {
     ),
   }).isRequired,
   setUIFocus: PropTypes.func.isRequired,
-}
+};

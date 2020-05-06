@@ -1,9 +1,9 @@
-import mapboxgl from 'mapbox-gl'
-import ReactDOM from 'react-dom'
+import mapboxgl from 'mapbox-gl';
+import ReactDOM from 'react-dom';
 
-const markerHeight = 50
-const markerRadius = 10
-const linearOffset = 25
+const markerHeight = 50;
+const markerRadius = 10;
+const linearOffset = 25;
 const POPUP_OFFSETS = {
   top: [0, 0],
   'top-left': [0, 0],
@@ -19,38 +19,37 @@ const POPUP_OFFSETS = {
   ],
   left: [markerRadius, (markerHeight - markerRadius) * -1],
   right: [-markerRadius, (markerHeight - markerRadius) * -1],
-}
+};
 
 export function addMarker(map, site, element) {
-  const placeholder = document.createElement('div')
+  const placeholder = document.createElement('div');
 
-  ReactDOM.render(element, placeholder)
+  ReactDOM.render(element, placeholder);
 
-  return new mapboxgl.Marker(placeholder)
-    .setLngLat(site)
-    .addTo(map)
+  return new mapboxgl.Marker(placeholder).setLngLat(site).addTo(map);
 }
 
 export function addPopup(map, site, element, options) {
-  const placeholder = document.createElement('div')
+  const placeholder = document.createElement('div');
 
-  ReactDOM.render(element, placeholder)
+  ReactDOM.render(element, placeholder);
 
   return new mapboxgl.Popup({
     offset: POPUP_OFFSETS,
     closeButton: false,
     ...options,
-  }).setDOMContent(placeholder)
+  })
+    .setDOMContent(placeholder)
     .setLngLat(site)
-    .addTo(map)
+    .addTo(map);
 }
 
 // accepts an array of LngLatLikes and returns a LngLatBounds
 export function collectionBounds(sites) {
-  const lngs = sites.map(({ lng }) => lng)
-  const lats = sites.map(({ lat }) => lat)
-  const swBound = [Math.min(...lngs), Math.min(...lats)]
-  const neBound = [Math.max(...lngs), Math.max(...lats)]
+  const lngs = sites.map(({ lng }) => lng);
+  const lats = sites.map(({ lat }) => lat);
+  const swBound = [Math.min(...lngs), Math.min(...lats)];
+  const neBound = [Math.max(...lngs), Math.max(...lats)];
 
-  return new mapboxgl.LngLatBounds([swBound, neBound])
+  return new mapboxgl.LngLatBounds([swBound, neBound]);
 }

@@ -1,9 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { DatePicker } from 'antd'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { DatePicker } from 'antd';
 
 function disabledDate(current) {
-  return current && !current.isBetween(new Date(2002, 0, 1), Date.now())
+  return current && !current.isBetween(new Date(2002, 0, 1), Date.now());
 }
 
 export default function DatePickerPopup({
@@ -26,15 +26,15 @@ export default function DatePickerPopup({
             id: deployment.id,
             key: 'period',
             value: dates,
-          })
+          });
 
           if (dates) {
-            setUIFocus({})
+            setUIFocus({});
           }
         }}
       />
     </div>
-  )
+  );
 }
 
 DatePickerPopup.propTypes = {
@@ -48,4 +48,4 @@ DatePickerPopup.propTypes = {
   }).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
   setUIFocus: PropTypes.func.isRequired,
-}
+};

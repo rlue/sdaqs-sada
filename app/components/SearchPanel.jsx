@@ -1,8 +1,8 @@
-import React, { useRef } from 'react'
-import PropTypes from 'prop-types'
-import Fuse from 'fuse.js'
-import SearchUnit from './SearchUnit'
-import sites from '../../assets/data/sites.json'
+import React, { useRef } from 'react';
+import PropTypes from 'prop-types';
+import Fuse from 'fuse.js';
+import SearchUnit from './SearchUnit';
+import sites from '../../assets/data/sites.json';
 
 export default function SearchPanel({
   deployments,
@@ -20,7 +20,7 @@ export default function SearchPanel({
       minMatchCharLength: 1,
       keys: ['name'],
     }),
-  )
+  );
 
   return (
     <div className="item__bifold-left">
@@ -40,7 +40,7 @@ export default function SearchPanel({
         ))}
       </ol>
     </div>
-  )
+  );
 }
 
 SearchPanel.propTypes = {
@@ -58,4 +58,4 @@ SearchPanel.propTypes = {
     ),
   }).isRequired,
   setUIFocus: PropTypes.func.isRequired,
-}
+};
