@@ -23,6 +23,7 @@
       "es6": true
     },
     "extends": [
+      "prettier",
       "plugin:react/recommended",
       "airbnb"
     ],
@@ -42,18 +43,10 @@
       "react"
     ],
     "rules": {
-      "semi": [
+      "no-param-reassign": [
         "error",
-        "never"
-      ],
-      "prettier/prettier": [
-        "warn",
         {
-          "singleQuote": true,
-          "semi": false,
-          "trailingComma": "all",
-          "tabWidth": 2,
-          "arrowParens": "always"
+          "props": false
         }
       ],
       "react/jsx-props-no-spreading": "off",
@@ -75,13 +68,14 @@
     "css-loader": "^3.4.2",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "latest",
+    "eslint-config-prettier": "^6.11.0",
     "eslint-import-resolver-node": "^0.3.3",
     "eslint-plugin-import": "latest",
     "eslint-plugin-jsx-a11y": "latest",
-    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-react": "latest",
     "eslint-plugin-react-hooks": "^1.7.0",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.5",
     "style-loader": "^1.1.3",
     "svg-inline-loader": "^0.8.2",
     "webpack": "^4.41.6",

@@ -75,6 +75,24 @@ To embed new fonts into this project:
 2. Save to `public/assets/fonts`
 3. Use the [CSS `@font-face` directive][6]
 
+### Linting
+
+This project uses ESLint (with `eslint-plugin-prettier`) for code linting.
+The following IDE configurations may be of use.
+
+#### vim + ALE
+
+```vimscript
+let g:ale_fix_on_save = 1
+let g:ale_javascript_eslint_use_global = 1
+let g:ale_javascript_eslint_executable = 'yarn'
+let g:ale_javascript_eslint_options = 'run eslint'
+let g:ale_fixers = {
+\   'javascriptreact': ['eslint'],
+\   'javascript': ['eslint'],
+\ }
+```
+
 License
 -------
 
