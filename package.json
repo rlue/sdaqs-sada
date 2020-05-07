@@ -85,7 +85,7 @@
   },
   "dependencies": {
     "antd": "^4.0.2",
-    "downshift": "^5.0.3",
+    "downshift": "^5.2.5",
     "fuse.js": "^3.4.6",
     "lodash.debounce": "^4.0.8",
     "mapbox-gl": "^1.8.0",

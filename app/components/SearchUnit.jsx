@@ -15,7 +15,7 @@ export default function SearchUnit({
   setUIFocus,
 }) {
   const [status, setStatus] = useState('ready');
-  const [comboboxState, setComboboxState] = useState({ inputValue: '' });
+  const [comboboxState, setComboboxState] = useState({});
   const [controlledInput, setControlledInput] = useState(deployment.base.name || '');
 
   const inputDebouncer = useRef(
@@ -42,48 +42,29 @@ export default function SearchUnit({
     onStateChange: setComboboxState,
   });
 
-  // ENFORCE NON-DEFAULT BEHAVIOR: Reset inputValue any time user leaves input
+  // What happens when you enter text?
   useEffect(() => {
-    const { isOpen, selectedItem } = comboboxState;
-    const originalSelection = (selectedItem || deployment.base).name || '';
+    const { inputValue, type } = comboboxState;
 
-    if (!isOpen) setControlledInput(originalSelection);
-  }, [comboboxState.isOpen]);
+    // without `type === '__input_change__'`, this effect fires on highlightedIndexChange
+    if ('inputValue' in comboboxState && type === '__input_change__') {
+      inputDebouncer.current({ query: inputValue });
 
-  useEffect(() => {
-    const { inputValue, isOpen, selectedItem } = comboboxState;
-    const selectionMade = selectedItem && selectedItem.id !== deployment.base.id;
-    const inputAbandoned = !isOpen && !selectionMade;
-
-    // FIXME? Selecting an item triggers this effect hook TWICE:
-    //
-    // * onSelectedItemChange (with { inputValue, isOpen, highlightedIndex, selectedItem })
-    // * when dispatchDeployments triggers re-render (with only { inputValue })
-    //
-    // Ignore this second state change.
-    if ('isOpen' in comboboxState) {
-      if (selectionMade) {
-        setStatus('complete');
-        setUIFocus({ on: 'date picker', id: deployment.id });
+      // active UI feedback for debouncer
+      if ((inputValue).trim().length) {
+        setStatus('debouncing');
       } else {
-        // inputValue may be non-empty when blurring via <Tab>/click
-        inputDebouncer.current({ query: inputAbandoned ? '' : inputValue });
-
-        // active UI feedback for debouncer
-        if (isOpen && inputValue.trim().length) {
-          setStatus('debouncing');
-        } else {
-          inputDebouncer.current.flush();
-        }
+        inputDebouncer.current.flush();
       }
     }
-  }, [comboboxState.inputValue, comboboxState.isOpen]);
+  }, [comboboxState.inputValue]);
 
-  // onHighlightedIndexChange
+  // What happens when you hover/highlight results?
   useEffect(() => {
-    const { highlightedIndex, isOpen } = comboboxState;
+    const { highlightedIndex, selectedItem } = comboboxState;
+    const selectionMade = selectedItem && selectedItem.id !== deployment.base.id;
 
-    if (isOpen && uiFocus.on === 'search results') {
+    if ('highlightedIndex' in comboboxState && !selectionMade && uiFocus.results) {
       setUIFocus({
         on: 'search results',
         results: uiFocus.results,
@@ -92,11 +73,17 @@ export default function SearchUnit({
           : null,
       });
     }
-  }, [comboboxState.highlightedIndex, comboboxState.isOpen]);
+  }, [comboboxState.highlightedIndex]);
 
-  // onSelectedItemChange
+  // What happens when you make a selection?
   useEffect(() => {
-    if (comboboxState.selectedItem) {
+    const { selectedItem } = comboboxState;
+    const selectionMade = selectedItem && selectedItem.id !== deployment.base.id;
+
+    if (selectionMade) {
+      setControlledInput(selectedItem.name);
+      setStatus('complete');
+      setUIFocus({ on: 'date picker', id: deployment.id });
       dispatchDeployments({
         type: 'modify',
         id: deployment.id,
@@ -105,6 +92,22 @@ export default function SearchUnit({
       });
     }
   }, [(comboboxState.selectedItem || {}).id]);
+
+  // What happens when you abandon input? (un-combobox-like behavior!)
+  useEffect(() => {
+    const { type, selectedItem } = comboboxState;
+    const selectionMade = selectedItem && selectedItem.id !== deployment.base.id;
+    const originalInputValue = (selectedItem || deployment.base).name || '';
+
+    switch (type) { // eslint-disable-line default-case
+      case '__input_blur__':
+        if (selectionMade) break;
+      case '__input_keydown_escape__': // eslint-disable-line no-fallthrough
+        setControlledInput(originalInputValue);
+        inputDebouncer.current({ query: '' });
+        inputDebouncer.current.flush();
+    }
+  }, [comboboxState.type]);
 
   function removeHandler() {
     setUIFocus({});
