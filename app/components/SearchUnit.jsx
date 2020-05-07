@@ -38,6 +38,7 @@ export default function SearchUnit({
     items: uiFocus.results || [],
     itemToString: (item) => (item ? item.name : ''),
     inputValue: comboboxState.inputValue,
+    selectedItem: comboboxState.selectedItem,
     onStateChange: setComboboxState,
   });
 
@@ -96,15 +97,20 @@ export default function SearchUnit({
   useEffect(() => {
     const { type, selectedItem } = comboboxState;
     const selectionMade = selectedItem && selectedItem.id !== deployment.base.id;
-    const originalInputValue = (selectedItem || deployment.base).name || '';
 
     switch (type) { // eslint-disable-line default-case
       case '__input_blur__':
+      case '__input_keydown_enter__':
         if (selectionMade) break;
       case '__input_keydown_escape__': // eslint-disable-line no-fallthrough
-        setComboboxState({ inputValue: originalInputValue });
-        inputDebouncer.current({ query: '' });
-        inputDebouncer.current.flush();
+        if (deployment.base.id) {
+          setComboboxState({ inputValue: deployment.base.name });
+          setUIFocus({ on: 'date picker', id: deployment.id });
+        } else {
+          setComboboxState({ inputValue: '' });
+          inputDebouncer.current({ query: '' });
+          inputDebouncer.current.flush();
+        }
     }
   }, [comboboxState.type]);
 
@@ -148,6 +154,14 @@ export default function SearchUnit({
                   setUIFocus({ on: 'date picker', id: deployment.id });
                 } else {
                   setUIFocus({});
+                }
+              },
+              onKeyPress: (event) => {
+                const keypressEnter = event.charCode === 13;
+                const implicitSelection = uiFocus.results && ds.highlightedIndex === -1;
+
+                if (keypressEnter && implicitSelection) {
+                  setComboboxState({ type: '__input_keydown_enter__', selectedItem: uiFocus.results[0] });
                 }
               },
             })}
