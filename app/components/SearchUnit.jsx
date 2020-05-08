@@ -137,39 +137,38 @@ export default function SearchUnit({
       onMouseOver={setHoveredSelection}
       onMouseOut={unsetHoveredSelection}
     >
-      <label
+      <label // eslint-disable-line jsx-a11y/label-has-associated-control
         {...ds.getLabelProps()}
-        htmlFor="military-base"
-        style={{ display: 'inline-block' }}
+        style={{ display: 'none' }}
       >
-        <div {...ds.getComboboxProps()}>
-          <input
-            {...ds.getInputProps({
-              onChange: (event) => {
-                setComboboxState({ type: '__input_change__', inputValue: event.target.value });
-              },
-              // FIXME: popup lingers on page when user clicks elsewhere on the SearchPanel
-              onFocus: () => {
-                if (deployment.base.id) {
-                  setUIFocus({ on: 'date picker', id: deployment.id });
-                } else {
-                  setUIFocus({});
-                }
-              },
-              onKeyPress: (event) => {
-                const keypressEnter = event.charCode === 13;
-                const implicitSelection = uiFocus.results && ds.highlightedIndex === -1;
-
-                if (keypressEnter && implicitSelection) {
-                  setComboboxState({ type: '__input_keydown_enter__', selectedItem: uiFocus.results[0] });
-                }
-              },
-            })}
-            id="military-base"
-            placeholder="Search bases"
-          />
-        </div>
+        Search bases
       </label>
+      <div {...ds.getComboboxProps()} style={{ display: 'inline-block' }}>
+        <input
+          {...ds.getInputProps({
+            onChange: (event) => {
+              setComboboxState({ type: '__input_change__', inputValue: event.target.value });
+            },
+            // FIXME: popup lingers on page when user clicks elsewhere on the SearchPanel
+            onFocus: () => {
+              if (deployment.base.id) {
+                setUIFocus({ on: 'date picker', id: deployment.id });
+              } else {
+                setUIFocus({});
+              }
+            },
+            onKeyPress: (event) => {
+              const keypressEnter = event.charCode === 13;
+              const implicitSelection = uiFocus.results && ds.highlightedIndex === -1;
+
+              if (keypressEnter && implicitSelection) {
+                setComboboxState({ type: '__input_keydown_enter__', selectedItem: uiFocus.results[0] });
+              }
+            },
+          })}
+          placeholder="Search bases"
+        />
+      </div>
       <span className="combobox__period">
         {deployment.base.id && humanMonthRange(deployment.period)}
       </span>
