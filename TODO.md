@@ -7,3 +7,5 @@
   (as opposed to only in a new search unit box)
 * Set cursor on clickable map markers
   (use “pointer”, but not when in date picker mode)
+* Auto-open date picker if empty
+  (https://github.com/mapbox/mapbox-gl-js/issues/1794)
