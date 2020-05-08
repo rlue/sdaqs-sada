@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 // eslint-disable-next-line import/prefer-default-export
 export function MapPin({ className, label, onClick }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={`map-pin ${className}`}
+      className={classNames('map-pin', className)}
       viewBox="0 0 128 128"
       onClick={onClick}
     >

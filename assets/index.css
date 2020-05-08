@@ -33,10 +33,6 @@ body {
   grid-row: 1 / span 1;
 }
 
-li.highlight {
-  background-color: #bde4ff;
-}
-
 span.combobox__period {
   display: inline-block;
   width: 10rem;
@@ -107,6 +103,10 @@ svg.map-pin--highlighted {
 ul.search-results {
   list-style: none;
   padding: 0;
+}
+
+li.search-result.highlight {
+  background-color: #bde4ff;
 }
 
 .search-result__name {

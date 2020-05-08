@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useCombobox } from 'downshift';
+import classNames from 'classnames';
 import debounce from 'lodash.debounce';
 import { humanMonthRange } from '../utils/dateHelper';
 import SearchResults from './SearchResults';
@@ -180,7 +181,7 @@ export default function SearchUnit({
             <li
               {...ds.getItemProps({ item, index })}
               key={`${item.id}`}
-              className={ds.highlightedIndex === index ? 'highlight' : null}
+              className={classNames('search-result', { highlight: ds.highlightedIndex === index })}
             >
               <div className="search-result__country">{item.country}</div>
               <div className="search-result__name">{item.name}</div>
