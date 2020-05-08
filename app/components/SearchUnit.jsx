@@ -15,8 +15,7 @@ export default function SearchUnit({
   setUIFocus,
 }) {
   const [status, setStatus] = useState('ready');
-  const [comboboxState, setComboboxState] = useState({});
-  const [controlledInput, setControlledInput] = useState(deployment.base.name || '');
+  const [comboboxState, setComboboxState] = useState({ inputValue: deployment.base.name || '' });
 
   const inputDebouncer = useRef(
     debounce(({ query }) => {
@@ -38,7 +37,7 @@ export default function SearchUnit({
   const ds = useCombobox({
     items: uiFocus.results || [],
     itemToString: (item) => (item ? item.name : ''),
-    inputValue: controlledInput,
+    inputValue: comboboxState.inputValue,
     onStateChange: setComboboxState,
   });
 
@@ -81,7 +80,7 @@ export default function SearchUnit({
     const selectionMade = selectedItem && selectedItem.id !== deployment.base.id;
 
     if (selectionMade) {
-      setControlledInput(selectedItem.name);
+      setComboboxState({ inputValue: selectedItem.name });
       setStatus('complete');
       setUIFocus({ on: 'date picker', id: deployment.id });
       dispatchDeployments({
@@ -103,7 +102,7 @@ export default function SearchUnit({
       case '__input_blur__':
         if (selectionMade) break;
       case '__input_keydown_escape__': // eslint-disable-line no-fallthrough
-        setControlledInput(originalInputValue);
+        setComboboxState({ inputValue: originalInputValue });
         inputDebouncer.current({ query: '' });
         inputDebouncer.current.flush();
     }
@@ -140,7 +139,9 @@ export default function SearchUnit({
         <div {...ds.getComboboxProps()}>
           <input
             {...ds.getInputProps({
-              onChange: (event) => setControlledInput(event.target.value),
+              onChange: (event) => {
+                setComboboxState({ type: '__input_change__', inputValue: event.target.value });
+              },
               // FIXME: popup lingers on page when user clicks elsewhere on the SearchPanel
               onFocus: () => {
                 if (deployment.base.id) {
