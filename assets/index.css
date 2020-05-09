@@ -125,12 +125,30 @@ li.search-result.highlight {
   font-style: normal;
 }
 
+@keyframes float {
+  0% {
+    transform: translatey(-50%);
+    filter: drop-shadow(0 0.25rem 0.125rem hsla(0, 0%, 0%, 0.4));
+  }
+  50% {
+    transform: translatey(-75%);
+    filter: drop-shadow(0 0.75rem 0.125rem hsla(0, 0%, 0%, 0.4));
+  }
+  100% {
+    transform: translatey(-50%);
+    filter: drop-shadow(0 0.25rem 0.125rem hsla(0, 0%, 0%, 0.4));
+  }
+}
+
 svg.map-pin {
   overflow: visible !important;
+  height: 2rem;
+  width: 2rem;
   position: relative;
+  transform: translatey(-50%);
   font-family: Lato;
   font-weight: 900;
-  filter: url('/assets/svg/filters.svg#shadow');
+  filter: drop-shadow(0 0.25rem 0.125rem hsla(0, 0%, 0%, 0.4));
 }
 
 svg.map-pin > path:first-of-type {
@@ -149,22 +167,31 @@ svg.map-pin > text {
   dominant-baseline: middle;
 }
 
-svg.map-pin--search-result {
-  height: 1.5rem;
-  width: 1.5rem;
-  bottom: 0.75rem;
-}
-
-svg.map-pin--selection {
-  height: 2rem;
-  width: 2rem;
-  bottom: 1rem;
-}
-
 svg.map-pin--highlighted {
-  height: 2.5rem;
-  width: 2.5rem;
-  bottom: 1.25rem;
+  animation: float 1s ease-in-out infinite;
+}
+
+.map-pin__label {
+  position: absolute;
+  bottom: 50%;
+  left: 106.25%;
+  width: max-content;
+  max-width: 16rem;
+  color: #000;
+}
+
+.map-pin__label > * {
+  /* simulate text-stroke */
+  text-shadow: -1px -1px #fff, -1px 0px #fff, -1px 1px #fff, 0px -1px #fff, 0px 1px #fff, 1px -1px #fff, 1px 0px #fff, 1px 1px #fff;
+}
+
+.map-pin__label-name {
+  font-weight: bold;
+  font-size: 1.125rem;
+}
+
+.map-pin__label-country {
+  line-height: 0.75rem;
 }
 
 .mapboxgl-marker--highlighted {

@@ -60,9 +60,10 @@ export default function Map({
           map.current,
           base,
           <Icons.MapPin
-            label={deployments.length - (i + 1)}
             className="map-pin--selection"
             onClick={() => setUIFocus({ on: 'deployment details', id })}
+            index={deployments.length - (i + 1)}
+            label={base}
           />,
         );
 

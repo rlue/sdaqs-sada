@@ -206,7 +206,7 @@ export default function SearchUnit({
       <div
         className={classNames(
           'search-unit__details',
-          { 'search-unit__details--hidden': !deployment.base.id },
+          { 'search-unit__details--hidden': uiFocus.on !== 'deployment details' || uiFocus.id !== deployment.id },
         )}
       >
         <DatePicker.RangePicker
@@ -248,6 +248,7 @@ SearchUnit.propTypes = {
   dispatchDeployments: PropTypes.func.isRequired,
   uiFocus: PropTypes.shape({
     on: PropTypes.string,
+    id: PropTypes.string,
     results: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number,
