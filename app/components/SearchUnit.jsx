@@ -20,6 +20,8 @@ export default function SearchUnit({
   const [status, setStatus] = useState('ready');
   const [comboboxState, setComboboxState] = useState({ inputValue: deployment.base.name || '' });
   const componentRoot = useRef(null);
+  const inputField = useRef(null);
+  const datePicker = useRef(null);
 
   const focusDebouncer = useRef(
     debounce((uiFocusParams) => setUIFocus(uiFocusParams), FOCUS_DEBOUNCE_WAIT),
@@ -122,6 +124,15 @@ export default function SearchUnit({
     }
   }, [comboboxState.type]);
 
+  // manage current UI focus
+  useEffect(() => {
+    const selectedForFocus = uiFocus.on === 'deployment details'
+      && uiFocus.id === deployment.id;
+    const hasFocus = componentRoot.current.contains(document.activeElement);
+
+    if (selectedForFocus && !hasFocus) inputField.current.focus();
+  }, [uiFocus.on, uiFocus.id]);
+
   function removeHandler() {
     focusDebouncer.current({});
     dispatchDeployments({ type: 'remove', id: deployment.id });
@@ -184,6 +195,7 @@ export default function SearchUnit({
                 }
               },
             })}
+            ref={inputField}
             placeholder="Search bases"
           />
 
@@ -222,6 +234,7 @@ export default function SearchUnit({
         )}
       >
         <DatePicker.RangePicker
+          ref={datePicker}
           picker="month"
           format="MMM YYYY"
           disabledDate={(current) => current
