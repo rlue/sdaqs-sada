@@ -84,6 +84,7 @@
     "yarn": "^2.0.0-rc.27"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.1.0",
     "antd": "^4.0.2",
     "classnames": "^2.2.6",
     "downshift": "^5.2.5",

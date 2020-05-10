@@ -35,6 +35,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ant-design/icons@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@ant-design/icons@npm:4.1.0"
+  dependencies:
+    "@ant-design/colors": ^3.1.0
+    "@ant-design/icons-svg": ^4.0.0
+    classnames: ^2.2.6
+    insert-css: ^2.0.0
+    rc-util: ^4.9.0
+  peerDependencies:
+    react: 16.x
+  checksum: 2/ca92a083084f72ec66c65f32413f08e55020562934943503aac47ee4c6d4023f1c98c46b882200cfab9a4e59ff2108edcc55b5238d8c30e80ef5ebd6b12f2ea7
+  languageName: node
+  linkType: hard
+
 "@ant-design/react-slick@npm:~0.25.5":
   version: 0.25.5
   resolution: "@ant-design/react-slick@npm:0.25.5"
@@ -8102,6 +8117,7 @@ fsevents@^1.2.7:
   version: 0.0.0-use.local
   resolution: "sdaqs@workspace:."
   dependencies:
+    "@ant-design/icons": ^4.1.0
     "@babel/core": ^7.8.4
     "@babel/preset-env": ^7.8.4
     "@babel/preset-react": ^7.8.3
