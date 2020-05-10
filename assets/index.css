@@ -46,6 +46,77 @@ span.combobox__period {
   font-family: monospace;
 }
 
+.search-unit__combobox-label {
+  display: none;
+}
+
+.search-unit__combobox {
+  display: flex;
+}
+
+.search-unit__combobox > input {
+  min-width: 0;
+  width: 100%;
+}
+
+.search-unit__close-button {
+  background-color: #fff;
+  border: 0;
+}
+
+.search-unit__close-button--hidden {
+  display: none;
+}
+
+.search-unit__close-button > .anticon {
+  transition: opacity 0.2s ease;
+  opacity: 30%;
+}
+
+.search-unit__close-button:hover > .anticon, .search-unit__close-button:focus > .anticon {
+  opacity: 100%;
+}
+
+.search-unit__details {
+  max-height: 2rem;
+  transition: max-height 0.5s ease-out;
+  overflow: hidden;
+}
+
+.search-unit__details--hidden {
+  max-height: 0;
+}
+
+ul.search-results {
+  list-style: none;
+  padding: 0;
+}
+
+li.search-result.highlight {
+  background-color: #bde4ff;
+}
+
+.search-result__name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.search-result__country {
+  float: right;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: #999;
+}
+
+.date-picker__country {
+  float: right;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: #999;
+}
+
 @font-face {
   font-family: 'Lato';
   src: url('/assets/fonts/lato-black.woff2') format('woff2'),
@@ -98,34 +169,4 @@ svg.map-pin--highlighted {
 
 .mapboxgl-marker--highlighted {
   z-index: 10;
-}
-
-ul.search-results {
-  list-style: none;
-  padding: 0;
-}
-
-li.search-result.highlight {
-  background-color: #bde4ff;
-}
-
-.search-result__name {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.search-result__country {
-  float: right;
-  white-space: nowrap;
-  font-size: 0.8rem;
-  font-style: italic;
-  color: #999;
-}
-
-.date-picker__country {
-  float: right;
-  font-size: 0.8rem;
-  font-style: italic;
-  color: #999;
 }

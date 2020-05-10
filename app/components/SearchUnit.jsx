@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useCombobox } from 'downshift';
+import { DatePicker } from 'antd';
 import classNames from 'classnames';
 import debounce from 'lodash.debounce';
-import { humanMonthRange } from '../utils/dateHelper';
+import { DeleteFilled } from '@ant-design/icons';
 import SearchResults from './SearchResults';
 
 const DEBOUNCE_WAIT = 300;
@@ -84,7 +85,7 @@ export default function SearchUnit({
     if (selectionMade) {
       setComboboxState({ inputValue: selectedItem.name });
       setStatus('complete');
-      setUIFocus({ on: 'date picker', id: deployment.id });
+      setUIFocus({ on: 'deployment details', id: deployment.id });
       dispatchDeployments({
         type: 'modify',
         id: deployment.id,
@@ -106,7 +107,7 @@ export default function SearchUnit({
       case '__input_keydown_escape__': // eslint-disable-line no-fallthrough
         if (deployment.base.id) {
           setComboboxState({ inputValue: deployment.base.name });
-          setUIFocus({ on: 'date picker', id: deployment.id });
+          setUIFocus({ on: 'deployment details', id: deployment.id });
         } else {
           setComboboxState({ inputValue: '' });
           inputDebouncer.current({ query: '' });
@@ -137,58 +138,97 @@ export default function SearchUnit({
       className="search-unit"
       onMouseOver={setHoveredSelection}
       onMouseOut={unsetHoveredSelection}
+      // FIXME: popup lingers on page when user clicks elsewhere on the SearchPanel
+      onFocus={() => {
+        if (deployment.base.id) {
+          setUIFocus({ on: 'deployment details', id: deployment.id });
+        } else {
+          setUIFocus({});
+        }
+      }}
     >
-      <label // eslint-disable-line jsx-a11y/label-has-associated-control
-        {...ds.getLabelProps()}
-        style={{ display: 'none' }}
-      >
-        Search bases
-      </label>
-      <div {...ds.getComboboxProps()} style={{ display: 'inline-block' }}>
-        <input
-          {...ds.getInputProps({
-            onChange: (event) => {
-              setComboboxState({ type: '__input_change__', inputValue: event.target.value });
-            },
-            // FIXME: popup lingers on page when user clicks elsewhere on the SearchPanel
-            onFocus: () => {
-              if (deployment.base.id) {
-                setUIFocus({ on: 'date picker', id: deployment.id });
-              } else {
-                setUIFocus({});
-              }
-            },
-            onKeyPress: (event) => {
-              const keypressEnter = event.charCode === 13;
-              const implicitSelection = uiFocus.results && ds.highlightedIndex === -1;
+      <div className="search-unit__header">
+        <label // eslint-disable-line jsx-a11y/label-has-associated-control
+          className="search-unit__combobox-label"
+          {...ds.getLabelProps()}
+        >
+          Search bases
+        </label>
+        <div
+          className="search-unit__combobox"
+          {...ds.getComboboxProps()}
+        >
+          <input
+            {...ds.getInputProps({
+              onChange: (event) => {
+                setComboboxState({ type: '__input_change__', inputValue: event.target.value });
+              },
+              onKeyPress: (event) => {
+                const keypressEnter = event.charCode === 13;
+                const implicitSelection = uiFocus.results && ds.highlightedIndex === -1;
 
-              if (keypressEnter && implicitSelection) {
-                setComboboxState({ type: '__input_keydown_enter__', selectedItem: uiFocus.results[0] });
-              }
-            },
-          })}
-          placeholder="Search bases"
+                if (keypressEnter && implicitSelection) {
+                  setComboboxState({ type: '__input_keydown_enter__', selectedItem: uiFocus.results[0] });
+                }
+              },
+            })}
+            placeholder="Search bases"
+          />
+
+          <button
+            className={classNames(
+              'search-unit__close-button',
+              { 'search-unit__close-button--hidden': !deployment.base.id },
+            )}
+            type="button"
+            onClick={removeHandler}
+          >
+            <DeleteFilled />
+          </button>
+        </div>
+
+        <ul className="search-results" {...ds.getMenuProps()}>
+          <SearchResults status={status}>
+            {(uiFocus.results || []).map((item, index) => (
+              <li
+                {...ds.getItemProps({ item, index })}
+                key={`${item.id}`}
+                className={classNames('search-result', { highlight: ds.highlightedIndex === index })}
+              >
+                <div className="search-result__country">{item.country}</div>
+                <div className="search-result__name">{item.name}</div>
+              </li>
+            ))}
+          </SearchResults>
+        </ul>
+      </div>
+
+      <div
+        className={classNames(
+          'search-unit__details',
+          { 'search-unit__details--hidden': !deployment.base.id },
+        )}
+      >
+        <DatePicker.RangePicker
+          picker="month"
+          format="MMM YYYY"
+          disabledDate={(current) => current
+            && !current.isBetween(new Date(2002, 0, 1), Date.now())}
+          defaultValue={deployment.period}
+          onChange={(dates) => {
+            dispatchDeployments({
+              type: 'modify',
+              id: deployment.id,
+              key: 'period',
+              value: dates,
+            });
+
+            if (dates) {
+              setUIFocus({});
+            }
+          }}
         />
       </div>
-      <span className="combobox__period">
-        {deployment.base.id && humanMonthRange(deployment.period)}
-      </span>
-      {deployment.base.id
-        && <button type="button" onClick={removeHandler}>x</button>}
-      <ul className="search-results" {...ds.getMenuProps()}>
-        <SearchResults status={status}>
-          {(uiFocus.results || []).map((item, index) => (
-            <li
-              {...ds.getItemProps({ item, index })}
-              key={`${item.id}`}
-              className={classNames('search-result', { highlight: ds.highlightedIndex === index })}
-            >
-              <div className="search-result__country">{item.country}</div>
-              <div className="search-result__name">{item.name}</div>
-            </li>
-          ))}
-        </SearchResults>
-      </ul>
     </li>
   );
 }

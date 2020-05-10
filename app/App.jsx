@@ -43,7 +43,6 @@ export default function App() {
       <Map
         {...{
           deployments,
-          dispatchDeployments,
           uiFocus,
           setUIFocus,
         }}

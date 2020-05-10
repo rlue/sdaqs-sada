@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import mapboxgl from 'mapbox-gl';
-import { addMarker, addPopup, collectionBounds } from '../utils/mapboxglHelper';
+import { addMarker, collectionBounds } from '../utils/mapboxglHelper';
 import sites from '../../assets/data/sites.json';
-import DatePickerPopup from './DatePickerPopup';
 import * as Icons from './Icons';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoicmx1ZSIsImEiOiJjazZwOHIwdXcwNzg1M2xuejVkbGNkaGEwIn0.S0KbmonSFTp9xI5J2ZGANQ';
@@ -13,7 +12,6 @@ const MAP_FIT_CONFIG = { padding: 120, maxZoom: 9 };
 
 export default function Map({
   deployments,
-  dispatchDeployments,
   uiFocus,
   setUIFocus,
 }) {
@@ -22,7 +20,6 @@ export default function Map({
   const [mapFit, setMapFit] = useState(DEFAULT_MAP_BOUNDS);
   const resultMarkers = useRef({});
   const selectionMarkers = useRef({});
-  const popup = useRef();
 
   // mount map
   useEffect(() => {
@@ -65,7 +62,7 @@ export default function Map({
           <Icons.MapPin
             label={deployments.length - (i + 1)}
             className="map-pin--selection"
-            onClick={() => setUIFocus({ on: 'date picker', id })}
+            onClick={() => setUIFocus({ on: 'deployment details', id })}
           />,
         );
 
@@ -97,24 +94,9 @@ export default function Map({
 
         if (uiFocus.results.length) setMapFit(collectionBounds(uiFocus.results));
         break;
-      case 'date picker':
+      case 'deployment details':
         deployment = deployments.find((d) => d.id === uiFocus.id);
-
         setMapFit(new mapboxgl.LngLat(deployment.base.lng, deployment.base.lat));
-
-        popup.current = addPopup(
-          map.current,
-          deployment.base,
-          <DatePickerPopup
-            {...{
-              deployment,
-              deployments,
-              dispatchDeployments,
-              setUIFocus,
-            }}
-          />,
-          { closeOnClick: false },
-        );
         break;
       default:
         setMapFit(DEFAULT_MAP_BOUNDS);
@@ -125,9 +107,6 @@ export default function Map({
       switch (uiFocus.on) {
         case 'search results':
           Object.values(resultMarkers.current).forEach((marker) => marker.remove());
-          break;
-        case 'date picker':
-          if (popup.current) popup.current.remove();
           break;
         default:
           break;
@@ -186,7 +165,6 @@ export default function Map({
 
 Map.propTypes = {
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
-  dispatchDeployments: PropTypes.func.isRequired,
   uiFocus: PropTypes.shape({
     on: PropTypes.string,
     id: PropTypes.string,
