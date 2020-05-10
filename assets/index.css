@@ -167,6 +167,10 @@ svg.map-pin > text {
   dominant-baseline: middle;
 }
 
+svg.map-pin--clickable {
+  cursor: pointer;
+}
+
 svg.map-pin--highlighted {
   animation: float 1s ease-in-out infinite;
 }

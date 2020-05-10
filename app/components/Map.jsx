@@ -78,6 +78,7 @@ export default function Map({
   // manage current UI focus
   useEffect(() => {
     let deployment;
+    let markerNode;
 
     switch (uiFocus.on) {
       case 'search results':
@@ -96,6 +97,12 @@ export default function Map({
         if (uiFocus.results.length) setMapFit(collectionBounds(uiFocus.results));
         break;
       case 'deployment details':
+        markerNode = selectionMarkers.current[uiFocus.id].getElement();
+
+        if (markerNode.children.length) {
+          markerNode.children[0].classList.remove('map-pin--clickable');
+        }
+
         deployment = deployments.find((d) => d.id === uiFocus.id);
         setMapFit(new mapboxgl.LngLat(deployment.base.lng, deployment.base.lat));
         break;
@@ -105,12 +112,18 @@ export default function Map({
     }
 
     return () => {
-      switch (uiFocus.on) {
+      switch (uiFocus.on) { // eslint-disable-line default-case
         case 'search results':
           Object.values(resultMarkers.current).forEach((marker) => marker.remove());
           break;
-        default:
-          break;
+        case 'deployment details':
+          if (!selectionMarkers.current[uiFocus.id]) break;
+
+          markerNode = selectionMarkers.current[uiFocus.id].getElement();
+
+          if (markerNode.children.length) {
+            markerNode.children[0].classList.add('map-pin--clickable');
+          }
       }
     };
   }, [
