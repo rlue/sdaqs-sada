@@ -3,8 +3,6 @@
 * Add 404 page
 * Design: Fix visual feedback when hovering over comboboxes
   (currently, there’s jitter when moving across element boundaries)
-* Defocus deployment details when clicking ANYWHERE outside target area
-  (as opposed to only in a new search unit box)
 * Set cursor on clickable map markers
   (use “pointer”, but not when in date picker mode)
 * Auto-open date picker if empty

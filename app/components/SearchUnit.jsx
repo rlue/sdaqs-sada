@@ -7,7 +7,8 @@ import debounce from 'lodash.debounce';
 import { DeleteFilled } from '@ant-design/icons';
 import SearchResults from './SearchResults';
 
-const DEBOUNCE_WAIT = 300;
+const FOCUS_DEBOUNCE_WAIT = 5;
+const INPUT_DEBOUNCE_WAIT = 300;
 
 export default function SearchUnit({
   fuse,
@@ -18,6 +19,11 @@ export default function SearchUnit({
 }) {
   const [status, setStatus] = useState('ready');
   const [comboboxState, setComboboxState] = useState({ inputValue: deployment.base.name || '' });
+  const componentRoot = useRef(null);
+
+  const focusDebouncer = useRef(
+    debounce((uiFocusParams) => setUIFocus(uiFocusParams), FOCUS_DEBOUNCE_WAIT),
+  );
 
   const inputDebouncer = useRef(
     debounce(({ query }) => {
@@ -33,7 +39,7 @@ export default function SearchUnit({
         setStatus('success');
         setUIFocus({ on: 'search results', results });
       }
-    }, DEBOUNCE_WAIT),
+    }, INPUT_DEBOUNCE_WAIT),
   );
 
   const ds = useCombobox({
@@ -117,7 +123,7 @@ export default function SearchUnit({
   }, [comboboxState.type]);
 
   function removeHandler() {
-    setUIFocus({});
+    focusDebouncer.current({});
     dispatchDeployments({ type: 'remove', id: deployment.id });
   }
 
@@ -136,15 +142,22 @@ export default function SearchUnit({
   return (
     <li // eslint-disable-line jsx-a11y/mouse-events-have-key-events
       className="search-unit"
+      ref={componentRoot}
       onMouseOver={setHoveredSelection}
       onMouseOut={unsetHoveredSelection}
-      // FIXME: popup lingers on page when user clicks elsewhere on the SearchPanel
       onFocus={() => {
         if (deployment.base.id) {
-          setUIFocus({ on: 'deployment details', id: deployment.id });
-        } else {
-          setUIFocus({});
+          focusDebouncer.current({ on: 'deployment details', id: deployment.id });
         }
+      }}
+      onBlur={({ target }) => {
+        // false positives occur when
+        // 1. switching tabs/windows
+        // 2. focusing another element in the same component
+        const falsePositive = target === document.activeElement
+          || componentRoot.current.contains(document.activeElement);
+
+        if (!falsePositive) focusDebouncer.current({});
       }}
     >
       <div className="search-unit__header">
