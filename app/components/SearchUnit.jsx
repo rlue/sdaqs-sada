@@ -127,24 +127,23 @@ export default function SearchUnit({
     dispatchDeployments({ type: 'remove', id: deployment.id });
   }
 
-  function setHoveredSelection() {
-    if (deployment.base.id && !uiFocus.on) {
-      setUIFocus({ on: 'hovered deployment', deploymentId: deployment.id });
-    }
-  }
-
-  function unsetHoveredSelection() {
-    if (deployment.base.id && uiFocus.on === 'hovered deployment') {
-      setUIFocus({});
-    }
-  }
-
   return (
     <li // eslint-disable-line jsx-a11y/mouse-events-have-key-events
       className="search-unit"
       ref={componentRoot}
-      onMouseOver={setHoveredSelection}
-      onMouseOut={unsetHoveredSelection}
+      onMouseOver={() => {
+        if (!uiFocus.on && deployment.base.id) {
+          setUIFocus({ on: 'hovered deployment', deploymentId: deployment.id });
+        }
+      }}
+      onMouseOut={({ clientX, clientY }) => {
+        const hoveredElement = document.elementFromPoint(clientX, clientY);
+        const falsePositive = componentRoot.current.contains(hoveredElement);
+
+        if (uiFocus.on === 'hovered deployment' && !falsePositive) {
+          setUIFocus({});
+        }
+      }}
       onFocus={() => {
         if (deployment.base.id) {
           focusDebouncer.current({ on: 'deployment details', id: deployment.id });
