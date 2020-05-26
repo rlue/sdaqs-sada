@@ -23,7 +23,7 @@ export default function SearchPanel({
   );
 
   return (
-    <div className="item__bifold-left">
+    <div id="search-panel">
       <h1>Look up exposure history</h1>
       <ol className="search-list">
         {deployments.map((deployment) => (

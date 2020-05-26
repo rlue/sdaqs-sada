@@ -8,7 +8,6 @@ import * as Icons from './Icons';
 mapboxgl.accessToken = 'pk.eyJ1Ijoicmx1ZSIsImEiOiJjazZwOHIwdXcwNzg1M2xuejVkbGNkaGEwIn0.S0KbmonSFTp9xI5J2ZGANQ';
 
 const DEFAULT_MAP_BOUNDS = collectionBounds(sites);
-const MAP_FIT_CONFIG = { padding: 120, maxZoom: 9 };
 
 export default function Map({
   deployments,
@@ -35,16 +34,22 @@ export default function Map({
 
   // refit map
   useEffect(() => {
+    const padding = {
+      top: 120,
+      bottom: 120,
+      left: 120 + document.querySelector('#search-panel').offsetWidth,
+      right: 120,
+    };
+
     switch (true) {
       case mapFit instanceof mapboxgl.LngLat:
-        // TODO: unify with MAP_FIT_CONFIG?
-        map.current.flyTo({ center: mapFit, padding: 120, zoom: 9 });
+        map.current.flyTo({ center: mapFit, padding, zoom: 9 });
         break;
       case mapFit instanceof mapboxgl.LngLatBounds:
-        map.current.fitBounds(mapFit, MAP_FIT_CONFIG);
+        map.current.fitBounds(mapFit, { padding, maxZoom: 9 });
         break;
       default:
-        map.current.fitBounds(DEFAULT_MAP_BOUNDS, MAP_FIT_CONFIG);
+        map.current.fitBounds(DEFAULT_MAP_BOUNDS, { padding, maxZoom: 9 });
         break;
     }
   }, [mapFit]);
@@ -174,7 +179,7 @@ export default function Map({
     };
   }, [uiFocus.on && uiFocus.deploymentId]);
 
-  return <div className="item__bifold-right" ref={mapContainer} />;
+  return <div ref={mapContainer} />;
 }
 
 Map.propTypes = {

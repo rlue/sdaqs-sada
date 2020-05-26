@@ -31,7 +31,7 @@ export default function App() {
   ]);
 
   return (
-    <div className="app container__bifold">
+    <>
       <SearchPanel
         {...{
           deployments,
@@ -47,6 +47,6 @@ export default function App() {
           setUIFocus,
         }}
       />
-    </div>
+    </>
   );
 }

@@ -8,29 +8,23 @@ body {
   font-family: sans-serif;
 }
 
-.item__bifold-left {
-  margin: 0 1rem;
-}
-
-.app {
-  height: 100vh;
+#app {
   width: 100vw;
+  height: 100vh;
 }
 
-.container__bifold {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  grid-template-rows: 1fr;
+.mapboxgl-map {
+  width: 100%;
+  height: 100%;
 }
 
-.item__bifold-left {
-  grid-column: 1 / span 1;
-  grid-row: 1 / span 1;
-}
-
-.item__bifold-right {
-  grid-column: 2 / span 1;
-  grid-row: 1 / span 1;
+#search-panel {
+  position: absolute;
+  width: 25vw;
+  height: 100%;
+  z-index: 1;
+  padding: 0 1rem;
+  background-color: #fff;
 }
 
 span.combobox__period {
