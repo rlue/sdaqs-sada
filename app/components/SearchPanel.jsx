@@ -24,7 +24,9 @@ export default function SearchPanel({
 
   return (
     <div id="search-panel">
-      <h1>Look up exposure history</h1>
+      <div className="search-panel__badge">
+        <h1>SDAQS</h1>
+      </div>
       <ol className="search-list">
         {deployments.map((deployment) => (
           <SearchUnit

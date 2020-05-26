@@ -37,7 +37,7 @@ export default function Map({
     const padding = {
       top: 120,
       bottom: 120,
-      left: 120 + document.querySelector('#search-panel').offsetWidth,
+      left: 120 + document.querySelector('#search-panel').offsetWidth + 32, // FIXME 32 is 2rem hmargin
       right: 120,
     };
 

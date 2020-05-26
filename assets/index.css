@@ -21,10 +21,56 @@ body {
 #search-panel {
   position: absolute;
   width: 25vw;
-  height: 100%;
   z-index: 1;
-  padding: 0 1rem;
+  margin: 0 1rem 1rem 1rem;
   background-color: #fff;
+  border-radius: 0 0 1rem 1rem;
+  box-shadow: 0 0.25rem 0.4rem hsla(0, 0%, 0%, 0.2);
+}
+
+.search-panel__badge {
+  padding: 1rem;
+  position: relative;
+  background: linear-gradient(2deg, hsl(240, 86%, 25%) 0%, hsl(240, 86%, 25%) 40%, hsl(276, 51%, 40%) 100%);
+  padding-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.search-panel__badge::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-style: solid;
+  border-color: transparent;
+  border-width: 0.5vw 12.5vw;
+  border-bottom-color: #fff;
+  border-right-color: #fff;
+}
+
+.search-panel__badge > h1 {
+  margin: 0;
+  transform: rotate(-2.29deg);
+  text-align: right;
+  position: relative;
+  top: 0.5rem;
+  font-size: 2.5rem;
+  font-family: Lato;
+  color: #fff;
+  /* simulate text-glow */
+  text-shadow: -1px -1px 3px hsla(48, 100%, 50%, 0.2),
+               -1px  0px 3px hsla(48, 100%, 50%, 0.2),
+               -1px  1px 3px hsla(48, 100%, 50%, 0.2),
+                0px -1px 3px hsla(48, 100%, 50%, 0.2),
+                0px  1px 3px hsla(48, 100%, 50%, 0.2),
+                1px -1px 3px hsla(48, 100%, 50%, 0.2),
+                1px  0px 3px hsla(48, 100%, 50%, 0.2),
+                1px  1px 3px hsla(48, 100%, 50%, 0.2);
+}
+
+#search-panel > ol {
+  margin: 1rem;
 }
 
 span.combobox__period {
