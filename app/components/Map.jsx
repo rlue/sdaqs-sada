@@ -105,7 +105,7 @@ export default function Map({
         markerNode = selectionMarkers.current[uiFocus.id].getElement();
 
         if (markerNode.children.length) {
-          markerNode.children[0].classList.remove('map-pin--clickable');
+          markerNode.children[0].classList.remove('cursor-pointer');
         }
 
         deployment = deployments.find((d) => d.id === uiFocus.id);
@@ -127,7 +127,7 @@ export default function Map({
           markerNode = selectionMarkers.current[uiFocus.id].getElement();
 
           if (markerNode.children.length) {
-            markerNode.children[0].classList.add('map-pin--clickable');
+            markerNode.children[0].classList.add('cursor-pointer');
           }
       }
     };
@@ -143,7 +143,7 @@ export default function Map({
       const resultMarkerDiv = resultMarkers.current[
         uiFocus.result.id
       ].getElement();
-      resultMarkerDiv.classList.add('mapboxgl-marker--highlighted');
+      resultMarkerDiv.classList.add('z-10');
       resultMarkerDiv.children[0].classList.add('map-pin--highlighted');
     }
 
@@ -152,7 +152,7 @@ export default function Map({
         const resultMarkerDiv = resultMarkers.current[
           uiFocus.result.id
         ].getElement();
-        resultMarkerDiv.classList.remove('mapboxgl-marker--highlighted');
+        resultMarkerDiv.classList.remove('z-10');
         resultMarkerDiv.children[0].classList.remove('map-pin--highlighted');
       }
     };
@@ -164,7 +164,7 @@ export default function Map({
       const selectionMarkerDiv = selectionMarkers.current[
         uiFocus.deploymentId
       ].getElement();
-      selectionMarkerDiv.classList.add('mapboxgl-marker--highlighted');
+      selectionMarkerDiv.classList.add('z-10');
       selectionMarkerDiv.children[0].classList.add('map-pin--highlighted');
     }
 
@@ -173,13 +173,13 @@ export default function Map({
         const selectionMarkerDiv = selectionMarkers.current[
           uiFocus.deploymentId
         ].getElement();
-        selectionMarkerDiv.classList.remove('mapboxgl-marker--highlighted');
+        selectionMarkerDiv.classList.remove('z-10');
         selectionMarkerDiv.children[0].classList.remove('map-pin--highlighted');
       }
     };
   }, [uiFocus.on && uiFocus.deploymentId]);
 
-  return <div ref={mapContainer} />;
+  return <div className="h-full w-full" ref={mapContainer} />;
 }
 
 Map.propTypes = {

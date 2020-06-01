@@ -2,66 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, #app {
-  margin: 0;
-  height: 100%;
-  width: 100%;
+@font-face {
+  font-family: 'Lato';
+  src: url('/assets/fonts/lato-black.woff2') format('woff2'),
+       url('/assets/fonts/lato-black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
 }
 
-body {
-  font-family: sans-serif;
-}
-
-#app {
-  width: 100vw;
-  height: 100vh;
-}
-
-.mapboxgl-map {
-  width: 100%;
-  height: 100%;
-}
+/* SEARCH PANEL ============================================================= */
 
 #search-panel {
-  position: absolute;
-  width: 25vw;
-  z-index: 1;
-  margin: 0 1rem 1rem 1rem;
-  background-color: #fff;
-  border-radius: 0 0 1rem 1rem;
-  box-shadow: 0 0.25rem 0.4rem hsla(0, 0%, 0%, 0.2);
+  @apply absolute z-10 mx-4 bg-white shadow-md rounded-b-lg w-1/4;
+  min-width: 15rem;
+  max-width: 35rem;
 }
 
-.search-panel__badge {
-  padding: 1rem;
-  position: relative;
+/* Slanty header ------------------------------------------------------------ */
+
+.search-panel__header {
+  @apply relative p-4 mb-8;
   background: linear-gradient(2deg, hsl(240, 86%, 25%) 0%, hsl(240, 86%, 25%) 40%, hsl(276, 51%, 40%) 100%);
-  padding-top: 1rem;
-  margin-bottom: 2rem;
 }
 
-.search-panel__badge::after {
+.search-panel__header::after {
   content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  border-style: solid;
-  border-color: transparent;
-  border-width: 0.5vw 12.5vw;
+
+  @apply absolute inset-x-0 bottom-0 border-solid border-transparent;
+  border-width: 0.875rem 17.5rem; /* (search panel max-width / 40) (search panel max-width / 2) */
   border-bottom-color: #fff;
   border-right-color: #fff;
 }
 
-.search-panel__badge > h1 {
-  margin: 0;
-  transform: rotate(-2.29deg);
-  text-align: right;
-  position: relative;
+@media screen and (max-width: 140rem) { /* (search panel max-width * 4) */
+  .search-panel__header::after {
+    border-width: 0.5vw 12.5vw; /* (search panel width / 40) (search panel width / 2) */
+  }
+}
+
+@media screen and (max-width: 60rem) { /* (search panel min-width * 4) */
+  .search-panel__header::after {
+    border-width: 0.3rem 7.5rem; /* (search panel min-width / 40) (search panel min-width / 2) */
+  }
+}
+
+.search-panel__header > h1 {
+  @apply relative mb-0 text-white text-5xl text-right;
+
   top: 0.5rem;
-  font-size: 2.5rem;
+  transform: rotate(-2.29deg);
   font-family: Lato;
-  color: #fff;
+
   /* simulate text-glow */
   text-shadow: -1px -1px 3px hsla(48, 100%, 50%, 0.2),
                -1px  0px 3px hsla(48, 100%, 50%, 0.2),
@@ -73,53 +64,19 @@ body {
                 1px  1px 3px hsla(48, 100%, 50%, 0.2);
 }
 
-#search-panel > ol {
-  margin: 1rem;
+/* Delete button ------------------------------------------------------------ */
+
+/* extra specificity overrides .anticon default vertical-align */
+.anticon.anticon-delete {
+  @apply align-baseline opacity-25 transition-opacity duration-200;
 }
 
-span.combobox__period {
-  display: inline-block;
-  width: 10rem;
+button:hover > .anticon.anticon-delete,
+button:focus > .anticon.anticon-delete {
+  @apply opacity-100;
 }
 
-.search-list {
-  padding-left: 1.5rem;
-}
-
-.search-unit::marker {
-  font-family: monospace;
-}
-
-.search-unit__combobox-label {
-  display: none;
-}
-
-.search-unit__combobox {
-  display: flex;
-}
-
-.search-unit__combobox > input {
-  min-width: 0;
-  width: 100%;
-}
-
-.search-unit__close-button {
-  background-color: #fff;
-  border: 0;
-}
-
-.search-unit__close-button--hidden {
-  display: none;
-}
-
-.search-unit__close-button > .anticon {
-  transition: opacity 0.2s ease;
-  opacity: 30%;
-}
-
-.search-unit__close-button:hover > .anticon, .search-unit__close-button:focus > .anticon {
-  opacity: 100%;
-}
+/* Collapsing details ------------------------------------------------------- */
 
 .search-unit__details {
   max-height: 2rem;
@@ -131,43 +88,9 @@ span.combobox__period {
   max-height: 0;
 }
 
-ul.search-results {
-  list-style: none;
-  padding: 0;
-}
+/* MAP ====================================================================== */
 
-li.search-result.highlight {
-  background-color: #bde4ff;
-}
-
-.search-result__name {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.search-result__country {
-  float: right;
-  white-space: nowrap;
-  font-size: 0.8rem;
-  font-style: italic;
-  color: #999;
-}
-
-.date-picker__country {
-  float: right;
-  font-size: 0.8rem;
-  font-style: italic;
-  color: #999;
-}
-
-@font-face {
-  font-family: 'Lato';
-  src: url('/assets/fonts/lato-black.woff2') format('woff2'),
-       url('/assets/fonts/lato-black.woff') format('woff');
-  font-weight: 900;
-  font-style: normal;
-}
+/* SVG pins ----------------------------------------------------------------- */
 
 @keyframes float {
   0% {
@@ -211,21 +134,18 @@ svg.map-pin > text {
   dominant-baseline: middle;
 }
 
-svg.map-pin--clickable {
-  cursor: pointer;
-}
-
 svg.map-pin--highlighted {
   animation: float 1s ease-in-out infinite;
 }
 
+/* Pin labels --------------------------------------------------------------- */
+
 .map-pin__label {
-  position: absolute;
+  @apply absolute text-black;
   bottom: 50%;
   left: 106.25%;
   width: max-content;
   max-width: 16rem;
-  color: #000;
 }
 
 .map-pin__label > * {
@@ -238,17 +158,4 @@ svg.map-pin--highlighted {
                 1px -1px #fff,
                 1px  0px #fff,
                 1px  1px #fff;
-}
-
-.map-pin__label-name {
-  font-weight: bold;
-  font-size: 1.125rem;
-}
-
-.map-pin__label-country {
-  line-height: 0.75rem;
-}
-
-.mapboxgl-marker--highlighted {
-  z-index: 10;
 }

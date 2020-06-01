@@ -140,7 +140,7 @@ export default function SearchUnit({
 
   return (
     <li // eslint-disable-line jsx-a11y/mouse-events-have-key-events
-      className="search-unit"
+      className="space-y-2"
       ref={componentRoot}
       onMouseOver={() => {
         if (!uiFocus.on && deployment.base.id) {
@@ -170,15 +170,15 @@ export default function SearchUnit({
         if (!falsePositive) focusDebouncer.current({});
       }}
     >
-      <div className="search-unit__header">
+      <div>
         <label // eslint-disable-line jsx-a11y/label-has-associated-control
-          className="search-unit__combobox-label"
+          className="hidden"
           {...ds.getLabelProps()}
         >
           Search bases
         </label>
         <div
-          className="search-unit__combobox"
+          className="flex"
           {...ds.getComboboxProps()}
         >
           <input
@@ -195,14 +195,15 @@ export default function SearchUnit({
                 }
               },
             })}
+            className="min-w-0 w-full"
             ref={inputField}
             placeholder="Search bases"
           />
 
           <button
             className={classNames(
-              'search-unit__close-button',
-              { 'search-unit__close-button--hidden': !deployment.base.id },
+              'px-2',
+              { hidden: !deployment.base.id },
             )}
             type="button"
             onClick={removeHandler}
@@ -217,10 +218,12 @@ export default function SearchUnit({
               <li
                 {...ds.getItemProps({ item, index })}
                 key={`${item.id}`}
-                className={classNames('search-result', { highlight: ds.highlightedIndex === index })}
+                className={classNames('search-result', { 'bg-gray-200': ds.highlightedIndex === index })}
               >
-                <div className="search-result__country">{item.country}</div>
-                <div className="search-result__name">{item.name}</div>
+                <div className="float-right whitespace-no-wrap text-xs italic text-gray-500">
+                  {item.country}
+                </div>
+                <div className="truncate">{item.name}</div>
               </li>
             ))}
           </SearchResults>
@@ -235,6 +238,7 @@ export default function SearchUnit({
       >
         <DatePicker.RangePicker
           ref={datePicker}
+          className="w-full"
           picker="month"
           format="MMM YYYY"
           disabledDate={(current) => current

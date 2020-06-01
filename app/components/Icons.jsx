@@ -25,8 +25,8 @@ export function MapPin({
       </svg>
       {label && (
         <div className="map-pin__label">
-          <div className="map-pin__label-name">{label.name}</div>
-          <div className="map-pin__label-country">{label.country}</div>
+          <div className="text-lg font-bold">{label.name}</div>
+          <div className="leading-3">{label.country}</div>
         </div>
       )}
     </>

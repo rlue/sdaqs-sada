@@ -24,10 +24,10 @@ export default function SearchPanel({
 
   return (
     <div id="search-panel">
-      <div className="search-panel__badge">
+      <div className="search-panel__header">
         <h1>SDAQS</h1>
       </div>
-      <ol className="search-list">
+      <ol className="search-list list-decimal m-4 pl-6 space-y-4">
         {deployments.map((deployment) => (
           <SearchUnit
             key={deployment.id}
