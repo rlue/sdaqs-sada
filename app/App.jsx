@@ -1,7 +1,7 @@
 import React, { useReducer, useState } from 'react';
 import uid from 'uid';
-import '../assets/index.css';
 import 'antd/dist/antd.css';
+import '../assets/index.css';
 import SearchPanel from './components/SearchPanel';
 import Map from './components/Map';
 

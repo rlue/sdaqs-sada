@@ -116,6 +116,7 @@ export default function SearchUnit({
         if (deployment.base.id) {
           setComboboxState({ inputValue: deployment.base.name });
           setUIFocus({ on: 'deployment details', id: deployment.id });
+          setStatus('ready');
         } else {
           setComboboxState({ inputValue: '' });
           inputDebouncer.current({ query: '' });
@@ -170,7 +171,13 @@ export default function SearchUnit({
         if (!falsePositive) focusDebouncer.current({});
       }}
     >
-      <div>
+      <div
+        className={classNames(
+          'relative',
+          'flex',
+          { 'shadow-md': status.match(/^(debouncing|no results|success)$/) },
+        )}
+      >
         <label // eslint-disable-line jsx-a11y/label-has-associated-control
           className="hidden"
           {...ds.getLabelProps()}
@@ -178,7 +185,7 @@ export default function SearchUnit({
           Search bases
         </label>
         <div
-          className="flex"
+          className="w-full"
           {...ds.getComboboxProps()}
         >
           <input
@@ -195,50 +202,82 @@ export default function SearchUnit({
                 }
               },
             })}
-            className="min-w-0 w-full"
+            className={classNames(
+              'min-w-0',
+              'w-full',
+              'px-2',
+              'py-1',
+              'rounded-tl',
+              { 'rounded-bl': status.match(/^(ready|complete)$/) },
+              { 'rounded-tr': !deployment.base.id || status.match(/^(debouncing|no results|success)$/) },
+              { 'rounded-br': !deployment.base.id && status.match(/^(ready|complete)$/) },
+              'border',
+              { 'border-b-0': status.match(/^(debouncing|no results|success)$/) },
+              'focus:outline-none',
+            )}
             ref={inputField}
             placeholder="Search bases"
           />
 
-          <button
+          <ul
+            {...ds.getMenuProps()}
             className={classNames(
-              'px-2',
-              { hidden: !deployment.base.id },
+              'absolute',
+              'z-10',
+              'shadow-md',
+              'w-full',
+              'bg-white',
+              'rounded-b',
+              { border: status.match(/^(debouncing|no results|success)$/) },
+              'border-t-0',
             )}
-            type="button"
-            onClick={removeHandler}
           >
-            <DeleteFilled />
-          </button>
+            <SearchResults status={status}>
+              {(uiFocus.results || []).map((item, index) => (
+                <li
+                  {...ds.getItemProps({ item, index })}
+                  key={`${item.id}`}
+                  className={classNames(
+                    'px-2',
+                    'py-1',
+                    { 'bg-gray-200': ds.highlightedIndex === index },
+                  )}
+                >
+                  <div className="float-right whitespace-no-wrap text-xs italic text-gray-500">
+                    {item.country}
+                  </div>
+                  <div className="truncate">{item.name}</div>
+                </li>
+              ))}
+            </SearchResults>
+          </ul>
         </div>
 
-        <ul className="search-results" {...ds.getMenuProps()}>
-          <SearchResults status={status}>
-            {(uiFocus.results || []).map((item, index) => (
-              <li
-                {...ds.getItemProps({ item, index })}
-                key={`${item.id}`}
-                className={classNames('search-result', { 'bg-gray-200': ds.highlightedIndex === index })}
-              >
-                <div className="float-right whitespace-no-wrap text-xs italic text-gray-500">
-                  {item.country}
-                </div>
-                <div className="truncate">{item.name}</div>
-              </li>
-            ))}
-          </SearchResults>
-        </ul>
+        <button
+          className={classNames(
+            'px-2',
+            'focus:outline-none',
+            { hidden: !deployment.base.id || status.match(/^(debouncing|no results|success)$/) },
+          )}
+          type="button"
+          onClick={removeHandler}
+        >
+          <DeleteFilled />
+        </button>
       </div>
 
       <div
         className={classNames(
           'search-unit__details',
-          { 'search-unit__details--hidden': uiFocus.on !== 'deployment details' || uiFocus.id !== deployment.id },
+          { 'search-unit__details--hidden': !deployment.base.id },
         )}
       >
         <DatePicker.RangePicker
           ref={datePicker}
-          className="w-full"
+          className={classNames(
+            'w-full',
+            { 'search-unit__date-picker--incomplete': !deployment.period },
+          )}
           picker="month"
           format="MMM YYYY"
           disabledDate={(current) => current

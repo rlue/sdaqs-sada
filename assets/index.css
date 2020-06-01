@@ -29,14 +29,14 @@
   content: "";
 
   @apply absolute inset-x-0 bottom-0 border-solid border-transparent;
-  border-width: 0.875rem 17.5rem; /* (search panel max-width / 40) (search panel max-width / 2) */
+  border-width: 0.5vw 12.5vw; /* (search panel width / 40) (search panel width / 2) */
   border-bottom-color: #fff;
   border-right-color: #fff;
 }
 
-@media screen and (max-width: 140rem) { /* (search panel max-width * 4) */
+@media screen and (min-width: 140rem) { /* (search panel max-width * 4) */
   .search-panel__header::after {
-    border-width: 0.5vw 12.5vw; /* (search panel width / 40) (search panel width / 2) */
+    border-width: 0.875rem 17.5rem; /* (search panel max-width / 40) (search panel max-width / 2) */
   }
 }
 
@@ -66,14 +66,17 @@
 
 /* Delete button ------------------------------------------------------------ */
 
-/* extra specificity overrides .anticon default vertical-align */
-.anticon.anticon-delete {
-  @apply align-baseline opacity-25 transition-opacity duration-200;
+.anticon-delete {
+  @apply opacity-25 transition-opacity duration-200;
 }
 
-button:hover > .anticon.anticon-delete,
-button:focus > .anticon.anticon-delete {
+button:hover > .anticon-delete,
+button:focus > .anticon-delete {
   @apply opacity-100;
+}
+
+.anticon { /* also apply to calendar icon--not crucial though */
+  @apply align-baseline;
 }
 
 /* Collapsing details ------------------------------------------------------- */
@@ -86,6 +89,25 @@ button:focus > .anticon.anticon-delete {
 
 .search-unit__details--hidden {
   max-height: 0;
+}
+
+.ant-picker,
+.ant-picker:hover {
+  @apply rounded;
+  border-color: hsl(214, 32%, 91%);
+}
+
+.search-unit__date-picker--incomplete,
+.search-unit__date-picker--incomplete:hover {
+  box-shadow: inset 0 0 0.125rem hsl(0, 95%, 75%);
+  border-color: hsl(0, 95%, 85%);
+}
+
+/* extra specificity -> soft-important! */
+input:focus,
+.ant-picker.ant-picker-focused {
+  box-shadow: inset 0 0 0.125rem hsl(207, 100%, 75%);
+  border-color: hsl(207, 100%, 85%);
 }
 
 /* MAP ====================================================================== */
