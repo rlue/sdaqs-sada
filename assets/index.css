@@ -226,7 +226,14 @@ svg.map-pin--highlighted {
 
 .map-pin__label > * {
   /* simulate text-stroke */
-  text-shadow: -1px -1px #fff, -1px 0px #fff, -1px 1px #fff, 0px -1px #fff, 0px 1px #fff, 1px -1px #fff, 1px 0px #fff, 1px 1px #fff;
+  text-shadow: -1px -1px #fff,
+               -1px  0px #fff,
+               -1px  1px #fff,
+                0px -1px #fff,
+                0px  1px #fff,
+                1px -1px #fff,
+                1px  0px #fff,
+                1px  1px #fff;
 }
 
 .map-pin__label-name {
