@@ -100,6 +100,11 @@ export default function SearchUnit({
         key: 'base',
         value: comboboxState.selectedItem,
       });
+
+      if (!deployment.period) {
+        // FIXME: Can we auto-open the dropdown instead of just focusing the input?
+        datePicker.current.focus();
+      }
     }
   }, [(comboboxState.selectedItem || {}).id]);
 
