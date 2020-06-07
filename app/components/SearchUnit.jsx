@@ -120,7 +120,7 @@ export default function SearchUnit({
       case '__input_keydown_escape__': // eslint-disable-line no-fallthrough
         if (deployment.base.id) {
           setComboboxState({ inputValue: deployment.base.name });
-          setUIFocus({ on: 'deployment details', id: deployment.id });
+          setUIFocus({ on: 'selected bases', id: deployment.id });
           setStatus('ready');
         } else {
           setComboboxState({ inputValue: '' });
@@ -162,20 +162,18 @@ export default function SearchUnit({
         }
       }}
       onFocus={() => {
+        const alreadyFocused = uiFocus.on === 'deployment details'
+          && uiFocus.id === deployment.id;
         const focusJumpRaceCondition = status === 'success';
 
-        if (deployment.base.id || focusJumpRaceCondition) {
-          focusDebouncer.current({ on: 'deployment details', id: deployment.id });
+        if (deployment.base.id && !alreadyFocused) {
+          focusDebouncer.current({
+            on: 'selected bases',
+            id: deployment.id,
+          });
+        } else if (uiFocus.on === 'selected bases' && !focusJumpRaceCondition) {
+          focusDebouncer.current({ on: 'nothing' });
         }
-      }}
-      onBlur={({ target }) => {
-        // false positives occur when
-        // 1. switching tabs/windows
-        // 2. focusing another element in the same component
-        const falsePositive = target === document.activeElement
-          || componentRoot.current.contains(document.activeElement);
-
-        if (!falsePositive) focusDebouncer.current({});
       }}
     >
       <div

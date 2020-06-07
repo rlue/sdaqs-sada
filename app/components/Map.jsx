@@ -86,6 +86,8 @@ export default function Map({
     let markerNode;
 
     switch (uiFocus.on) {
+      case 'nothing': // used to reset this effect & invoke cleanup with no other changes
+        break;
       case 'search results':
         resultMarkers.current = uiFocus.results.reduce((markers, base) => {
           if (!(base.id in markers)) {
@@ -111,6 +113,20 @@ export default function Map({
         deployment = deployments.find((d) => d.id === uiFocus.id);
         setMapFit(new mapboxgl.LngLat(deployment.base.lng, deployment.base.lat));
         break;
+      case 'selected bases':
+        setMapFit(collectionBounds(
+          deployments.filter(({ base }) => base.id).map(({ base }) => base),
+        ));
+
+        if (selectionMarkers.current[uiFocus.id]) {
+          selectionMarkers
+            .current[uiFocus.id]
+            .getElement()
+            .children[0]
+            .classList
+            .add('map-pin--highlighted');
+        }
+        break;
       default:
         setMapFit(DEFAULT_MAP_BOUNDS);
         break;
@@ -128,6 +144,17 @@ export default function Map({
 
           if (markerNode.children.length) {
             markerNode.children[0].classList.add('cursor-pointer');
+          }
+          break;
+        case 'selected bases':
+          if (selectionMarkers.current[uiFocus.id]) {
+            selectionMarkers
+              .current[uiFocus.id]
+              .getElement()
+              .children[0]
+              .classList
+              .remove('map-pin--highlighted');
+            break;
           }
       }
     };
