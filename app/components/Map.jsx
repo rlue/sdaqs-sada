@@ -43,7 +43,7 @@ export default function Map({
 
     switch (true) {
       case mapFit instanceof mapboxgl.LngLat:
-        map.current.flyTo({ center: mapFit, padding, zoom: 9 });
+        map.current.fitBounds(collectionBounds([mapFit]), { padding, maxZoom: 9 });
         break;
       case mapFit instanceof mapboxgl.LngLatBounds:
         map.current.fitBounds(mapFit, { padding, maxZoom: 9 });
