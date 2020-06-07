@@ -162,7 +162,9 @@ export default function SearchUnit({
         }
       }}
       onFocus={() => {
-        if (deployment.base.id) {
+        const focusJumpRaceCondition = status === 'success';
+
+        if (deployment.base.id || focusJumpRaceCondition) {
           focusDebouncer.current({ on: 'deployment details', id: deployment.id });
         }
       }}
