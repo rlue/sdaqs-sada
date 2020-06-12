@@ -1,6 +1,3 @@
-* Redo visual design
-  * Add Reset/Finish buttons
-  * Disable Finish button when deployments incomplete
 * Create guided tour
 
 <!--- deprioritized since we have a workaround! -->

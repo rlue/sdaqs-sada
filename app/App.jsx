@@ -19,6 +19,8 @@ function deploymentsReducer(state, action) {
       }
 
       return state.slice(0);
+    case 'reset':
+      return state.slice(-1);
     default:
       return state.slice(0);
   }

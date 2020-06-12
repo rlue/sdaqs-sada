@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import Fuse from 'fuse.js';
+import classNames from 'classnames';
 import SearchUnit from './SearchUnit';
 import sites from '../../assets/data/sites.json';
 
@@ -22,6 +23,14 @@ export default function SearchPanel({
     }),
   );
 
+  function validateDeployments() {
+    const initializedDeployments = deployments.filter(({ base }) => base.id);
+    const completedDeployments = initializedDeployments.filter(({ period }) => period);
+
+    return initializedDeployments.length
+      && initializedDeployments.length === completedDeployments.length;
+  }
+
   return (
     <div id="search-panel">
       <div className="search-panel__header">
@@ -41,6 +50,47 @@ export default function SearchPanel({
           />
         ))}
       </ol>
+      <div
+        className="m-4 space-x-2 flex justify-end"
+      >
+        <button
+          type="button"
+          className={classNames(
+            'text-indigo-700',
+            'border',
+            'border-transparent',
+            'hover:border-indigo-700',
+            'focus:border-indigo-700',
+            'py-2',
+            'px-4',
+            'rounded',
+          )}
+          onClick={() => {
+            dispatchDeployments({ type: 'reset' });
+            setUIFocus({});
+          }}
+        >
+          Reset
+        </button>
+        <button
+          type="button"
+          disabled={!validateDeployments()}
+          className={classNames(
+            'bg-indigo-700',
+            'hover:bg-indigo-900',
+            'focus:bg-indigo-900',
+            'text-white',
+            'font-bold',
+            'py-2',
+            'px-4',
+            'rounded',
+            'disabled:opacity-50',
+            'disabled:cursor-not-allowed',
+          )}
+        >
+          Submit
+        </button>
+      </div>
     </div>
   );
 }
