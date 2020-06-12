@@ -1,3 +1,5 @@
+* Add UI tests (browser tests are probably the safest best)
+* Tabbing from last (empty) deployment should move focus to Submit
 * Create guided tour
 
 <!--- deprioritized since we have a workaround! -->
