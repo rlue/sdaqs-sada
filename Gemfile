@@ -20,4 +20,6 @@ end
 
 group :test do
   gem 'benchmark-ips', '~> 2.7'
+  gem 'capybara'
+  gem 'selenium-webdriver'
 end
