@@ -4,6 +4,7 @@ import 'antd/dist/antd.css';
 import '../assets/index.css';
 import SearchPanel from './components/SearchPanel';
 import Map from './components/Map';
+import GuidedTour from './components/GuidedTour';
 
 function deploymentsReducer(state, action) {
   const target = state.find((el) => el.id === action.id);
@@ -36,10 +37,10 @@ export default function App() {
     <>
       <SearchPanel
         {...{
-          deployments,
-          dispatchDeployments,
           uiFocus,
           setUIFocus,
+          deployments,
+          dispatchDeployments,
         }}
       />
       <Map
@@ -48,6 +49,14 @@ export default function App() {
           uiFocus,
           setUIFocus,
         }}
+      />
+      <GuidedTour
+        {...{
+          uiFocus,
+          setUIFocus,
+          dispatchDeployments,
+        }}
+        sampleDeployment={deployments.find(({ id }) => id === uiFocus.id)}
       />
     </>
   );

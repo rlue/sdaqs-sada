@@ -130,6 +130,11 @@ export default function SearchUnit({
     }
   }, [comboboxState.type]);
 
+  // What happens when deployment.base is independently updated (e.g., during guided tour)?
+  useEffect(() => {
+    setComboboxState({ inputValue: deployment.base.name });
+  }, [deployment.base.id]);
+
   // manage current UI focus
   useEffect(() => {
     const selectedForFocus = uiFocus.on === 'deployment details'
@@ -146,7 +151,7 @@ export default function SearchUnit({
 
   return (
     <li // eslint-disable-line jsx-a11y/mouse-events-have-key-events
-      className="space-y-2"
+      className={`search-unit-${deployment.id} space-y-2`}
       ref={componentRoot}
       onMouseOver={() => {
         if (!uiFocus.on && deployment.base.id) {
@@ -288,6 +293,7 @@ export default function SearchUnit({
           disabledDate={(current) => current
             && !current.isBetween(new Date(2002, 0, 1), Date.now())}
           defaultValue={deployment.period}
+          value={deployment.period}
           onChange={(dates) => {
             dispatchDeployments({
               type: 'modify',

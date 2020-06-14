@@ -6,10 +6,10 @@ import SearchUnit from './SearchUnit';
 import sites from '../../assets/data/sites.json';
 
 export default function SearchPanel({
-  deployments,
-  dispatchDeployments,
   uiFocus,
   setUIFocus,
+  deployments,
+  dispatchDeployments,
 }) {
   const fuse = useRef(
     new Fuse(sites, {
@@ -50,9 +50,7 @@ export default function SearchPanel({
           />
         ))}
       </ol>
-      <div
-        className="m-4 space-x-2 flex justify-end"
-      >
+      <div className="m-4 flex justify-between">
         <button
           type="button"
           className={classNames(
@@ -66,38 +64,59 @@ export default function SearchPanel({
             'rounded',
           )}
           onClick={() => {
-            dispatchDeployments({ type: 'reset' });
-            setUIFocus({});
+            const deployment = deployments.find(({ base }) => base.name === 'Baghdad')
+              || deployments.slice(-1)[0];
+
+            setUIFocus({ on: 'tour', id: deployment.id });
           }}
         >
-          Reset
+          Help
         </button>
-        <button
-          type="button"
-          disabled={!validateDeployments()}
-          className={classNames(
-            'bg-indigo-700',
-            'hover:bg-indigo-900',
-            'focus:bg-indigo-900',
-            'text-white',
-            'font-bold',
-            'py-2',
-            'px-4',
-            'rounded',
-            'disabled:opacity-50',
-            'disabled:cursor-not-allowed',
-          )}
-        >
-          Submit
-        </button>
+        <div className="space-x-2">
+          <button
+            type="button"
+            className={classNames(
+              'text-indigo-700',
+              'border',
+              'border-transparent',
+              'hover:border-indigo-700',
+              'focus:border-indigo-700',
+              'py-2',
+              'px-4',
+              'rounded',
+            )}
+            onClick={() => {
+              dispatchDeployments({ type: 'reset' });
+              setUIFocus({});
+            }}
+          >
+            Reset
+          </button>
+          <button
+            type="submit"
+            disabled={!validateDeployments()}
+            className={classNames(
+              'bg-indigo-700',
+              'hover:bg-indigo-900',
+              'focus:bg-indigo-900',
+              'text-white',
+              'font-bold',
+              'py-2',
+              'px-4',
+              'rounded',
+              'disabled:opacity-50',
+              'disabled:cursor-not-allowed',
+            )}
+          >
+            Submit
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
 SearchPanel.propTypes = {
-  deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
-  dispatchDeployments: PropTypes.func.isRequired,
   uiFocus: PropTypes.shape({
     for: PropTypes.string,
     results: PropTypes.arrayOf(
@@ -110,4 +129,6 @@ SearchPanel.propTypes = {
     ),
   }).isRequired,
   setUIFocus: PropTypes.func.isRequired,
+  deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
+  dispatchDeployments: PropTypes.func.isRequired,
 };
