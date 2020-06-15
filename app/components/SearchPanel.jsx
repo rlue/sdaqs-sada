@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import Fuse from 'fuse.js';
-import classNames from 'classnames';
 import SearchUnit from './SearchUnit';
 import sites from '../../assets/data/sites.json';
 
@@ -53,16 +52,7 @@ export default function SearchPanel({
       <div className="m-4 flex justify-between">
         <button
           type="button"
-          className={classNames(
-            'text-indigo-700',
-            'border',
-            'border-transparent',
-            'hover:border-indigo-700',
-            'focus:border-indigo-700',
-            'py-2',
-            'px-4',
-            'rounded',
-          )}
+          className="btn--secondary"
           onClick={() => {
             const deployment = deployments.find(({ base }) => base.name === 'Baghdad')
               || deployments.slice(-1)[0];
@@ -75,16 +65,7 @@ export default function SearchPanel({
         <div className="space-x-2">
           <button
             type="button"
-            className={classNames(
-              'text-indigo-700',
-              'border',
-              'border-transparent',
-              'hover:border-indigo-700',
-              'focus:border-indigo-700',
-              'py-2',
-              'px-4',
-              'rounded',
-            )}
+            className="btn--secondary"
             onClick={() => {
               dispatchDeployments({ type: 'reset' });
               setUIFocus({});
@@ -95,18 +76,7 @@ export default function SearchPanel({
           <button
             type="submit"
             disabled={!validateDeployments()}
-            className={classNames(
-              'bg-indigo-700',
-              'hover:bg-indigo-900',
-              'focus:bg-indigo-900',
-              'text-white',
-              'font-bold',
-              'py-2',
-              'px-4',
-              'rounded',
-              'disabled:opacity-50',
-              'disabled:cursor-not-allowed',
-            )}
+            className="btn--primary"
           >
             Submit
           </button>
