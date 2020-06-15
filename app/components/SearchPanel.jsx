@@ -42,6 +42,7 @@ export default function SearchPanel({
             fuse={fuse.current}
             deployment={deployment}
             {...{
+              deployments,
               dispatchDeployments,
               uiFocus,
               setUIFocus,

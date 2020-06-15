@@ -7,12 +7,12 @@ import debounce from 'lodash.debounce';
 import { DeleteFilled } from '@ant-design/icons';
 import SearchResults from './SearchResults';
 
-const FOCUS_DEBOUNCE_WAIT = 5;
 const INPUT_DEBOUNCE_WAIT = 300;
 
 export default function SearchUnit({
   fuse,
   deployment,
+  deployments,
   dispatchDeployments,
   uiFocus,
   setUIFocus,
@@ -22,10 +22,6 @@ export default function SearchUnit({
   const componentRoot = useRef(null);
   const inputField = useRef(null);
   const datePicker = useRef(null);
-
-  const focusDebouncer = useRef(
-    debounce((uiFocusParams) => setUIFocus(uiFocusParams), FOCUS_DEBOUNCE_WAIT),
-  );
 
   const inputDebouncer = useRef(
     debounce(({ query }) => {
@@ -145,7 +141,10 @@ export default function SearchUnit({
   }, [uiFocus.on, uiFocus.id]);
 
   function removeHandler() {
-    focusDebouncer.current({});
+    const noDeploymentsRemain = !deployments.filter((d) => d.id !== deployment.id && d.base.id)
+      .length;
+
+    setUIFocus(noDeploymentsRemain ? {} : { on: 'selected bases' });
     dispatchDeployments({ type: 'remove', id: deployment.id });
   }
 
@@ -166,18 +165,18 @@ export default function SearchUnit({
           setUIFocus({});
         }
       }}
-      onFocus={() => {
+      onFocus={({ target }) => {
+        const deferToRemoveHandler = target.matches('button[id$="__delete"]');
         const alreadyFocused = uiFocus.on === 'deployment details'
           && uiFocus.id === deployment.id;
         const focusJumpRaceCondition = status === 'success';
 
+        if (deferToRemoveHandler) return;
+
         if (deployment.base.id && !alreadyFocused) {
-          focusDebouncer.current({
-            on: 'selected bases',
-            id: deployment.id,
-          });
+          setUIFocus({ on: 'selected bases', id: deployment.id });
         } else if (uiFocus.on === 'selected bases' && !focusJumpRaceCondition) {
-          focusDebouncer.current({ on: 'nothing' });
+          setUIFocus({ on: 'nothing' });
         }
       }}
     >
@@ -264,6 +263,7 @@ export default function SearchUnit({
         </div>
 
         <button
+          id={`search-unit-${deployment.id}__delete`}
           className={classNames(
             'px-2',
             'focus:outline-none',
@@ -324,6 +324,7 @@ SearchUnit.propTypes = {
     }).isRequired,
     period: PropTypes.array,
   }).isRequired,
+  deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
   uiFocus: PropTypes.shape({
     on: PropTypes.string,
