@@ -187,19 +187,17 @@ export default function Map({
 
   // manage visual feedback for currently-hovered deployment
   useEffect(() => {
-    if (uiFocus.on === 'hovered deployment') {
-      const selectionMarkerDiv = selectionMarkers.current[
-        uiFocus.deploymentId
-      ].getElement();
+    const selectionMarker = selectionMarkers.current[uiFocus.deploymentId];
+
+    if (uiFocus.on === 'hovered deployment' && selectionMarker) {
+      const selectionMarkerDiv = selectionMarker.getElement();
       selectionMarkerDiv.classList.add('z-10');
       selectionMarkerDiv.children[0].classList.add('map-pin--highlighted');
     }
 
     return () => {
-      if (uiFocus.on === 'hovered deployment') {
-        const selectionMarkerDiv = selectionMarkers.current[
-          uiFocus.deploymentId
-        ].getElement();
+      if (uiFocus.on === 'hovered deployment' && selectionMarker) {
+        const selectionMarkerDiv = selectionMarker.getElement();
         selectionMarkerDiv.classList.remove('z-10');
         selectionMarkerDiv.children[0].classList.remove('map-pin--highlighted');
       }
