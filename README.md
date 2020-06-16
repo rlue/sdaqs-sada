@@ -64,7 +64,7 @@ $ rake db:seed
 $ pry -r ./app.rb
 
 # launch in development mode
-$ forego start
+$ forego start -f Procfile.dev
 ```
 
 ### Fonts
