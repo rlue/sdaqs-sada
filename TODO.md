@@ -1,5 +1,7 @@
 ### Up Next
 
+* Add option to set granularity of air quality results
+* Build out backend API with Ken’s sample data
 * How will the chart of air quality stats be presented to the user?
 * How will mapbox-gl API keys be handled in production?
 * How will the app be served for client demo, if not on Heroku?
