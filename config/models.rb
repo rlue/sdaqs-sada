@@ -22,14 +22,14 @@ class Roda
 
       def self.unreload_models
         ::UNRELOADER ||= Rack::Unreloader.new
-        ::UNRELOADER.require('models') do |f|
+        ::UNRELOADER.require('app/models') do |f|
           Sequel::Model.send(:camelize, File.basename(f).sub(/\.rb\z/, ''))
         end
       end
 
       def self.load_models
         Pathname.new(__dir__).parent
-          .then { |root_dir| root_dir.join('models', '*.rb') }
+          .then { |root_dir| root_dir.join('app', 'models', '*.rb') }
           .then { |models_glob| Dir[models_glob] }
           .then { |model_files| model_files.each(&method(:require)) }
       end

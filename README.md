@@ -61,7 +61,7 @@ $ rake db:migrate
 $ rake db:seed
 
 # launch ruby console
-$ pry -r ./app.rb
+$ pry -r ./app/app.rb
 
 # launch in development mode
 $ forego start -f Procfile.dev

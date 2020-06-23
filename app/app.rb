@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'roda'
-require_relative 'config/models'
+require_relative '../config/models'
 require 'json'
 
 class App < Roda
