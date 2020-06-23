@@ -93,6 +93,26 @@ let g:ale_fixers = {
 \ }
 ```
 
+### Git Commit Message Codes
+
+This repo establishes a pattern for git commit messages
+inspired by [the one used on AngularJS][7].
+
+The first line of each commit should begin
+with one of the following three-letter codes:
+
+* `bfx`: Bugfix
+* `chr`: Chore (deprecated, try `dev` or `dep`)
+* `dep`: Dependency (_i.e.,_ Bundler/Yarn files)
+* `dev`: Developer Concerns (notes, tooling, file structure, etc.)
+* `doc`: Documentation
+* `dpl`: Deployment
+* `ftr`: Feature
+* `rfg`: Refactoring
+* `tdd`: Testing
+* `uix`: UI/UX
+* `vis`: Visual Design
+
 License
 -------
 
@@ -105,3 +125,4 @@ Copyright © 2020 University of Southern California. All rights reserved.
 [4]: https://github.com/direnv/direnv
 [5]: https://www.fontsquirrel.com/tools/webfont-generator
 [6]: https://css-tricks.com/snippets/css/using-font-face/
+[7]: https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y
