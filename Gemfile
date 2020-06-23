@@ -5,7 +5,6 @@ source 'https://rubygems.org'
 ruby '2.7.0'
 
 gem 'pg', '~> 1.2'
-gem 'rack-unreloader', '~> 1.7'
 gem 'roda', '~> 3.29'
 gem 'sequel', '~> 5.29'
 gem 'sequel_pg', '~> 1.12'
@@ -16,6 +15,10 @@ group :development, :test do
   gem 'rspec', '~> 3.9'
   gem 'rubocop', '~> 0.79', require: false
   gem 'rubocop-rspec', require: false
+end
+
+group :development do
+  gem 'rack-unreloader', '~> 1.7'
 end
 
 group :test do
