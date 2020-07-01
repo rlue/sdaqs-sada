@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
-require 'roda'
+require 'rubygems'
+require 'bundler/setup'
+Bundler.require(:default, ENV.fetch('RACK_ENV') { 'production' })
+
 require_relative '../config/models'
 require 'json'
 

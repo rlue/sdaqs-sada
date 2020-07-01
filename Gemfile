@@ -7,7 +7,7 @@ ruby '2.7.0'
 gem 'pg', '~> 1.2'
 gem 'roda', '~> 3.29'
 gem 'sequel', '~> 5.29'
-gem 'sequel_pg', '~> 1.12'
+gem 'sequel_pg', '~> 1.12', require: false
 
 group :development, :test do
   gem 'pry', '~> 0.13'

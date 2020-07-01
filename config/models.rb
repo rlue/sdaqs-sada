@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'logger'
-require 'rack/unreloader'
 require 'sequel/model'
 require_relative 'db'
 
@@ -44,6 +43,8 @@ end
 
 case ENV['RACK_ENV']
 when 'development'
+  require 'rack/unreloader'
+
   Roda::Config::Models.add_logger
   Roda::Config::Models.configure_sequel(cached: false, subclasses: false)
   Roda::Config::Models.unreload_models
