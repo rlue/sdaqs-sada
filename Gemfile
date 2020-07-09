@@ -11,6 +11,7 @@ gem 'sequel_pg', '~> 1.12', require: false
 
 group :development, :test do
   gem 'pry', '~> 0.13'
+  gem 'pry-remote', '~> 0.1'
   gem 'rake', '~> 13.0'
   gem 'rspec', '~> 3.9'
   gem 'rubocop', '~> 0.79', require: false
