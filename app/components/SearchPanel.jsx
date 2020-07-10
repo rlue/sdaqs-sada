@@ -9,6 +9,7 @@ export default function SearchPanel({
   setUIFocus,
   deployments,
   dispatchDeployments,
+  setAQProfile,
 }) {
   const fuse = useRef(
     new Fuse(sites, {
@@ -78,6 +79,15 @@ export default function SearchPanel({
             type="submit"
             disabled={!validateDeployments()}
             className="btn--primary"
+            onClick={() => {
+              const queryString = deployments.filter((d) => d.base.id && d.period)
+                .map((d) => `${d.base.id}[]=${d.period.map((m) => m.format('YYYY-MM-01')).join(',')}`)
+                .join('&');
+
+              fetch(`/exposures?${queryString}`)
+                .then((response) => response.json())
+                .then(setAQProfile); // WARNING: JSON payload contains floats serialized to strings
+            }}
           >
             Submit
           </button>
@@ -102,4 +112,5 @@ SearchPanel.propTypes = {
   setUIFocus: PropTypes.func.isRequired,
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
+  setAQProfile: PropTypes.func.isRequired,
 };

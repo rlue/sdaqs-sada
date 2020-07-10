@@ -9,6 +9,7 @@ require 'json'
 
 class App < Roda
   plugin :public
+  plugin :json
 
   plugin :not_found do
     <<~HTML
@@ -26,7 +27,7 @@ class App < Roda
     HTML
   end
 
-  route do |r|
+  route do |r| # rubocop:disable Metrics/BlockLength
     r.public
 
     r.root do
@@ -46,6 +47,24 @@ class App < Roda
         </body>
         </html>
       HTML
+    end
+
+    r.get 'exposures' do
+      deployment_conditions = r.params.map do |base_id, periods|
+        periods.map { |p| <<~SQL.chomp }.join(' OR ')
+          (base_id = '#{base_id}' AND
+           date >= '#{Date.parse(p.split(',').first)}'::date AND
+           date <= '#{Date.parse(p.split(',').last).next_month - 1}'::date)
+        SQL
+      end.join(' OR ')
+
+      DB[<<~SQL.chomp].all.group_by { |record| record.delete(:base_id) }
+        SELECT date, pm25, base_id
+        FROM exposures
+        LEFT JOIN bases
+          ON exposures.pixel_id = bases.pixel_id
+        WHERE #{deployment_conditions}
+      SQL
     end
   end
 end

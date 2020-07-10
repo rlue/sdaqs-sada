@@ -32,6 +32,7 @@ export default function App() {
   const [deployments, dispatchDeployments] = useReducer(deploymentsReducer, [
     { id: uid(), base: {}, period: null },
   ]);
+  const [aqProfile, setAQProfile] = useState({});
 
   return (
     <>
@@ -41,6 +42,7 @@ export default function App() {
           setUIFocus,
           deployments,
           dispatchDeployments,
+          setAQProfile,
         }}
       />
       <Map
