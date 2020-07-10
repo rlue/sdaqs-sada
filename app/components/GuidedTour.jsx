@@ -126,7 +126,7 @@ GuidedTour.propTypes = {
   sampleDeployment: PropTypes.shape({
     id: PropTypes.string.isRequired,
     base: PropTypes.shape({
-      id: PropTypes.number,
+      id: PropTypes.string,
       name: PropTypes.string,
     }).isRequired,
     period: PropTypes.array,

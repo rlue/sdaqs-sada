@@ -214,14 +214,14 @@ Map.propTypes = {
     id: PropTypes.string,
     results: PropTypes.arrayOf(
       PropTypes.shape({
-        id: PropTypes.number,
+        id: PropTypes.string,
         name: PropTypes.string,
         lat: PropTypes.string,
         lng: PropTypes.string,
       }),
     ),
     result: PropTypes.shape({
-      id: PropTypes.number,
+      id: PropTypes.string,
       name: PropTypes.string,
       lat: PropTypes.string,
       lng: PropTypes.string,

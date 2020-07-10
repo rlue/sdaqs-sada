@@ -319,7 +319,7 @@ SearchUnit.propTypes = {
   deployment: PropTypes.shape({
     id: PropTypes.string.isRequired,
     base: PropTypes.shape({
-      id: PropTypes.number,
+      id: PropTypes.string,
       name: PropTypes.string,
     }).isRequired,
     period: PropTypes.array,
@@ -331,7 +331,7 @@ SearchUnit.propTypes = {
     id: PropTypes.string,
     results: PropTypes.arrayOf(
       PropTypes.shape({
-        id: PropTypes.number,
+        id: PropTypes.string,
         name: PropTypes.string,
         lat: PropTypes.string,
         lng: PropTypes.string,
