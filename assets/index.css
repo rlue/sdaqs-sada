@@ -92,6 +92,12 @@
                 1px  1px 3px hsla(48, 100%, 50%, 0.2);
 }
 
+/* Back button -------------------------------------------------------------- */
+
+.back-button {
+  @apply hidden absolute w-8 h-8 z-10 rounded-full bg-white shadow-md;
+}
+
 /* Delete button ------------------------------------------------------------ */
 
 .anticon-delete {
@@ -136,6 +142,13 @@ input:focus,
 .ant-picker.ant-picker-focused {
   box-shadow: inset 0 0 0.125rem hsl(207, 100%, 75%);
   border-color: hsl(207, 100%, 85%);
+}
+
+/* CONTENT WINDOW =========================================================== */
+
+.content-window {
+  @apply flex h-full overflow-hidden;
+  width: 200vw;
 }
 
 /* MAP ====================================================================== */
@@ -210,6 +223,18 @@ svg.map-pin--highlighted {
                 1px  1px #fff;
 }
 
+/* EXPOSURE SUMMARY ========================================================= */
+
+.exposure-shim { /* match width/margin of search-panel */
+  @apply ml-4 w-1/4 flex-none;
+  min-width: 15rem;
+  max-width: 35rem;
+}
+
+#exposure-summary {
+  @apply flex-grow;
+}
+
 /* GUIDED TOUR ============================================================== */
 
 #___reactour .reactour__helper {
@@ -227,4 +252,77 @@ svg.map-pin--highlighted {
 #___reactour button[data-tour-elem="right-arrow"]:hover,
 #___reactour button[data-tour-elem="right-arrow"]:focus {
   @apply btn--primary;
+}
+
+/* CSS EFFECTS (borrowed from animate.css) ================================== */
+
+@keyframes slide-right {
+  from {
+    transform: translate3d(-100vw, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.slide-right {
+  animation: slide-right 500ms ease-in-out forwards;
+}
+
+@keyframes slide-left {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-100vw, 0, 0);
+  }
+}
+
+.slide-left {
+  animation: slide-left 500ms ease-in-out forwards;
+}
+
+@keyframes zoom-enter {
+  from {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.zoom-enter {
+  animation: zoom-enter 300ms ease-out forwards;
+  display: block;
+}
+
+@keyframes zoom-exit {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+    visibility: hidden;
+  }
+}
+
+.zoom-exit {
+  animation: zoom-exit 300ms ease-out forwards;
+  display: block;
 }

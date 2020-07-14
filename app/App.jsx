@@ -4,6 +4,7 @@ import 'antd/dist/antd.css';
 import '../assets/index.css';
 import SearchPanel from './components/SearchPanel';
 import Map from './components/Map';
+import ExposureSummary from './components/ExposureSummary';
 import GuidedTour from './components/GuidedTour';
 
 function deploymentsReducer(state, action) {
@@ -32,7 +33,7 @@ export default function App() {
   const [deployments, dispatchDeployments] = useReducer(deploymentsReducer, [
     { id: uid(), base: {}, period: null },
   ]);
-  const [aqProfile, setAQProfile] = useState({});
+  const [exposureHistory, setExposureHistory] = useState({});
 
   return (
     <>
@@ -42,16 +43,23 @@ export default function App() {
           setUIFocus,
           deployments,
           dispatchDeployments,
-          setAQProfile,
+          setExposureHistory,
         }}
       />
-      <Map
-        {...{
-          deployments,
-          uiFocus,
-          setUIFocus,
-        }}
-      />
+      <div className="content-window">
+        <Map
+          {...{
+            deployments,
+            uiFocus,
+            setUIFocus,
+          }}
+        />
+        <ExposureSummary
+          {...{
+            exposureHistory,
+          }}
+        />
+      </div>
       <GuidedTour
         {...{
           uiFocus,

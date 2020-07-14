@@ -204,7 +204,7 @@ export default function Map({
     };
   }, [uiFocus.on && uiFocus.deploymentId]);
 
-  return <div className="h-full w-full" ref={mapContainer} />;
+  return <div className="h-screen w-screen" ref={mapContainer} />;
 }
 
 Map.propTypes = {

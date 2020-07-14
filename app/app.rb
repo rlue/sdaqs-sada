@@ -39,7 +39,7 @@ class App < Roda
           <link href='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css' rel='stylesheet' />
         </head>
         <body>
-          <div id="app" class="fixed inset-0"></div>
+          <div id="app" class="fixed inset-0 overflow-hidden"></div>
           #{JSON.parse(File.read('assets/webpack-assets.json')).values
                 .map { |asset| asset['js'] }
                 .map { |path| %(<script src="assets/#{path}"></script>) }
@@ -58,8 +58,8 @@ class App < Roda
         SQL
       end.join(' OR ')
 
-      DB[<<~SQL.chomp].all.group_by { |record| record.delete(:base_id) }
-        SELECT date, pm25, base_id
+      DB[<<~SQL.chomp].all.group_by { |record| record.delete(:base_name) }
+        SELECT base_name, date, pm25
         FROM exposures
         LEFT JOIN bases
           ON exposures.pixel_id = bases.pixel_id

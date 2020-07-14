@@ -3366,6 +3366,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chartjs-plugin-colorschemes@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "chartjs-plugin-colorschemes@npm:0.4.0"
+  peerDependencies:
+    chart.js: ">= 2.5.0 < 3"
+  checksum: 2/b1af5b761f4976d99c1547e175b22a91a7a89eb6a5e41561d090dd73a38cbef359ecf8141ae108527e250e9e7c829e7a748f12db4e10dd2bfcf8d980033b2fb8
+  languageName: node
+  linkType: hard
+
 "cheerio@npm:^1.0.0-rc.3":
   version: 1.0.0-rc.3
   resolution: "cheerio@npm:1.0.0-rc.3"
@@ -11177,6 +11186,7 @@ resolve@^1.17.0:
     babel-jest: ^26.0.1
     babel-loader: ^8.0.6
     chart.js: ^2.9.3
+    chartjs-plugin-colorschemes: ^0.4.0
     classnames: ^2.2.6
     clean-webpack-plugin: ^3.0.0
     css-loader: ^3.4.2

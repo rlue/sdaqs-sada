@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import Fuse from 'fuse.js';
+import { LeftOutlined, SaveFilled } from '@ant-design/icons';
 import SearchUnit from './SearchUnit';
 import sites from '../../assets/data/sites.json';
 
@@ -9,7 +10,7 @@ export default function SearchPanel({
   setUIFocus,
   deployments,
   dispatchDeployments,
-  setAQProfile,
+  setExposureHistory,
 }) {
   const fuse = useRef(
     new Fuse(sites, {
@@ -35,63 +36,148 @@ export default function SearchPanel({
     <div id="search-panel">
       <div className="search-panel__header">
         <h1>SDAQS</h1>
-      </div>
-      <ol className="search-list list-decimal m-4 pl-6 space-y-4">
-        {deployments.map((deployment) => (
-          <SearchUnit
-            key={deployment.id}
-            fuse={fuse.current}
-            deployment={deployment}
-            {...{
-              deployments,
-              dispatchDeployments,
-              uiFocus,
-              setUIFocus,
-            }}
-          />
-        ))}
-      </ol>
-      <div className="m-4 flex justify-between">
         <button
           type="button"
-          className="btn--secondary"
+          className="back-button"
           onClick={() => {
-            const deployment = deployments.find(({ base }) => base.name === 'Baghdad')
-              || deployments.slice(-1)[0];
-
-            setUIFocus({ on: 'tour', id: deployment.id });
+            document.querySelector('.content-window').classList.remove('slide-left');
+            document.querySelector('.content-window').classList.add('slide-right');
+            document.querySelector('.back-button').classList.remove('zoom-enter');
+            document.querySelector('.back-button').classList.add('zoom-exit');
+            document.querySelector('.search-form').classList.remove('hidden');
+            document.querySelector('.exposure-menu').classList.add('hidden');
           }}
         >
-          Help
+          <LeftOutlined />
         </button>
-        <div className="space-x-2">
+      </div>
+      <div className="search-form m-4 space-y-4">
+        <ol className="search-list list-decimal pl-6 space-y-4">
+          {deployments.map((deployment) => (
+            <SearchUnit
+              key={deployment.id}
+              fuse={fuse.current}
+              deployment={deployment}
+              {...{
+                deployments,
+                dispatchDeployments,
+                uiFocus,
+                setUIFocus,
+              }}
+            />
+          ))}
+        </ol>
+        <div className="flex justify-between">
           <button
             type="button"
             className="btn--secondary"
             onClick={() => {
-              dispatchDeployments({ type: 'reset' });
-              setUIFocus({});
-            }}
-          >
-            Reset
-          </button>
-          <button
-            type="submit"
-            disabled={!validateDeployments()}
-            className="btn--primary"
-            onClick={() => {
-              const queryString = deployments.filter((d) => d.base.id && d.period)
-                .map((d) => `${d.base.id}[]=${d.period.map((m) => m.format('YYYY-MM-01')).join(',')}`)
-                .join('&');
+              const deployment = deployments.find(({ base }) => base.name === 'Baghdad')
+                || deployments.slice(-1)[0];
 
-              fetch(`/exposures?${queryString}`)
-                .then((response) => response.json())
-                .then(setAQProfile); // WARNING: JSON payload contains floats serialized to strings
+              setUIFocus({ on: 'tour', id: deployment.id });
             }}
           >
-            Submit
+            Help
           </button>
+          <div className="space-x-2">
+            <button
+              type="button"
+              className="btn--secondary"
+              onClick={() => {
+                dispatchDeployments({ type: 'reset' });
+                setUIFocus({});
+              }}
+            >
+              Reset
+            </button>
+            <button
+              type="submit"
+              disabled={!validateDeployments()}
+              className="btn--primary"
+              onClick={() => {
+                const queryString = deployments.filter((d) => d.base.id && d.period)
+                  .map((d) => `${d.base.id}[]=${d.period.map((m) => m.format('YYYY-MM-01')).join(',')}`)
+                  .join('&');
+
+                fetch(`/exposures?${queryString}`)
+                  .then((response) => response.json())
+                  .then(setExposureHistory);
+
+                document.querySelector('.content-window').classList.remove('slide-right');
+                document.querySelector('.content-window').classList.add('slide-left');
+                document.querySelector('.back-button').classList.remove('zoom-exit');
+                document.querySelector('.back-button').classList.add('zoom-enter');
+                document.querySelector('.search-form').classList.add('hidden');
+                document.querySelector('.exposure-menu').classList.remove('hidden');
+              }}
+            >
+              Submit
+            </button>
+          </div>
         </div>
+      </div>
+      <div className="exposure-menu hidden">
+        <ul>
+          <li>
+            <button
+              type="button"
+              className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+            >
+              Summary
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+            >
+              PM2.5
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+            >
+              PM10
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+            >
+              VOCs
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+            >
+              Nitrates
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+            >
+              Sulfates
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+            >
+              <SaveFilled />
+              {' '}
+              Export to CSV
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
   );
@@ -112,5 +198,5 @@ SearchPanel.propTypes = {
   setUIFocus: PropTypes.func.isRequired,
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
-  setAQProfile: PropTypes.func.isRequired,
+  setExposureHistory: PropTypes.func.isRequired,
 };

@@ -4,7 +4,7 @@ import Tour from 'reactour';
 import moment from 'moment';
 
 const SAMPLE_BASE = {
-  id: 1,
+  id: 'VA0518',
   name: 'Baghdad',
   lat: 33.3152,
   lng: 44.3661,
