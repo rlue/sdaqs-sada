@@ -3337,6 +3337,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chart.js@npm:^2.9.3":
+  version: 2.9.3
+  resolution: "chart.js@npm:2.9.3"
+  dependencies:
+    chartjs-color: ^2.1.0
+    moment: ^2.10.2
+  checksum: 2/8e3f10e003941c1c77a5209cd08ed342a41c7c6a2ed93722b7ea1366c804bb2349d957e066f2abb7a3399d6ebebe83a298a15cbc960bc64846bc127e94f77f27
+  languageName: node
+  linkType: hard
+
+"chartjs-color-string@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "chartjs-color-string@npm:0.6.0"
+  dependencies:
+    color-name: ^1.0.0
+  checksum: 2/29f7ef3ebf5af1a76034da3148e1f230eee0c0f6df497ab7072ce5fb9c11ff37f5f030d2a2a5f1fd9230895d9aa294b455c5dd0f0e04f38688c69d0ccbdca7dd
+  languageName: node
+  linkType: hard
+
+"chartjs-color@npm:^2.1.0":
+  version: 2.4.1
+  resolution: "chartjs-color@npm:2.4.1"
+  dependencies:
+    chartjs-color-string: ^0.6.0
+    color-convert: ^1.9.3
+  checksum: 2/850408dfcda057ef0115018d5c83b88f5539cf93bbae8389bd3c5caa405a18e1f1d89b22a26107e1559248206a4ad6243294a820d50f042c6782a1d9d09fb3de
+  languageName: node
+  linkType: hard
+
 "cheerio@npm:^1.0.0-rc.3":
   version: 1.0.0-rc.3
   resolution: "cheerio@npm:1.0.0-rc.3"
@@ -3518,7 +3547,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-convert@npm:^1.9.0, color-convert@npm:^1.9.1":
+"color-convert@npm:^1.9.0, color-convert@npm:^1.9.1, color-convert@npm:^1.9.3":
   version: 1.9.3
   resolution: "color-convert@npm:1.9.3"
   dependencies:
@@ -8247,7 +8276,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.24.0":
+"moment@npm:^2.10.2, moment@npm:^2.24.0":
   version: 2.24.0
   resolution: "moment@npm:2.24.0"
   checksum: 2/983617bc51c8121a88d9530671fb9e5dc2c71d67ba5bf1b16ebef25b51bd3d1291f17735ac33e8604f4984a275561dfe0fb883664eceacf8f67291ffd26acee9
@@ -11147,6 +11176,7 @@ resolve@^1.17.0:
     autoprefixer: ^9.8.0
     babel-jest: ^26.0.1
     babel-loader: ^8.0.6
+    chart.js: ^2.9.3
     classnames: ^2.2.6
     clean-webpack-plugin: ^3.0.0
     css-loader: ^3.4.2
