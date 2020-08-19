@@ -18,8 +18,8 @@ const SAMPLE_PERIOD = [
 ];
 
 export default function GuidedTour({
-  uiFocus,
-  setUIFocus,
+  userFlow,
+  setUserFlow,
   sampleDeployment,
   dispatchDeployments,
 }) {
@@ -67,13 +67,13 @@ export default function GuidedTour({
       },
     },
     {
-      selector: `.search-unit-${uiFocus.id} input[id^="downshift"]`,
+      selector: `.search-unit-${userFlow.deploymentId} input[id^="downshift"]`,
       content: 'Step 1: Select a base',
       action: () => {
         if (!sampleDeployment.base.id) {
           dispatchDeployments({
             type: 'modify',
-            id: uiFocus.id,
+            id: userFlow.deploymentId,
             key: 'base',
             value: SAMPLE_BASE,
           });
@@ -81,13 +81,13 @@ export default function GuidedTour({
       },
     },
     {
-      selector: `.search-unit-${uiFocus.id} > .search-unit__details`,
+      selector: `.search-unit-${userFlow.deploymentId} > .search-unit__details`,
       content: 'Step 2: Select the dates you were deployed there.',
       action: () => {
         if (!sampleDeployment.period) {
           dispatchDeployments({
             type: 'modify',
-            id: uiFocus.id,
+            id: userFlow.deploymentId,
             key: 'period',
             value: SAMPLE_PERIOD,
           });
@@ -107,8 +107,8 @@ export default function GuidedTour({
   return (
     <Tour
       steps={steps}
-      isOpen={uiFocus.on === 'tour'}
-      onRequestClose={() => setUIFocus({})}
+      isOpen={userFlow.action === 'tour'}
+      onRequestClose={() => setUserFlow({ mode: 'deployment builder' })}
       showNumber={false}
       showNavigationNumber={false}
       nextButton="Next"
@@ -118,11 +118,12 @@ export default function GuidedTour({
 }
 
 GuidedTour.propTypes = {
-  uiFocus: PropTypes.shape({
-    on: PropTypes.string,
-    id: PropTypes.string,
+  userFlow: PropTypes.shape({
+    mode: PropTypes.string,
+    action: PropTypes.string,
+    deploymentId: PropTypes.string,
   }).isRequired,
-  setUIFocus: PropTypes.func.isRequired,
+  setUserFlow: PropTypes.func.isRequired,
   sampleDeployment: PropTypes.shape({
     id: PropTypes.string.isRequired,
     base: PropTypes.shape({

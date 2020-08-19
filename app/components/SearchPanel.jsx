@@ -6,8 +6,8 @@ import SearchUnit from './SearchUnit';
 import sites from '../../assets/data/sites.json';
 
 export default function SearchPanel({
-  uiFocus,
-  setUIFocus,
+  userFlow,
+  setUserFlow,
   deployments,
   dispatchDeployments,
   setExposureHistory,
@@ -61,8 +61,8 @@ export default function SearchPanel({
               {...{
                 deployments,
                 dispatchDeployments,
-                uiFocus,
-                setUIFocus,
+                userFlow,
+                setUserFlow,
               }}
             />
           ))}
@@ -75,7 +75,7 @@ export default function SearchPanel({
               const deployment = deployments.find(({ base }) => base.name === 'Baghdad')
                 || deployments.slice(-1)[0];
 
-              setUIFocus({ on: 'tour', id: deployment.id });
+              setUserFlow({ mode: 'deployment builder', action: 'tour', deploymentId: deployment.id });
             }}
           >
             Help
@@ -86,7 +86,7 @@ export default function SearchPanel({
               className="btn--secondary"
               onClick={() => {
                 dispatchDeployments({ type: 'reset' });
-                setUIFocus({});
+                setUserFlow({ mode: 'deployment builder' });
               }}
             >
               Reset
@@ -184,7 +184,7 @@ export default function SearchPanel({
 }
 
 SearchPanel.propTypes = {
-  uiFocus: PropTypes.shape({
+  userFlow: PropTypes.shape({
     for: PropTypes.string,
     results: PropTypes.arrayOf(
       PropTypes.shape({
@@ -195,7 +195,7 @@ SearchPanel.propTypes = {
       }),
     ),
   }).isRequired,
-  setUIFocus: PropTypes.func.isRequired,
+  setUserFlow: PropTypes.func.isRequired,
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
   setExposureHistory: PropTypes.func.isRequired,

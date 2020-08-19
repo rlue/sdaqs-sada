@@ -11,8 +11,8 @@ const DEFAULT_MAP_BOUNDS = collectionBounds(sites);
 
 export default function Map({
   deployments,
-  uiFocus,
-  setUIFocus,
+  userFlow,
+  setUserFlow,
 }) {
   const mapContainer = useRef();
   const map = useRef();
@@ -66,7 +66,11 @@ export default function Map({
           base,
           <Icons.MapPin
             className="map-pin--selection"
-            onClick={() => setUIFocus({ on: 'deployment details', id })}
+            onClick={() => setUserFlow({
+              mode: 'deployment builder',
+              action: 'edit deployment',
+              deploymentId: id,
+            })}
             index={deployments.length - (i + 1)}
             label={base}
           />,
@@ -85,11 +89,11 @@ export default function Map({
     let deployment;
     let markerNode;
 
-    switch (uiFocus.on) {
-      case 'nothing': // used to reset this effect & invoke cleanup with no other changes
+    switch (userFlow.action) {
+      case 'none': // used to reset this effect & invoke cleanup with no other changes
         break;
-      case 'search results':
-        resultMarkers.current = uiFocus.results.reduce((markers, base) => {
+      case 'search bases':
+        resultMarkers.current = userFlow.results.reduce((markers, base) => {
           if (!(base.id in markers)) {
             markers[base.id] = addMarker(
               map.current,
@@ -101,26 +105,26 @@ export default function Map({
           return markers;
         }, {});
 
-        if (uiFocus.results.length) setMapFit(collectionBounds(uiFocus.results));
+        if (userFlow.results.length) setMapFit(collectionBounds(userFlow.results));
         break;
-      case 'deployment details':
-        markerNode = selectionMarkers.current[uiFocus.id].getElement();
+      case 'edit deployment':
+        markerNode = selectionMarkers.current[userFlow.deploymentId].getElement();
 
         if (markerNode.children.length) {
           markerNode.children[0].classList.remove('cursor-pointer');
         }
 
-        deployment = deployments.find((d) => d.id === uiFocus.id);
+        deployment = deployments.find((d) => d.id === userFlow.deploymentId);
         setMapFit(new mapboxgl.LngLat(deployment.base.lng, deployment.base.lat));
         break;
-      case 'selected bases':
+      case 'review deployments':
         setMapFit(collectionBounds(
           deployments.filter(({ base }) => base.id).map(({ base }) => base),
         ));
 
-        if (selectionMarkers.current[uiFocus.id]) {
+        if (selectionMarkers.current[userFlow.deploymentId]) {
           selectionMarkers
-            .current[uiFocus.id]
+            .current[userFlow.deploymentId]
             .getElement()
             .children[0]
             .classList
@@ -133,23 +137,23 @@ export default function Map({
     }
 
     return () => {
-      switch (uiFocus.on) { // eslint-disable-line default-case
-        case 'search results':
+      switch (userFlow.action) { // eslint-disable-line default-case
+        case 'search bases':
           Object.values(resultMarkers.current).forEach((marker) => marker.remove());
           break;
-        case 'deployment details':
-          if (!selectionMarkers.current[uiFocus.id]) break;
+        case 'edit deployment':
+          if (!selectionMarkers.current[userFlow.deploymentId]) break;
 
-          markerNode = selectionMarkers.current[uiFocus.id].getElement();
+          markerNode = selectionMarkers.current[userFlow.deploymentId].getElement();
 
           if (markerNode.children.length) {
             markerNode.children[0].classList.add('cursor-pointer');
           }
           break;
-        case 'selected bases':
-          if (selectionMarkers.current[uiFocus.id]) {
+        case 'review deployments':
+          if (selectionMarkers.current[userFlow.deploymentId]) {
             selectionMarkers
-              .current[uiFocus.id]
+              .current[userFlow.deploymentId]
               .getElement()
               .children[0]
               .classList
@@ -159,59 +163,60 @@ export default function Map({
       }
     };
   }, [
-    uiFocus.on,
-    uiFocus.id,
-    uiFocus.results && uiFocus.results.map((r) => r.id).join(''),
+    userFlow.action,
+    userFlow.deploymentId,
+    userFlow.results && userFlow.results.map((r) => r.id).join(''),
   ]);
 
   // manage visual feedback for currently-highlighted result
   useEffect(() => {
-    if (uiFocus.on === 'search results' && uiFocus.result) {
+    if (userFlow.action === 'search bases' && userFlow.result) {
       const resultMarkerDiv = resultMarkers.current[
-        uiFocus.result.id
+        userFlow.result.id
       ].getElement();
       resultMarkerDiv.classList.add('z-10');
       resultMarkerDiv.children[0].classList.add('map-pin--highlighted');
     }
 
     return () => {
-      if (uiFocus.on === 'search results' && uiFocus.result) {
+      if (userFlow.action === 'search bases' && userFlow.result) {
         const resultMarkerDiv = resultMarkers.current[
-          uiFocus.result.id
+          userFlow.result.id
         ].getElement();
         resultMarkerDiv.classList.remove('z-10');
         resultMarkerDiv.children[0].classList.remove('map-pin--highlighted');
       }
     };
-  }, [uiFocus.on && uiFocus.result && uiFocus.result.id]);
+  }, [userFlow.action && userFlow.result && userFlow.result.id]);
 
   // manage visual feedback for currently-hovered deployment
   useEffect(() => {
-    const selectionMarker = selectionMarkers.current[uiFocus.deploymentId];
+    const selectionMarker = selectionMarkers.current[userFlow.deploymentId];
 
-    if (uiFocus.on === 'hovered deployment' && selectionMarker) {
+    if (userFlow.action === 'preview deployment' && selectionMarker) {
       const selectionMarkerDiv = selectionMarker.getElement();
       selectionMarkerDiv.classList.add('z-10');
       selectionMarkerDiv.children[0].classList.add('map-pin--highlighted');
     }
 
     return () => {
-      if (uiFocus.on === 'hovered deployment' && selectionMarker) {
+      if (userFlow.action === 'preview deployment' && selectionMarker) {
         const selectionMarkerDiv = selectionMarker.getElement();
         selectionMarkerDiv.classList.remove('z-10');
         selectionMarkerDiv.children[0].classList.remove('map-pin--highlighted');
       }
     };
-  }, [uiFocus.on && uiFocus.deploymentId]);
+  }, [userFlow.action && userFlow.deploymentId]);
 
   return <div className="h-screen w-screen" ref={mapContainer} />;
 }
 
 Map.propTypes = {
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
-  uiFocus: PropTypes.shape({
-    on: PropTypes.string,
-    id: PropTypes.string,
+  userFlow: PropTypes.shape({
+    mode: PropTypes.string,
+    action: PropTypes.string,
+    deploymentId: PropTypes.string,
     results: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.string,
@@ -226,7 +231,6 @@ Map.propTypes = {
       lat: PropTypes.string,
       lng: PropTypes.string,
     }),
-    deploymentId: PropTypes.string,
   }).isRequired,
-  setUIFocus: PropTypes.func.isRequired,
+  setUserFlow: PropTypes.func.isRequired,
 };

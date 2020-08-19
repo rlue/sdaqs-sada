@@ -29,7 +29,7 @@ function deploymentsReducer(state, action) {
 }
 
 export default function App() {
-  const [uiFocus, setUIFocus] = useState({});
+  const [userFlow, setUserFlow] = useState({ mode: 'deployment builder' });
   const [deployments, dispatchDeployments] = useReducer(deploymentsReducer, [
     { id: uid(), base: {}, period: null },
   ]);
@@ -39,8 +39,8 @@ export default function App() {
     <>
       <SearchPanel
         {...{
-          uiFocus,
-          setUIFocus,
+          userFlow,
+          setUserFlow,
           deployments,
           dispatchDeployments,
           setExposureHistory,
@@ -50,8 +50,8 @@ export default function App() {
         <Map
           {...{
             deployments,
-            uiFocus,
-            setUIFocus,
+            userFlow,
+            setUserFlow,
           }}
         />
         <ExposureSummary
@@ -62,11 +62,11 @@ export default function App() {
       </div>
       <GuidedTour
         {...{
-          uiFocus,
-          setUIFocus,
+          userFlow,
+          setUserFlow,
           dispatchDeployments,
         }}
-        sampleDeployment={deployments.find(({ id }) => id === uiFocus.id)}
+        sampleDeployment={deployments.find(({ id }) => id === userFlow.deploymentId)}
       />
     </>
   );

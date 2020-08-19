@@ -14,8 +14,8 @@ export default function SearchUnit({
   deployment,
   deployments,
   dispatchDeployments,
-  uiFocus,
-  setUIFocus,
+  userFlow,
+  setUserFlow,
 }) {
   const [status, setStatus] = useState('ready');
   const [comboboxState, setComboboxState] = useState({ inputValue: deployment.base.name || '' });
@@ -29,19 +29,23 @@ export default function SearchUnit({
 
       if (!query.trim().length) {
         setStatus('ready');
-        setUIFocus({});
+        setUserFlow({ mode: 'deployment builder' });
       } else if (!results.length) {
         setStatus('no results');
-        setUIFocus({});
+        setUserFlow({ mode: 'deployment builder' });
       } else {
         setStatus('success');
-        setUIFocus({ on: 'search results', results });
+        setUserFlow({
+          mode: 'deployment builder',
+          action: 'search bases',
+          results,
+        });
       }
     }, INPUT_DEBOUNCE_WAIT),
   );
 
   const ds = useCombobox({
-    items: uiFocus.results || [],
+    items: userFlow.results || [],
     itemToString: (item) => (item ? item.name : ''),
     inputValue: comboboxState.inputValue,
     selectedItem: comboboxState.selectedItem,
@@ -70,12 +74,13 @@ export default function SearchUnit({
     const { highlightedIndex, selectedItem } = comboboxState;
     const selectionMade = selectedItem && selectedItem.id !== deployment.base.id;
 
-    if ('highlightedIndex' in comboboxState && !selectionMade && uiFocus.results) {
-      setUIFocus({
-        on: 'search results',
-        results: uiFocus.results,
+    if ('highlightedIndex' in comboboxState && !selectionMade && userFlow.results) {
+      setUserFlow({
+        mode: 'deployment builder',
+        action: 'search bases',
+        results: userFlow.results,
         result: highlightedIndex > -1
-          ? uiFocus.results[highlightedIndex]
+          ? userFlow.results[highlightedIndex]
           : null,
       });
     }
@@ -89,7 +94,11 @@ export default function SearchUnit({
     if (selectionMade) {
       setComboboxState({ inputValue: selectedItem.name });
       setStatus('complete');
-      setUIFocus({ on: 'deployment details', id: deployment.id });
+      setUserFlow({
+        mode: 'deployment builder',
+        action: 'edit deployment',
+        deploymentId: deployment.id,
+      });
       dispatchDeployments({
         type: 'modify',
         id: deployment.id,
@@ -116,7 +125,11 @@ export default function SearchUnit({
       case '__input_keydown_escape__': // eslint-disable-line no-fallthrough
         if (deployment.base.id) {
           setComboboxState({ inputValue: deployment.base.name });
-          setUIFocus({ on: 'selected bases', id: deployment.id });
+          setUserFlow({
+            mode: 'deployment builder',
+            action: 'review deployments',
+            deploymentId: deployment.id,
+          });
           setStatus('ready');
         } else {
           setComboboxState({ inputValue: '' });
@@ -133,18 +146,22 @@ export default function SearchUnit({
 
   // manage current UI focus
   useEffect(() => {
-    const selectedForFocus = uiFocus.on === 'deployment details'
-      && uiFocus.id === deployment.id;
+    const selectedForFocus = userFlow.action === 'edit deployment'
+      && userFlow.deploymentId === deployment.id;
     const hasFocus = componentRoot.current.contains(document.activeElement);
 
     if (selectedForFocus && !hasFocus) inputField.current.focus();
-  }, [uiFocus.on, uiFocus.id]);
+  }, [userFlow.action, userFlow.deploymentId]);
 
   function removeHandler() {
     const noDeploymentsRemain = !deployments.filter((d) => d.id !== deployment.id && d.base.id)
       .length;
 
-    setUIFocus(noDeploymentsRemain ? {} : { on: 'selected bases' });
+    setUserFlow(
+      noDeploymentsRemain
+        ? { mode: 'deployment builder' }
+        : { mode: 'deployment builder', action: 'review deployments' },
+    );
     dispatchDeployments({ type: 'remove', id: deployment.id });
   }
 
@@ -153,30 +170,38 @@ export default function SearchUnit({
       className={`search-unit-${deployment.id} space-y-2`}
       ref={componentRoot}
       onMouseOver={() => {
-        if (!uiFocus.on && deployment.base.id) {
-          setUIFocus({ on: 'hovered deployment', deploymentId: deployment.id });
+        if (!userFlow.action && deployment.base.id) {
+          setUserFlow({
+            mode: 'deployment builder',
+            action: 'preview deployment',
+            deploymentId: deployment.id,
+          });
         }
       }}
       onMouseOut={({ clientX, clientY }) => {
         const hoveredElement = document.elementFromPoint(clientX, clientY);
         const falsePositive = componentRoot.current.contains(hoveredElement);
 
-        if (uiFocus.on === 'hovered deployment' && !falsePositive) {
-          setUIFocus({});
+        if (userFlow.action === 'preview deployment' && !falsePositive) {
+          setUserFlow({ mode: 'deployment builder' });
         }
       }}
       onFocus={({ target }) => {
         const deferToRemoveHandler = target.matches('button[id$="__delete"]');
-        const alreadyFocused = uiFocus.on === 'deployment details'
-          && uiFocus.id === deployment.id;
+        const alreadyFocused = userFlow.action === 'edit deployment'
+          && userFlow.deploymentId === deployment.id;
         const focusJumpRaceCondition = status === 'success';
 
         if (deferToRemoveHandler) return;
 
         if (deployment.base.id && !alreadyFocused) {
-          setUIFocus({ on: 'selected bases', id: deployment.id });
-        } else if (uiFocus.on === 'selected bases' && !focusJumpRaceCondition) {
-          setUIFocus({ on: 'nothing' });
+          setUserFlow({
+            mode: 'deployment builder',
+            action: 'review deployments',
+            deploymentId: deployment.id,
+          });
+        } else if (userFlow.action === 'review deployments' && !focusJumpRaceCondition) {
+          setUserFlow({ mode: 'deployment builder', action: 'none' });
         }
       }}
     >
@@ -204,10 +229,10 @@ export default function SearchUnit({
               },
               onKeyPress: (event) => {
                 const keypressEnter = event.charCode === 13;
-                const implicitSelection = uiFocus.results && ds.highlightedIndex === -1;
+                const implicitSelection = userFlow.results && ds.highlightedIndex === -1;
 
                 if (keypressEnter && implicitSelection) {
-                  setComboboxState({ type: '__input_keydown_enter__', selectedItem: uiFocus.results[0] });
+                  setComboboxState({ type: '__input_keydown_enter__', selectedItem: userFlow.results[0] });
                 }
               },
             })}
@@ -242,7 +267,7 @@ export default function SearchUnit({
             )}
           >
             <SearchResults status={status}>
-              {(uiFocus.results || []).map((item, index) => (
+              {(userFlow.results || []).map((item, index) => (
                 <li
                   {...ds.getItemProps({ item, index })}
                   key={`${item.id}`}
@@ -303,7 +328,7 @@ export default function SearchUnit({
             });
 
             if (dates) {
-              setUIFocus({});
+              setUserFlow({ mode: 'deployment builder' });
             }
           }}
         />
@@ -326,9 +351,10 @@ SearchUnit.propTypes = {
   }).isRequired,
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
-  uiFocus: PropTypes.shape({
-    on: PropTypes.string,
-    id: PropTypes.string,
+  userFlow: PropTypes.shape({
+    mode: PropTypes.string,
+    action: PropTypes.string,
+    deploymentId: PropTypes.string,
     results: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.string,
@@ -338,5 +364,5 @@ SearchUnit.propTypes = {
       }),
     ),
   }).isRequired,
-  setUIFocus: PropTypes.func.isRequired,
+  setUserFlow: PropTypes.func.isRequired,
 };
