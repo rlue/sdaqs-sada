@@ -92,12 +92,6 @@
                 1px  1px 3px hsla(48, 100%, 50%, 0.2);
 }
 
-/* Back button -------------------------------------------------------------- */
-
-.back-button {
-  @apply hidden absolute w-8 h-8 z-10 rounded-full bg-white shadow-md;
-}
-
 /* Delete button ------------------------------------------------------------ */
 
 .anticon-delete {

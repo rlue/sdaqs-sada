@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import Fuse from 'fuse.js';
 import { LeftOutlined, SaveFilled } from '@ant-design/icons';
+import classNames from 'classnames';
 import SearchUnit from './SearchUnit';
 import sites from '../../assets/data/sites.json';
 
@@ -38,20 +39,32 @@ export default function SearchPanel({
         <h1>SDAQS</h1>
         <button
           type="button"
-          className="back-button"
-          onClick={() => {
-            document.querySelector('.content-window').classList.remove('slide-left');
-            document.querySelector('.content-window').classList.add('slide-right');
-            document.querySelector('.back-button').classList.remove('zoom-enter');
-            document.querySelector('.back-button').classList.add('zoom-exit');
-            document.querySelector('.search-form').classList.remove('hidden');
-            document.querySelector('.exposure-menu').classList.add('hidden');
-          }}
+          className={classNames(
+            'hidden',
+            'absolute',
+            'w-8',
+            'h-8',
+            'z-10',
+            'rounded-full',
+            'bg-white',
+            'shadow-md',
+            {
+              'zoom-enter': userFlow.mode === 'exposure report',
+              'zoom-exit': userFlow.mode === 'deployment builder',
+            },
+          )}
+          onClick={() => setUserFlow({ mode: 'deployment builder' })}
         >
           <LeftOutlined />
         </button>
       </div>
-      <div className="search-form m-4 space-y-4">
+      <div
+        className={classNames(
+          'm-4',
+          'space-y-4',
+          { hidden: userFlow.mode === 'exposure report' },
+        )}
+      >
         <ol className="search-list list-decimal pl-6 space-y-4">
           {deployments.map((deployment) => (
             <SearchUnit
@@ -104,12 +117,7 @@ export default function SearchPanel({
                   .then((response) => response.json())
                   .then(setExposureHistory);
 
-                document.querySelector('.content-window').classList.remove('slide-right');
-                document.querySelector('.content-window').classList.add('slide-left');
-                document.querySelector('.back-button').classList.remove('zoom-exit');
-                document.querySelector('.back-button').classList.add('zoom-enter');
-                document.querySelector('.search-form').classList.add('hidden');
-                document.querySelector('.exposure-menu').classList.remove('hidden');
+                setUserFlow({ mode: 'exposure report' });
               }}
             >
               Submit
@@ -117,7 +125,11 @@ export default function SearchPanel({
           </div>
         </div>
       </div>
-      <div className="exposure-menu hidden">
+      <div
+        className={classNames(
+          { hidden: userFlow.mode === 'deployment builder' },
+        )}
+      >
         <ul>
           <li>
             <button
@@ -185,6 +197,7 @@ export default function SearchPanel({
 
 SearchPanel.propTypes = {
   userFlow: PropTypes.shape({
+    mode: PropTypes.string,
     for: PropTypes.string,
     results: PropTypes.arrayOf(
       PropTypes.shape({

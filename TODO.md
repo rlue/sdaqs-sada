@@ -1,6 +1,5 @@
 ### Up Next
 
-* Refactor all classList.{add,remove} instances as React state
 * Limit date picker to available dates
 * Add units (μg/m³) to chart
 * Prefer classes to IDs for CSS hooks
@@ -23,6 +22,7 @@
 * Fix last step of tour (clicking “submit” should exit)
 * Add error handling to JS fetch logic
 * Add hover animation to buttons
+* Fix “FOUC”-style animations caused by prematurely applied CSS classes (3c2cd1c)
 
 ### Deprioritized
 

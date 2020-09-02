@@ -1,6 +1,7 @@
 import React, { useReducer, useState } from 'react';
 import uid from 'uid';
 import 'antd/dist/antd.css';
+import classNames from 'classnames';
 import '../assets/index.css';
 import SearchPanel from './components/SearchPanel';
 import Map from './components/Map';
@@ -46,7 +47,15 @@ export default function App() {
           setExposureHistory,
         }}
       />
-      <div className="content-window">
+      <div
+        className={classNames(
+          'content-window',
+          {
+            'slide-right': userFlow.mode === 'deployment builder',
+            'slide-left': userFlow.mode === 'exposure report',
+          },
+        )}
+      >
         <Map
           {...{
             deployments,
