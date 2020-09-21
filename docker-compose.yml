@@ -1,0 +1,34 @@
+version: '3'
+services:
+  db:
+    image: postgis/postgis
+    volumes:
+      - ./tmp/me_sample_db.sql:/docker-entrypoint-initdb.d/me_sample_db.sql:ro
+    environment:
+      POSTGRES_DB: sdaqs_production
+      POSTGRES_PASSWORD: password
+    labels:
+      - traefik.enable=false
+  web:
+    build: .
+    environment:
+      APP_DATABASE_URL: postgres://postgres:password@db/sdaqs_production
+    ports:
+      - 9292:9292
+    depends_on:
+      - db
+    networks:
+      - default
+      - router
+    labels:
+      traefik.http.services.sdaqs.loadbalancer.server.port: 9292
+      traefik.http.routers.sdaqs.entrypoints: websecure
+      traefik.http.routers.sdaqs.rule: Host(`airquality.ryanlue.com`)
+      traefik.http.routers.sdaqs.tls: true
+      traefik.http.routers.sdaqs.tls.certresolver: letsencrypt
+      traefik.docker.network: ryanluecom_default
+    restart: unless-stopped
+networks:
+  router:
+    external:
+      name: ryanluecom_default
