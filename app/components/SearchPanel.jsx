@@ -160,7 +160,7 @@ export default function SearchPanel({
               type="button"
               className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
             >
-              VOCs
+              Dust
             </button>
           </li>
           <li>
