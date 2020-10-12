@@ -39,7 +39,7 @@ class App < Roda
           <link href='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css' rel='stylesheet' />
         </head>
         <body>
-          <div id="app" class="fixed inset-0 overflow-hidden"></div>
+          <div class="app-root fixed inset-0 overflow-hidden"></div>
           #{JSON.parse(File.read('assets/webpack-assets.json')).values
                 .map { |asset| asset['js'] }
                 .map { |path| %(<script src="assets/#{path}"></script>) }

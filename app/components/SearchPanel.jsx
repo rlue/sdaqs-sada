@@ -34,7 +34,7 @@ export default function SearchPanel({
   }
 
   return (
-    <div id="search-panel">
+    <div className="search-panel">
       <div className="search-panel__header">
         <h1>SDAQS</h1>
         <button

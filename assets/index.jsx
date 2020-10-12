@@ -5,5 +5,5 @@ import WebGLSupportCheck from '../app/components/WebGLSupportCheck';
 
 ReactDOM.render(
   <WebGLSupportCheck><App /></WebGLSupportCheck>,
-  document.querySelector('#app'),
+  document.querySelector('.app-root'),
 );

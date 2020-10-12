@@ -40,7 +40,7 @@
 
 /* SEARCH PANEL ============================================================= */
 
-#search-panel {
+.search-panel {
   @apply absolute z-10 mx-4 bg-white shadow-md rounded-b-lg w-1/4;
   min-width: 15rem;
   max-width: 35rem;
@@ -223,10 +223,6 @@ svg.map-pin--highlighted {
   @apply ml-4 w-1/4 flex-none;
   min-width: 15rem;
   max-width: 35rem;
-}
-
-#exposure-summary {
-  @apply flex-grow;
 }
 
 /* GUIDED TOUR ============================================================== */

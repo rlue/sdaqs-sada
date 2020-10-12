@@ -8,7 +8,7 @@ export default function ExposureSummary({ exposureHistory }) {
   return (
     <div className="exposure-container flex w-screen min-h-screen overflow-x-hidden">
       <div className="exposure-shim" />
-      <div id="exposure-summary" className="m-8">
+      <div className="flex-grow m-8">
         <h1 className="text-4xl">Your Results</h1>
         {contaminants.current.map((contaminant) => (
           <ExposureChart

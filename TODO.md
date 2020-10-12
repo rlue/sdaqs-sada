@@ -2,7 +2,6 @@
 
 * Add aggregate figures (average, standard deviation) to charts
 * Limit date picker to available dates
-* Prefer classes to IDs for CSS hooks
 * Animate switch from search form to exposure menu
 * Rename SearchPanel component
 * (?) Add option to set granularity of air quality results

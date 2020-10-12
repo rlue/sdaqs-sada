@@ -187,7 +187,7 @@ export default function SearchUnit({
         }
       }}
       onFocus={({ target }) => {
-        const deferToRemoveHandler = target.matches('button[id$="__delete"]');
+        const deferToRemoveHandler = target.classList.contains('js-search-unit-delete');
         const alreadyFocused = userFlow.action === 'edit deployment'
           && userFlow.deploymentId === deployment.id;
         const focusJumpRaceCondition = status === 'success';
@@ -288,11 +288,11 @@ export default function SearchUnit({
         </div>
 
         <button
-          id={`search-unit-${deployment.id}__delete`}
           className={classNames(
             'px-2',
             'focus:outline-none',
             { hidden: !deployment.base.id || status.match(/^(debouncing|no results|success)$/) },
+            'js-search-unit-delete',
           )}
           type="button"
           onClick={removeHandler}
