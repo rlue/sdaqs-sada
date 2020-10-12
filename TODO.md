@@ -2,7 +2,6 @@
 
 * Add aggregate figures (average, standard deviation) to charts
 * Limit date picker to available dates
-* Add units (μg/m³) to chart
 * Prefer classes to IDs for CSS hooks
 * Animate switch from search form to exposure menu
 * Rename SearchPanel component

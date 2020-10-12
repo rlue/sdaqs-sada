@@ -42,8 +42,10 @@ export default function ExposureChart({ contaminant, exposureHistory }) {
             },
           }],
           yAxes: [{
-            stacked: true,
-            labelString: 'ppm',
+            scaleLabel: {
+              display: true,
+              labelString: 'μg/m³',
+            },
           }],
         },
         tooltips: {
