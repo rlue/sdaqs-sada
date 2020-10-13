@@ -93,11 +93,12 @@
 }
 
 .search-panel__back-button {
-  @apply block hidden absolute w-8 h-8 z-10 rounded-full bg-white shadow-md;
+  @apply block absolute w-8 h-8 z-10 rounded-full bg-white shadow-md;
 
-  animation-duration: 300ms;
-  animation-timing-function: ease-out;
-  animation-fill-mode: forwards;
+  transition-property: transform, opacity;
+  transition-duration: 300ms;
+  transition-timing-function: ease-out;
+  transition-delay: 0s, 150ms;
 }
 
 /* Delete button ------------------------------------------------------------ */
@@ -144,17 +145,6 @@ input:focus,
 .ant-picker.ant-picker-focused {
   box-shadow: inset 0 0 0.125rem hsl(207, 100%, 75%);
   border-color: hsl(207, 100%, 85%);
-}
-
-/* CONTENT WINDOW =========================================================== */
-
-.content-window {
-  @apply flex h-full overflow-hidden;
-
-  width: 200vw;
-  animation-duration: 500ms;
-  animation-timing-function: ease-in-out;
-  animation-fill-mode: forwards;
 }
 
 /* MAP ====================================================================== */
@@ -257,75 +247,4 @@ svg.map-pin--highlighted {
 #___reactour button[data-tour-elem="right-arrow"]:hover,
 #___reactour button[data-tour-elem="right-arrow"]:focus {
   @apply btn--primary;
-}
-
-/* CSS EFFECTS (borrowed from animate.css) ================================== */
-
-@keyframes slide-right {
-  from {
-    transform: translate3d(-100vw, 0, 0);
-  }
-
-  to {
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-.animate-slide-right {
-  animation-name: slide-right;
-}
-
-@keyframes slide-left {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    transform: translate3d(-100vw, 0, 0);
-  }
-}
-
-.animate-slide-left {
-  animation-name: slide-right;
-}
-
-@keyframes zoom-enter {
-  from {
-    opacity: 0;
-    transform: scale3d(0.3, 0.3, 0.3);
-  }
-
-  50% {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-.animate-zoom-enter {
-  animation-name: zoom-enter;
-}
-
-@keyframes zoom-exit {
-  from {
-    opacity: 1;
-    transform: none;
-  }
-
-  50% {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-    transform: scale3d(0.3, 0.3, 0.3);
-    visibility: hidden;
-  }
-}
-
-.animate-zoom-exit {
-  animation-name: zoom-exit;
 }

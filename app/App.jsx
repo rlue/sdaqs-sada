@@ -50,11 +50,19 @@ export default function App() {
       <div
         className={classNames(
           'content-window',
+          'flex',
+          'h-full',
+          'overflow-hidden',
+          'transition-transform',
+          'duration-500',
+          'ease-in-out',
+          'transform',
           {
-            'animate-slide-right': userFlow.mode === 'deployment builder',
-            'animate-slide-left': userFlow.mode === 'exposure report',
+            'translate-x-0': userFlow.mode === 'deployment builder',
+            '-translate-x-1/2': userFlow.mode === 'exposure report',
           },
         )}
+        style={{ width: '200vw' }}
       >
         <Map
           {...{

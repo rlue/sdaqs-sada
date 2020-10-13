@@ -21,7 +21,6 @@
 * Fix last step of tour (clicking “submit” should exit)
 * Add error handling to JS fetch logic
 * Add hover animation to buttons
-* Fix “FOUC”-style animations caused by prematurely applied CSS classes (3c2cd1c)
 
 ### Deprioritized
 
