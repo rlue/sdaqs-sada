@@ -29,14 +29,14 @@ export default function SearchUnit({
 
       if (!query.trim().length) {
         setStatus('ready');
-        setUserFlow({ mode: 'deployment builder' });
+        setUserFlow({ mode: 'map' });
       } else if (!results.length) {
         setStatus('no results');
-        setUserFlow({ mode: 'deployment builder' });
+        setUserFlow({ mode: 'map' });
       } else {
         setStatus('success');
         setUserFlow({
-          mode: 'deployment builder',
+          mode: 'map',
           action: 'search bases',
           results,
         });
@@ -76,7 +76,7 @@ export default function SearchUnit({
 
     if ('highlightedIndex' in comboboxState && !selectionMade && userFlow.results) {
       setUserFlow({
-        mode: 'deployment builder',
+        mode: 'map',
         action: 'search bases',
         results: userFlow.results,
         result: highlightedIndex > -1
@@ -95,7 +95,7 @@ export default function SearchUnit({
       setComboboxState({ inputValue: selectedItem.name });
       setStatus('complete');
       setUserFlow({
-        mode: 'deployment builder',
+        mode: 'map',
         action: 'edit deployment',
         deploymentId: deployment.id,
       });
@@ -126,7 +126,7 @@ export default function SearchUnit({
         if (deployment.base.id) {
           setComboboxState({ inputValue: deployment.base.name });
           setUserFlow({
-            mode: 'deployment builder',
+            mode: 'map',
             action: 'review deployments',
             deploymentId: deployment.id,
           });
@@ -159,8 +159,8 @@ export default function SearchUnit({
 
     setUserFlow(
       noDeploymentsRemain
-        ? { mode: 'deployment builder' }
-        : { mode: 'deployment builder', action: 'review deployments' },
+        ? { mode: 'map' }
+        : { mode: 'map', action: 'review deployments' },
     );
     dispatchDeployments({ type: 'remove', id: deployment.id });
   }
@@ -172,7 +172,7 @@ export default function SearchUnit({
       onMouseOver={() => {
         if (!userFlow.action && deployment.base.id) {
           setUserFlow({
-            mode: 'deployment builder',
+            mode: 'map',
             action: 'preview deployment',
             deploymentId: deployment.id,
           });
@@ -183,7 +183,7 @@ export default function SearchUnit({
         const falsePositive = componentRoot.current.contains(hoveredElement);
 
         if (userFlow.action === 'preview deployment' && !falsePositive) {
-          setUserFlow({ mode: 'deployment builder' });
+          setUserFlow({ mode: 'map' });
         }
       }}
       onFocus={({ target }) => {
@@ -196,12 +196,12 @@ export default function SearchUnit({
 
         if (deployment.base.id && !alreadyFocused) {
           setUserFlow({
-            mode: 'deployment builder',
+            mode: 'map',
             action: 'review deployments',
             deploymentId: deployment.id,
           });
         } else if (userFlow.action === 'review deployments' && !focusJumpRaceCondition) {
-          setUserFlow({ mode: 'deployment builder', action: 'none' });
+          setUserFlow({ mode: 'map', action: 'none' });
         }
       }}
     >
@@ -328,7 +328,7 @@ export default function SearchUnit({
             });
 
             if (dates) {
-              setUserFlow({ mode: 'deployment builder' });
+              setUserFlow({ mode: 'map' });
             }
           }}
         />

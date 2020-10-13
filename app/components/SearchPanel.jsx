@@ -43,13 +43,13 @@ export default function SearchPanel({
             'search-panel__back-button',
             'transform',
             {
-              'scale-1': userFlow.mode === 'exposure report',
-              'opacity-100': userFlow.mode === 'exposure report',
-              'scale-0': userFlow.mode === 'deployment builder',
-              'opacity-0': userFlow.mode === 'deployment builder',
+              'scale-1': userFlow.mode === 'chart',
+              'opacity-100': userFlow.mode === 'chart',
+              'scale-0': userFlow.mode === 'map',
+              'opacity-0': userFlow.mode === 'map',
             },
           )}
-          onClick={() => setUserFlow({ mode: 'deployment builder' })}
+          onClick={() => setUserFlow({ mode: 'map' })}
         >
           <LeftOutlined />
         </button>
@@ -58,7 +58,7 @@ export default function SearchPanel({
         className={classNames(
           'm-4',
           'space-y-4',
-          { hidden: userFlow.mode === 'exposure report' },
+          { hidden: userFlow.mode === 'chart' },
         )}
       >
         <ol className="search-list list-decimal pl-6 space-y-4">
@@ -84,7 +84,7 @@ export default function SearchPanel({
               const deployment = deployments.find(({ base }) => base.name === 'Baghdad')
                 || deployments.slice(-1)[0];
 
-              setUserFlow({ mode: 'deployment builder', action: 'tour', deploymentId: deployment.id });
+              setUserFlow({ mode: 'map', action: 'tour', deploymentId: deployment.id });
             }}
           >
             Help
@@ -95,7 +95,7 @@ export default function SearchPanel({
               className="btn--secondary"
               onClick={() => {
                 dispatchDeployments({ type: 'reset' });
-                setUserFlow({ mode: 'deployment builder' });
+                setUserFlow({ mode: 'map' });
               }}
             >
               Reset
@@ -113,7 +113,7 @@ export default function SearchPanel({
                   .then((response) => response.json())
                   .then(setExposureHistory);
 
-                setUserFlow({ mode: 'exposure report' });
+                setUserFlow({ mode: 'chart' });
               }}
             >
               Submit
@@ -123,7 +123,7 @@ export default function SearchPanel({
       </div>
       <div
         className={classNames(
-          { hidden: userFlow.mode === 'deployment builder' },
+          { hidden: userFlow.mode === 'map' },
         )}
       >
         <ul>

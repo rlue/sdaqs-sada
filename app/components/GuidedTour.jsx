@@ -108,7 +108,7 @@ export default function GuidedTour({
     <Tour
       steps={steps}
       isOpen={userFlow.action === 'tour'}
-      onRequestClose={() => setUserFlow({ mode: 'deployment builder' })}
+      onRequestClose={() => setUserFlow({ mode: 'map' })}
       showNumber={false}
       showNavigationNumber={false}
       nextButton="Next"

@@ -67,7 +67,7 @@ export default function Map({
           <Icons.MapPin
             className="map-pin--selection"
             onClick={() => setUserFlow({
-              mode: 'deployment builder',
+              mode: 'map',
               action: 'edit deployment',
               deploymentId: id,
             })}

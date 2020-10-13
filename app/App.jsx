@@ -30,7 +30,7 @@ function deploymentsReducer(state, action) {
 }
 
 export default function App() {
-  const [userFlow, setUserFlow] = useState({ mode: 'deployment builder' });
+  const [userFlow, setUserFlow] = useState({ mode: 'map' });
   const [deployments, dispatchDeployments] = useReducer(deploymentsReducer, [
     { id: uid(), base: {}, period: null },
   ]);
@@ -58,8 +58,8 @@ export default function App() {
           'ease-in-out',
           'transform',
           {
-            'translate-x-0': userFlow.mode === 'deployment builder',
-            '-translate-x-1/2': userFlow.mode === 'exposure report',
+            'translate-x-0': userFlow.mode === 'map',
+            '-translate-x-1/2': userFlow.mode === 'chart',
           },
         )}
         style={{ width: '200vw' }}
