@@ -51,8 +51,8 @@ export default function App() {
         className={classNames(
           'content-window',
           {
-            'slide-right': userFlow.mode === 'deployment builder',
-            'slide-left': userFlow.mode === 'exposure report',
+            'animate-slide-right': userFlow.mode === 'deployment builder',
+            'animate-slide-left': userFlow.mode === 'exposure report',
           },
         )}
       >

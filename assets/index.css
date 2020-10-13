@@ -92,6 +92,14 @@
                 1px  1px 3px hsla(48, 100%, 50%, 0.2);
 }
 
+.search-panel__back-button {
+  @apply block hidden absolute w-8 h-8 z-10 rounded-full bg-white shadow-md;
+
+  animation-duration: 300ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
 /* Delete button ------------------------------------------------------------ */
 
 .anticon-delete {
@@ -142,7 +150,11 @@ input:focus,
 
 .content-window {
   @apply flex h-full overflow-hidden;
+
   width: 200vw;
+  animation-duration: 500ms;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
 }
 
 /* MAP ====================================================================== */
@@ -192,7 +204,10 @@ svg.map-pin > text {
 }
 
 svg.map-pin--highlighted {
-  animation: float 1s ease-in-out infinite;
+  animation-name: float;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
 }
 
 /* Pin labels --------------------------------------------------------------- */
@@ -256,8 +271,8 @@ svg.map-pin--highlighted {
   }
 }
 
-.slide-right {
-  animation: slide-right 500ms ease-in-out forwards;
+.animate-slide-right {
+  animation-name: slide-right;
 }
 
 @keyframes slide-left {
@@ -270,8 +285,8 @@ svg.map-pin--highlighted {
   }
 }
 
-.slide-left {
-  animation: slide-left 500ms ease-in-out forwards;
+.animate-slide-left {
+  animation-name: slide-right;
 }
 
 @keyframes zoom-enter {
@@ -290,9 +305,8 @@ svg.map-pin--highlighted {
   }
 }
 
-.zoom-enter {
-  animation: zoom-enter 300ms ease-out forwards;
-  display: block;
+.animate-zoom-enter {
+  animation-name: zoom-enter;
 }
 
 @keyframes zoom-exit {
@@ -312,7 +326,6 @@ svg.map-pin--highlighted {
   }
 }
 
-.zoom-exit {
-  animation: zoom-exit 300ms ease-out forwards;
-  display: block;
+.animate-zoom-exit {
+  animation-name: zoom-exit;
 }

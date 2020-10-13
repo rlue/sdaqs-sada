@@ -40,17 +40,10 @@ export default function SearchPanel({
         <button
           type="button"
           className={classNames(
-            'hidden',
-            'absolute',
-            'w-8',
-            'h-8',
-            'z-10',
-            'rounded-full',
-            'bg-white',
-            'shadow-md',
+            'search-panel__back-button',
             {
-              'zoom-enter': userFlow.mode === 'exposure report',
-              'zoom-exit': userFlow.mode === 'deployment builder',
+              'animate-zoom-enter': userFlow.mode === 'exposure report',
+              'animate-zoom-exit': userFlow.mode === 'deployment builder',
             },
           )}
           onClick={() => setUserFlow({ mode: 'deployment builder' })}
