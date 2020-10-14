@@ -41,12 +41,9 @@ export default function SearchPanel({
           type="button"
           className={classNames(
             'search-panel__back-button',
-            'transform',
             {
-              'scale-1': userFlow.mode === 'chart',
-              'opacity-100': userFlow.mode === 'chart',
-              'scale-0': userFlow.mode === 'map',
-              'opacity-0': userFlow.mode === 'map',
+              'search-panel__back-button--shown': userFlow.mode === 'chart',
+              'search-panel__back-button--hidden': userFlow.mode === 'map',
             },
           )}
           onClick={() => setUserFlow({ mode: 'map' })}
