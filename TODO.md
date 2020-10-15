@@ -17,7 +17,6 @@
   to silence this warning.
 
   https://tailwindcss.com/docs/controlling-file-size/#removing-unused-css
-* Add favicon
 * Fix last step of tour (clicking “submit” should exit)
 * Add error handling to JS fetch logic
 * Add hover animation to buttons
