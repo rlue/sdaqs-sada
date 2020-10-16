@@ -35,7 +35,7 @@ export default function GuidedTour({
           <p>
             US military personnel are exposed to
             all kinds of air pollution on deployment:
-            sulfates, nitrates, organic compounds, and more.
+            dust, sulfates, nitrates, and more.
           </p>
           <p>
             This
@@ -55,9 +55,9 @@ export default function GuidedTour({
             // TODO: add screenshot of sample results
           }
           <p className="text-xs">
-            Data is limited to bases located in
+            Data is available for bases located in
             Southwest Asia, Djibouti, and Afghanistan (SADA)
-            between 2002–present.
+            between 2002–2018.
           </p>
         </div>
       ),
