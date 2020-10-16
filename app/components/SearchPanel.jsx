@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import Fuse from 'fuse.js';
-import { LeftOutlined, SaveFilled } from '@ant-design/icons';
+import { LeftOutlined, DownloadOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 import SearchUnit from './SearchUnit';
 import sites from '../../assets/data/sites.json';
@@ -137,7 +137,7 @@ export default function SearchPanel({
               type="button"
               className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
             >
-              PM2.5
+              PM<sub>2.5</sub>
             </button>
           </li>
           <li>
@@ -145,7 +145,7 @@ export default function SearchPanel({
               type="button"
               className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
             >
-              PM10
+              PM<sub>10</sub>
             </button>
           </li>
           <li>
@@ -177,7 +177,7 @@ export default function SearchPanel({
               type="button"
               className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
             >
-              <SaveFilled />
+              <DownloadOutlined />
               {' '}
               Export to CSV
             </button>
