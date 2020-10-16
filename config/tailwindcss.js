@@ -10,4 +10,10 @@ module.exports = {
     './app/**/*.jsx',
     './assets/index.css',
   ],
+  future: {
+    removeDeprecatedGapUtilities: true,
+    purgeLayersByDefault: true,
+    defaultLineHeights: true,
+    standardFontWeights: true,
+  },
 };

@@ -75,7 +75,7 @@
 }
 
 .search-panel__header > h1 {
-  @apply relative mb-0 text-white text-5xl text-right;
+  @apply relative mb-0 text-white text-5xl text-right leading-normal;
 
   top: 0.5rem;
   transform: rotate(-2.29deg);
