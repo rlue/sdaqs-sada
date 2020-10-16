@@ -5,14 +5,6 @@
 * Rename SearchPanel component
   (because in “chart” mode, it’s not for search)
 * How will mapbox-gl API keys be handled in production?
-* ⚠️ Tailwind is not purging unused styles
-  because no template paths have been provided.
-  If you have manually configured PurgeCSS outside of Tailwind
-  or are deliberately not removing unused styles,
-  set `purge: false` in your Tailwind config file
-  to silence this warning.
-
-  https://tailwindcss.com/docs/controlling-file-size/#removing-unused-css
 * Add error handling to JS fetch logic
 * Add hover animation to buttons
 * [Style background](https://bgjar.com/?ck_subscriber_id=702982198)

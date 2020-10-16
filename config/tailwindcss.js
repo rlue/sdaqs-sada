@@ -5,4 +5,9 @@ module.exports = {
     opacity: ['responsive', 'hover', 'focus', 'disabled'],
   },
   plugins: [],
+  purge: [
+    './app/**/*.html',
+    './app/**/*.jsx',
+    './assets/index.css',
+  ],
 };
