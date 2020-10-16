@@ -50,12 +50,12 @@ export default function ExposureChart({ contaminant, exposureHistory }) {
         },
         tooltips: {
           callbacks: {
-            title: () => contaminant,
             beforeBody: ([{ label }]) => label,
             label: ({ value }) => ` ${value} μg/m³`,
           },
-          intersect: false,
           mode: 'index',
+          intersect: false,
+          position: 'average',
           titleFontSize: 18,
           titleMarginBottom: 12,
           xPadding: 12,
