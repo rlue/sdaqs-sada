@@ -1,5 +1,4 @@
 const path = require('path')
-const PnpWebpackPlugin = require('pnp-webpack-plugin')
 const AssetsPlugin = require('assets-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
@@ -44,10 +43,6 @@ module.exports = {
   ],
   resolve: {
     extensions: ['.js', '.jsx'],
-    plugins: [PnpWebpackPlugin],
-  },
-  resolveLoader: {
-    plugins: [PnpWebpackPlugin.moduleLoader(module)],
   },
   devServer: {
     writeToDisk: true,

@@ -2,6 +2,6 @@
 
 desc 'Deploy live application'
 task :deploy do
-  system('yarn build')
+  system('npm run build')
   system('docker build .')
 end

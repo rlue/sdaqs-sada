@@ -35,7 +35,7 @@ SDAQS-SADA is built using Roda + React.
 
 * Ruby 2.7.0
 * Bundler 2.1.2
-* Yarn 2.0.0
+* npm 6.0+
 * PostgreSQL
 * [forego][3]
 * [direnv][4] (recommended)
@@ -53,7 +53,7 @@ export APP_DATABASE_URL="postgres:///sdaqs_${RACK_ENV}"
 ```sh
 # install dependencies
 $ bundle install
-$ yarn install
+$ npm install
 
 # set up database
 $ createdb sdaqs_development
@@ -85,7 +85,6 @@ The following IDE configurations may be of use.
 ```vimscript
 let g:ale_fix_on_save = 1
 let g:ale_javascript_eslint_use_global = 1
-let g:ale_javascript_eslint_executable = 'yarn'
 let g:ale_javascript_eslint_options = 'run eslint'
 let g:ale_fixers = {
 \   'javascriptreact': ['eslint'],
@@ -103,7 +102,7 @@ with one of the following three-letter codes:
 
 * `bfx`: Bugfix
 * `chr`: Chore (deprecated, try `dev` or `dep`)
-* `dep`: Dependency (_i.e.,_ Bundler/Yarn files)
+* `dep`: Dependency (_i.e.,_ Bundler/npm files)
 * `dev`: Developer Concerns (notes, tooling, file structure, etc.)
 * `doc`: Documentation
 * `dpl`: Deployment

@@ -1,2 +1,2 @@
 roda: bundle exec rackup -o 0.0.0.0 -p $PORT
-webpack: yarn webpack-dev-server --config config/webpack.js --port $PORT
+webpack: npx webpack-dev-server --config config/webpack.js --port $PORT
