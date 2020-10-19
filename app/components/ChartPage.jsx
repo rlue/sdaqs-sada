@@ -19,16 +19,43 @@ function title(exposureHistory) {
   }
 }
 
+function subtitle(exposureHistory) {
+  const perDeploymentDateBounds = Object.values(exposureHistory)
+    .map((deploymentDays) =>
+      [deploymentDays[0], ...deploymentDays.slice(-1)]
+        .map(({ date }) => date.split('-'))
+        .map(([year, month, day]) => new Date(year, month - 1, day))
+    ).flat()
+
+  if (!perDeploymentDateBounds.length) return '';
+
+  const overallDateBounds = [
+    new Date(Math.min(...perDeploymentDateBounds)),
+    new Date(Math.max(...perDeploymentDateBounds)),
+  ]
+
+  const humanizeDate = (date) =>
+    date.toLocaleString(
+      'en-US',
+      { year: 'numeric', month: 'short' },
+    );
+
+  return overallDateBounds.map(humanizeDate).join(' to ');
+}
+
 export default function ChartPage({ exposureHistory, userFlow }) {
   return (
     <div className="exposure-container flex w-screen min-h-screen overflow-x-hidden">
       <div className="exposure-shim" />
       <div className="flex-grow m-8">
-        <h1 className="text-4xl leading-normal mb-2">{title(exposureHistory)}</h1>
-        {userFlow.contaminant
-          ? <Chart contaminant={userFlow.contaminant} {...{ exposureHistory }} />
-          : <ExposureSummary {...{ exposureHistory }} />
-        }
+        <h1 className="text-5xl leading-normal">{title(exposureHistory)}</h1>
+        <h2 className="text-3xl leading-normal">{subtitle(exposureHistory)}</h2>
+        <div className="my-4">
+          {userFlow.contaminant
+            ? <Chart contaminant={userFlow.contaminant} {...{ exposureHistory }} />
+            : <ExposureSummary {...{ exposureHistory }} />
+          }
+        </div>
       </div>
     </div>
   );
