@@ -1,22 +1,10 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import ExposureChart from './ExposureChart';
 
 export default function ExposureSummary({ exposureHistory }) {
-  const contaminants = useRef(['pm25']);
-
   return (
-    <div className="exposure-container flex w-screen min-h-screen overflow-x-hidden">
-      <div className="exposure-shim" />
-      <div className="flex-grow m-8">
-        <h1 className="text-4xl">Your Results</h1>
-        {contaminants.current.map((contaminant) => (
-          <ExposureChart
-            key={contaminant}
-            {...{ contaminant, exposureHistory }}
-          />
-        ))}
-      </div>
+    <div>
+      This is where I keep stuff
     </div>
   );
 }

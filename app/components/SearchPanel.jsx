@@ -128,6 +128,7 @@ export default function SearchPanel({
             <button
               type="button"
               className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+              onClick={() => setUserFlow({ mode: 'chart' })}
             >
               Summary
             </button>
@@ -136,6 +137,7 @@ export default function SearchPanel({
             <button
               type="button"
               className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+              onClick={() => setUserFlow({ mode: 'chart', contaminant: 'pm25' })}
             >
               PM<sub>2.5</sub>
             </button>
@@ -144,6 +146,7 @@ export default function SearchPanel({
             <button
               type="button"
               className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+              onClick={() => setUserFlow({ mode: 'chart', contaminant: 'pm10' })}
             >
               PM<sub>10</sub>
             </button>
@@ -152,6 +155,7 @@ export default function SearchPanel({
             <button
               type="button"
               className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+              onClick={() => setUserFlow({ mode: 'chart', contaminant: 'dust' })}
             >
               Dust
             </button>
@@ -160,6 +164,7 @@ export default function SearchPanel({
             <button
               type="button"
               className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+              onClick={() => setUserFlow({ mode: 'chart', contaminant: 'nitrates' })}
             >
               Nitrates
             </button>
@@ -168,6 +173,7 @@ export default function SearchPanel({
             <button
               type="button"
               className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+              onClick={() => setUserFlow({ mode: 'chart', contaminant: 'sulfates' })}
             >
               Sulfates
             </button>

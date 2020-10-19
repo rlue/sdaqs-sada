@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import Chart from 'chart.js';
+import {Chart as ChartJS} from 'chart.js';
 import 'chartjs-plugin-colorschemes';
 
 function exposuresToChartJSDataset(contaminant, exposureHistory) {
@@ -15,12 +15,12 @@ function exposuresToChartJSDataset(contaminant, exposureHistory) {
   };
 }
 
-export default function ExposureChart({ contaminant, exposureHistory }) {
+export default function Chart({ contaminant, exposureHistory }) {
   const chartCanvas = useRef();
   const chart = useRef();
 
   useEffect(() => {
-    chart.current = new Chart(chartCanvas.current, {
+    chart.current = new ChartJS(chartCanvas.current, {
       type: 'line',
       data: exposuresToChartJSDataset(contaminant, exposureHistory),
       options: {
@@ -28,6 +28,9 @@ export default function ExposureChart({ contaminant, exposureHistory }) {
           point: {
             radius: 0,
           },
+        },
+        legend: {
+          display: Object.keys(exposureHistory).length > 1,
         },
         plugins: {
           colorschemes: {
@@ -73,7 +76,7 @@ export default function ExposureChart({ contaminant, exposureHistory }) {
   return <canvas ref={chartCanvas} />;
 }
 
-ExposureChart.propTypes = {
+Chart.propTypes = {
   contaminant: PropTypes.string.isRequired,
   exposureHistory: PropTypes.objectOf( // key: <baseId> (e.g., VA0518)
     PropTypes.arrayOf(

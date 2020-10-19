@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import '../assets/index.css';
 import SearchPanel from './components/SearchPanel';
 import Map from './components/Map';
-import ExposureSummary from './components/ExposureSummary';
+import ChartPage from './components/ChartPage';
 import GuidedTour from './components/GuidedTour';
 
 function deploymentsReducer(state, action) {
@@ -71,9 +71,10 @@ export default function App() {
             setUserFlow,
           }}
         />
-        <ExposureSummary
+        <ChartPage
           {...{
             exposureHistory,
+            userFlow,
           }}
         />
       </div>
