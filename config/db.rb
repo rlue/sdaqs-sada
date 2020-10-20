@@ -17,3 +17,6 @@ rescue Sequel::DatabaseConnectionError
   $stdout.puts('DB connection failed. Retrying...')
   sleep(retry_wait)
 end
+
+DB.extension(:connection_validator)
+DB.pool.connection_validation_timeout = -1

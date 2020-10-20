@@ -22,7 +22,6 @@
 
 ### Deprioritized
 
-* Handle DB connection errors during regular app operation (see d4230a3)
 * WORKAROUND IMPLEMENTED: update to mapbox-gl v1.9.0+
   (1.9.0 adds support for a “padding” option on flyTo)
   * submit bug report for map fit weirdness from 1.9.0 upgrade
