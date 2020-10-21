@@ -18,7 +18,7 @@ export default function SearchUnit({
   setUserFlow,
 }) {
   const [status, setStatus] = useState('ready');
-  const [comboboxState, setComboboxState] = useState({ inputValue: deployment.base.name || '' });
+  const [controlledInput, setControlledInput] = useState(deployment.base.name || '');
   const componentRoot = useRef(null);
   const inputField = useRef(null);
   const datePicker = useRef(null);
@@ -47,102 +47,112 @@ export default function SearchUnit({
   const ds = useCombobox({
     items: userFlow.results || [],
     itemToString: (item) => (item ? item.name : ''),
-    inputValue: comboboxState.inputValue,
-    selectedItem: comboboxState.selectedItem,
-    onStateChange: setComboboxState,
+    inputValue: controlledInput,
+    onInputValueChange: ({ inputValue }) => setControlledInput(inputValue),
+    stateReducer: (_state, { type, changes }) => {
+      const { selectedItem } = changes;
+      const selectionMade = selectedItem && selectedItem.id !== deployment.base.id;
+      const types = useCombobox.stateChangeTypes;
+
+      switch (type) {
+        // What happens when you make a selection?
+        case types.FunctionSelectItem:
+        case types.ItemClick:
+        case types.InputKeyDownEnter:
+          if (selectionMade) {
+            changes.inputValue = selectedItem.name;
+            break; // Keep this INSIDE the `if` clause (we're relying on case fallthrough)
+          }
+
+        // What happens when you abandon input? (un-combobox-like behavior!)
+        case types.InputBlur: // previously would `break` if (selectionMade)???
+        case types.InputKeyDownEscape:
+          changes.inputValue = deployment.base.name || '';
+      }
+
+      return changes;
+    },
+    onStateChange: (state) => {
+      const { type, inputValue, highlightedIndex, selectedItem } = state;
+      const selectionMade = selectedItem && selectedItem.id !== deployment.base.id;
+      const types = useCombobox.stateChangeTypes;
+
+      switch (type) {
+        // What happens when you enter text?
+        case types.InputChange:
+          inputDebouncer.current({ query: inputValue || '' });
+
+          // active UI feedback for debouncer
+          if (inputValue?.trim().length) {
+            setStatus('debouncing');
+          } else {
+            inputDebouncer.current.flush();
+          }
+          break;
+
+        // What happens when you hover/highlight results?
+        case types.InputKeyDownArrowUp:
+        case types.InputKeyDownArrowDown:
+        case types.InputKeyDownHome:
+        case types.InputKeyDownEnd:
+        case types.ItemMouseMove:
+        case types.MenuMouseLeave:
+        case types.FunctionSetHighlightedIndex:
+          if (!selectionMade && userFlow.results) {
+            setUserFlow({
+              mode: 'map',
+              action: 'search bases',
+              results: userFlow.results,
+              result: highlightedIndex > -1
+                ? userFlow.results[highlightedIndex]
+                : null,
+            });
+          }
+
+          break;
+
+        // What happens when you make a selection?
+        case types.FunctionSelectItem:
+        case types.ItemClick:
+        case types.InputKeyDownEnter:
+          if (selectionMade) {
+            setUserFlow({
+              mode: 'map',
+              action: 'edit deployment',
+              deploymentId: deployment.id,
+            });
+            dispatchDeployments({
+              type: 'modify',
+              id: deployment.id,
+              key: 'base',
+              value: selectedItem,
+            });
+
+            setStatus('complete');
+
+            // FIXME: Can we auto-open the dropdown instead of just focusing the input?
+            if (!deployment.period) datePicker.current.focus();
+
+            break; // Keep this INSIDE the `if` clause (we're relying on case fallthrough)
+          }
+
+        // What happens when you abandon input? (un-combobox-like behavior!)
+        case types.InputBlur: // previously would break if (selectionMade)???
+        case types.InputKeyDownEscape:
+          if (deployment.base.id) {
+            setUserFlow({
+              mode: 'map',
+              action: 'review deployments',
+              deploymentId: deployment.id,
+            });
+            setStatus('ready');
+          } else {
+            inputDebouncer.current({ query: '' });
+            inputDebouncer.current.flush();
+          }
+      }
+    },
   });
-
-  // What happens when you enter text?
-  useEffect(() => {
-    const { inputValue, type } = comboboxState;
-
-    // without `type === '__input_change__'`, this effect fires on highlightedIndexChange
-    if ('inputValue' in comboboxState && type === '__input_change__') {
-      inputDebouncer.current({ query: inputValue });
-
-      // active UI feedback for debouncer
-      if ((inputValue).trim().length) {
-        setStatus('debouncing');
-      } else {
-        inputDebouncer.current.flush();
-      }
-    }
-  }, [comboboxState.inputValue]);
-
-  // What happens when you hover/highlight results?
-  useEffect(() => {
-    const { highlightedIndex, selectedItem } = comboboxState;
-    const selectionMade = selectedItem && selectedItem.id !== deployment.base.id;
-
-    if ('highlightedIndex' in comboboxState && !selectionMade && userFlow.results) {
-      setUserFlow({
-        mode: 'map',
-        action: 'search bases',
-        results: userFlow.results,
-        result: highlightedIndex > -1
-          ? userFlow.results[highlightedIndex]
-          : null,
-      });
-    }
-  }, [comboboxState.highlightedIndex]);
-
-  // What happens when you make a selection?
-  useEffect(() => {
-    const { selectedItem } = comboboxState;
-    const selectionMade = selectedItem && selectedItem.id !== deployment.base.id;
-
-    if (selectionMade) {
-      setComboboxState({ inputValue: selectedItem.name });
-      setStatus('complete');
-      setUserFlow({
-        mode: 'map',
-        action: 'edit deployment',
-        deploymentId: deployment.id,
-      });
-      dispatchDeployments({
-        type: 'modify',
-        id: deployment.id,
-        key: 'base',
-        value: comboboxState.selectedItem,
-      });
-
-      if (!deployment.period) {
-        // FIXME: Can we auto-open the dropdown instead of just focusing the input?
-        datePicker.current.focus();
-      }
-    }
-  }, [(comboboxState.selectedItem || {}).id]);
-
-  // What happens when you abandon input? (un-combobox-like behavior!)
-  useEffect(() => {
-    const { type, selectedItem } = comboboxState;
-    const selectionMade = selectedItem && selectedItem.id !== deployment.base.id;
-
-    switch (type) { // eslint-disable-line default-case
-      case '__input_blur__':
-      case '__input_keydown_enter__':
-        if (selectionMade) break;
-      case '__input_keydown_escape__': // eslint-disable-line no-fallthrough
-        if (deployment.base.id) {
-          setComboboxState({ inputValue: deployment.base.name });
-          setUserFlow({
-            mode: 'map',
-            action: 'review deployments',
-            deploymentId: deployment.id,
-          });
-          setStatus('ready');
-        } else {
-          setComboboxState({ inputValue: '' });
-          inputDebouncer.current({ query: '' });
-          inputDebouncer.current.flush();
-        }
-    }
-  }, [comboboxState.type]);
-
-  // What happens when deployment.base is independently updated (e.g., during guided tour)?
-  useEffect(() => {
-    setComboboxState({ inputValue: deployment.base.name });
-  }, [deployment.base.id]);
 
   // manage current UI focus
   useEffect(() => {
@@ -224,16 +234,13 @@ export default function SearchUnit({
         >
           <input
             {...ds.getInputProps({
-              onChange: (event) => {
-                setComboboxState({ type: '__input_change__', inputValue: event.target.value });
-              },
+              ref: inputField,
               onKeyPress: (event) => {
                 const keypressEnter = event.charCode === 13;
                 const implicitSelection = userFlow.results && ds.highlightedIndex === -1;
 
-                if (keypressEnter && implicitSelection) {
-                  setComboboxState({ type: '__input_keydown_enter__', selectedItem: userFlow.results[0] });
-                }
+                if (keypressEnter && implicitSelection)
+                  ds.selectItem(userFlow.results[0]);
               },
             })}
             className={classNames(
@@ -249,7 +256,6 @@ export default function SearchUnit({
               { 'border-b-0': status.match(/^(debouncing|no results|success)$/) },
               'focus:outline-none',
             )}
-            ref={inputField}
             placeholder="Search bases"
           />
 

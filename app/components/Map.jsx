@@ -108,11 +108,12 @@ export default function Map({
         if (userFlow.results.length) setMapFit(collectionBounds(userFlow.results));
         break;
       case 'edit deployment':
-        markerNode = selectionMarkers.current[userFlow.deploymentId].getElement();
-
-        if (markerNode.children.length) {
-          markerNode.children[0].classList.remove('cursor-pointer');
-        }
+        selectionMarkers
+          .current[userFlow.deploymentId]
+          .getElement()
+          .children[0]
+          ?.classList
+          .remove('cursor-pointer');
 
         deployment = deployments.find((d) => d.id === userFlow.deploymentId);
         setMapFit(new mapboxgl.LngLat(deployment.base.lng, deployment.base.lat));
@@ -127,7 +128,7 @@ export default function Map({
             .current[userFlow.deploymentId]
             .getElement()
             .children[0]
-            .classList
+            ?.classList
             .add('map-pin--highlighted');
         }
         break;
@@ -142,13 +143,11 @@ export default function Map({
           Object.values(resultMarkers.current).forEach((marker) => marker.remove());
           break;
         case 'edit deployment':
-          if (!selectionMarkers.current[userFlow.deploymentId]) break;
-
-          markerNode = selectionMarkers.current[userFlow.deploymentId].getElement();
-
-          if (markerNode.children.length) {
-            markerNode.children[0].classList.add('cursor-pointer');
-          }
+          selectionMarkers
+            .current[userFlow.deploymentId]
+            .getElement()
+            .children[0]
+            ?.classList.add('cursor-pointer');
           break;
         case 'review deployments':
           if (selectionMarkers.current[userFlow.deploymentId]) {
@@ -156,7 +155,7 @@ export default function Map({
               .current[userFlow.deploymentId]
               .getElement()
               .children[0]
-              .classList
+              ?.classList
               .remove('map-pin--highlighted');
             break;
           }
@@ -175,7 +174,7 @@ export default function Map({
         userFlow.result.id
       ].getElement();
       resultMarkerDiv.classList.add('z-10');
-      resultMarkerDiv.children[0].classList.add('map-pin--highlighted');
+      resultMarkerDiv.children[0]?.classList.add('map-pin--highlighted');
     }
 
     return () => {
@@ -184,7 +183,7 @@ export default function Map({
           userFlow.result.id
         ].getElement();
         resultMarkerDiv.classList.remove('z-10');
-        resultMarkerDiv.children[0].classList.remove('map-pin--highlighted');
+        resultMarkerDiv.children[0]?.classList.remove('map-pin--highlighted');
       }
     };
   }, [userFlow.action && userFlow.result && userFlow.result.id]);
@@ -196,14 +195,14 @@ export default function Map({
     if (userFlow.action === 'preview deployment' && selectionMarker) {
       const selectionMarkerDiv = selectionMarker.getElement();
       selectionMarkerDiv.classList.add('z-10');
-      selectionMarkerDiv.children[0].classList.add('map-pin--highlighted');
+      selectionMarkerDiv.children[0]?.classList.add('map-pin--highlighted');
     }
 
     return () => {
       if (userFlow.action === 'preview deployment' && selectionMarker) {
         const selectionMarkerDiv = selectionMarker.getElement();
         selectionMarkerDiv.classList.remove('z-10');
-        selectionMarkerDiv.children[0].classList.remove('map-pin--highlighted');
+        selectionMarkerDiv.children[0]?.classList.remove('map-pin--highlighted');
       }
     };
   }, [userFlow.action && userFlow.deploymentId]);
