@@ -4,6 +4,8 @@
 * Animate switch from search form to exposure menu
 * Rename SearchPanel component
   (because in “chart” mode, it’s not for search)
+* Refactor SearchPanel map/chart mode content the React way
+  (declaratively rendered, not via shown/hidden CSS classes)
 * How will mapbox-gl API keys be handled in production?
 * Add error handling to JS fetch logic
 * Add hover animation to buttons
@@ -19,6 +21,8 @@
   (Waiting on Ken / Meredith for sample data)
 * Limit date picker to available dates
   (Waiting on @chmln to merge flatpickr PR)
+* Ditch moment.js
+  (depends on replacing antd with flatpickr)
 
 ### Deprioritized
 
