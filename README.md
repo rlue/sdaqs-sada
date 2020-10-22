@@ -21,10 +21,33 @@ including sulfates, nitrates, elemental carbon, organic carbon, and dust.
 * **Clinical:** Department of Veterans’ Affairs [CSP #595][1]
 * **Research:** Department of Defense [Millennium Cohort Study][2]
 
-Installation
-------------
+Deployment
+----------
 
-[TODO: write me]
+```sh
+$ docker-compose up -d
+```
+
+### Notes
+
+* The resulting container will expose the service at <http://localhost:9292>.
+
+  Deploying to the public Internet and enabling HTTPS
+  are beyond the scope of this README.
+  For help with these tasks,
+  consider a reverse proxy or edge router like [traefik](https://docs.traefik.io).
+
+* The `docker-compose.yml` file bundled in this repo contains some keys
+  which relate solely to configuration for the production instance at
+  <https://airquality.ryanlue.com>.
+
+  These keys (`labels` and `networks`) may be safely removed
+  prior to deployment on any other server.
+
+### Requirements
+
+* Docker Engine 1.13.0+
+* Docker Compose
 
 Development
 -----------
