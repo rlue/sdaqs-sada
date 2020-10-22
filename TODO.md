@@ -6,7 +6,6 @@
   (because in “chart” mode, it’s not for search)
 * Refactor SearchPanel map/chart mode content the React way
   (declaratively rendered, not via shown/hidden CSS classes)
-* How will mapbox-gl API keys be handled in production?
 * Add error handling to JS fetch logic
 * Add hover animation to buttons
 * [Style background](https://bgjar.com/?ck_subscriber_id=702982198)

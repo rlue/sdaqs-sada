@@ -14,6 +14,7 @@ services:
     build: .
     environment:
       APP_DATABASE_URL: postgres://postgres:password@db/sdaqs_production
+      MAPBOXGL_ACCESS_TOKEN: "${MAPBOXGL_ACCESS_TOKEN}"
     ports:
       - 9292:9292
     depends_on:

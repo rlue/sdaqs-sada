@@ -25,6 +25,7 @@ Deployment
 ----------
 
 ```sh
+$ export MAPBOXGL_ACCESS_TOKEN="pk.eyJ1Ijoicmx..." # get one at account.mapbox.com
 $ docker-compose up -d
 ```
 
@@ -66,9 +67,10 @@ SDAQS-SADA is built using Roda + React.
 ### Configuration
 
 ```sh
-# .envrc
+# .envrc (for direnv)
 export RACK_ENV="development"
 export APP_DATABASE_URL="postgres:///sdaqs_${RACK_ENV}"
+export MAPBOXGL_ACCESS_TOKEN="pk.eyJ1Ijoicmx..." # get one at account.mapbox.com
 ```
 
 ### Common Tasks

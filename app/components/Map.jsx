@@ -5,7 +5,7 @@ import { addMarker, collectionBounds } from '../utils/mapboxglHelper';
 import sites from '../../assets/data/sites.json';
 import * as Icons from './Icons';
 
-mapboxgl.accessToken = 'pk.eyJ1Ijoicmx1ZSIsImEiOiJjazZwOHIwdXcwNzg1M2xuejVkbGNkaGEwIn0.S0KbmonSFTp9xI5J2ZGANQ';
+mapboxgl.accessToken = MAPBOXGL_ACCESS_TOKEN;
 
 const DEFAULT_MAP_BOUNDS = collectionBounds(sites);
 

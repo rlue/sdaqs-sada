@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 const AssetsPlugin = require('assets-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
@@ -40,6 +41,9 @@ module.exports = {
   plugins: [
     new AssetsPlugin({ path: path.resolve('assets') }),
     new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['*.js'] }),
+    new webpack.DefinePlugin({
+      MAPBOXGL_ACCESS_TOKEN: JSON.stringify(process.env.MAPBOXGL_ACCESS_TOKEN),
+    }),
   ],
   resolve: {
     extensions: ['.js', '.jsx'],
