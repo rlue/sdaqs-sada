@@ -10,7 +10,7 @@ is an air quality reporting tool built for
 
 Generate a **chart** and **downloadable CSV file** of air contaminant levels
 for over 1,600 sites throughout the SADA region,
-broken down by week, for any period from 2002 to present.
+broken down by month, for any period from 2002 to present.
 
 SDAQS-SADA reports individual concentration levels
 for a variety of air contaminant types,
@@ -85,11 +85,8 @@ $ createdb sdaqs_development
 $ rake db:migrate
 $ rake db:seed
 
-# launch ruby console
-$ pry -r ./app/app.rb
-
-# launch in development mode
-$ forego start -f Procfile.dev
+$ rake console  # launch ruby console
+$ rake server   # launch in development mode
 ```
 
 ### Fonts
