@@ -12,7 +12,11 @@
 * Fix chart.js hover tracking for multiple datasets covering diff. time
   windows
 * Link application state to browser history / URLs
-  (`Submit` should push permalinks of app state to browser history)
+  * Refreshing/pressing “enter” with updated URL fragment should update app
+  * `Submit` should push permalinks of app state to browser history
+  * Browser “back” button should restore previous app state
+  * Clear invalid parameters from URL fragment
+  * Add “routes” for map mode & chart mode
 
 ### Blocked
 
