@@ -1,10 +1,18 @@
 import moment from 'moment';
 import uid from 'uid';
-import { hashParams } from './urlParser';
+import { hashPath, hashParams } from './urlParser';
 import sites from '../../assets/data/sites.json';
 
 export function createDeployment({ base, period } = { base: {} }) {
   return { id: uid(), base, period };
+}
+
+export function validate({ deployments }) {
+  const initializedDeployments = deployments.filter(({ base }) => base.id);
+  const completedDeployments = initializedDeployments.filter(({ period }) => period);
+
+  return initializedDeployments.length
+    && initializedDeployments.length === completedDeployments.length;
 }
 
 export function deploymentsReducer(state, action) {
@@ -69,4 +77,22 @@ function validatePeriod(periodString) {
   ) return;
 
   return [moment(`${fromYYYY}-${fromMM}-01`), moment(`${toYYYY}-${toMM}-01`)];
+}
+
+export function loadHashParams({ dispatchDeployments, setUserFlow }) {
+  dispatchDeployments({ type: 'reload' });
+
+  // waiting for state vars to update is hard,
+  // so just grab it from the source
+  const deployments = deserializeHashParams();
+
+  switch (hashPath()) {
+    case 'chart':
+      if (validate({ deployments })) {
+        setUserFlow({ mode: 'chart' });
+        break;
+      }
+    case 'map':
+      setUserFlow({ mode: 'map' });
+  }
 }

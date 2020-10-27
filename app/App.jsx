@@ -6,7 +6,11 @@ import SearchPanel from './components/SearchPanel';
 import Map from './components/Map';
 import ChartPage from './components/ChartPage';
 import GuidedTour from './components/GuidedTour';
-import { deploymentsReducer, createDeployment } from './utils/deploymentsHelper';
+import {
+  createDeployment,
+  deploymentsReducer,
+  loadHashParams,
+} from './utils/globalStateHelper';
 
 export default function App() {
   const [userFlow, setUserFlow] = useState({ mode: 'map' });
@@ -17,10 +21,26 @@ export default function App() {
   const [exposureHistory, setExposureHistory] = useState({});
 
   useEffect(() => {
-    if (!window.location.hash) return;
+    if (window.location.hash) loadHashParams({ dispatchDeployments, setUserFlow });
 
-    dispatchDeployments({ type: 'reload' });
+    window.addEventListener(
+      'hashchange',
+      () => loadHashParams({ dispatchDeployments, setUserFlow }),
+    );
   }, []);
+
+  useEffect(() => {
+    if (userFlow.mode !== 'chart') return;
+
+    const queryString = deployments.filter((d) => d.base.id && d.period)
+      .map((d) => `${d.base.id}[]=${d.period.map((m) => m.format('YYYY-MM-01')).join(',')}`)
+      .join('&');
+    if (!queryString) return;
+
+    fetch(`/exposures?${queryString}`)
+      .then((response) => response.json())
+      .then(setExposureHistory);
+  }, [userFlow.mode, deployments]);
 
   return (
     <>
@@ -30,7 +50,6 @@ export default function App() {
           setUserFlow,
           deployments,
           dispatchDeployments,
-          setExposureHistory,
         }}
       />
       <div

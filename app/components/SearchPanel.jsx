@@ -4,6 +4,7 @@ import Fuse from 'fuse.js';
 import { LeftOutlined, DownloadOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 import SearchUnit from './SearchUnit';
+import { validate } from '../utils/globalStateHelper';
 import sites from '../../assets/data/sites.json';
 
 export default function SearchPanel({
@@ -11,7 +12,6 @@ export default function SearchPanel({
   setUserFlow,
   deployments,
   dispatchDeployments,
-  setExposureHistory,
 }) {
   const fuse = useRef(
     new Fuse(sites, {
@@ -24,14 +24,6 @@ export default function SearchPanel({
       keys: ['name'],
     }),
   );
-
-  function validateDeployments() {
-    const initializedDeployments = deployments.filter(({ base }) => base.id);
-    const completedDeployments = initializedDeployments.filter(({ period }) => period);
-
-    return initializedDeployments.length
-      && initializedDeployments.length === completedDeployments.length;
-  }
 
   return (
     <div className="search-panel">
@@ -99,19 +91,9 @@ export default function SearchPanel({
             </button>
             <button
               type="submit"
-              disabled={!validateDeployments()}
+              disabled={!validate({ deployments })}
               className="btn--primary"
-              onClick={() => {
-                const queryString = deployments.filter((d) => d.base.id && d.period)
-                  .map((d) => `${d.base.id}[]=${d.period.map((m) => m.format('YYYY-MM-01')).join(',')}`)
-                  .join('&');
-
-                fetch(`/exposures?${queryString}`)
-                  .then((response) => response.json())
-                  .then(setExposureHistory);
-
-                setUserFlow({ mode: 'chart' });
-              }}
+              onClick={() => setUserFlow({ mode: 'chart' })}
             >
               Submit
             </button>
@@ -210,5 +192,4 @@ SearchPanel.propTypes = {
   setUserFlow: PropTypes.func.isRequired,
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchDeployments: PropTypes.func.isRequired,
-  setExposureHistory: PropTypes.func.isRequired,
 };
