@@ -1,13 +1,6 @@
 ### Up Next
 
-* Add aggregate figures (average, standard deviation) to charts
-* Animate switch from search form to exposure menu
-* Rename SearchPanel component
-  (because in “chart” mode, it’s not for search)
-* Refactor SearchPanel map/chart mode content the React way
-  (declaratively rendered, not via shown/hidden CSS classes)
 * Add error handling to JS fetch logic
-* Add hover animation to buttons
 * [Style background](https://bgjar.com/?ck_subscriber_id=702982198)
 * Fix chart.js hover tracking for multiple datasets covering diff. time
   windows
@@ -15,6 +8,19 @@
   * `Submit` should push permalinks of app state to browser history
   * Browser “back” button should restore previous app state
   * Clear invalid parameters from URL fragment
+* Add export-to-CSV functionality
+  (DETERMINE: What format should CSV data follow? Which columns are needed?)
+* Add screenshot of chart mode to guided tour
+
+#### Chart mode redesign
+
+* Add aggregate figures (average, standard deviation) to charts
+* Animate switch from search form to exposure menu
+* Rename SearchPanel component
+  (because in “chart” mode, it’s not for search)
+* Refactor SearchPanel map/chart mode content the React way
+  (declaratively rendered, not via shown/hidden CSS classes)
+* Add hover animation to buttons
 
 ### Blocked
 

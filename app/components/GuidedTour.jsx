@@ -51,9 +51,6 @@ export default function GuidedTour({
             <strong>when</strong>
             .
           </p>
-          {
-            // TODO: add screenshot of sample results
-          }
           <p className="text-xs">
             Data is available for bases located in
             Southwest Asia, Djibouti, and Afghanistan (SADA)
