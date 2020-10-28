@@ -6,6 +6,7 @@ import SearchPanel from './components/SearchPanel';
 import Map from './components/Map';
 import ChartPage from './components/ChartPage';
 import GuidedTour from './components/GuidedTour';
+import { exposureQuery } from './utils/urlHelper';
 import {
   createDeployment,
   deploymentsReducer,
@@ -32,9 +33,7 @@ export default function App() {
   useEffect(() => {
     if (userFlow.mode !== 'chart') return;
 
-    const queryString = deployments.filter((d) => d.base.id && d.period)
-      .map((d) => `${d.base.id}[]=${d.period.map((m) => m.format('YYYY-MM-01')).join(',')}`)
-      .join('&');
+    const queryString = exposureQuery(deployments);
     if (!queryString) return;
 
     fetch(`/exposures?${queryString}`)

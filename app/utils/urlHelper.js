@@ -1,3 +1,32 @@
+// Returns a query string for a given array of deployments.
+//
+//     [
+//       {
+//         id: ...,
+//         base: { id: 'VA0518', ... },
+//         period: [<2018-01-01>, <2018-02-01>],
+//       },
+//       {
+//         id: ...,
+//         base: { id: 'VA1260', ... },
+//         period: [<2018-03-01>, <2018-06-01>],
+//       },
+//     ]
+//
+//  returns
+//
+//     VA0518[]=2018-01-01,2018-02-01&VA1260[]=2018-03-01,2018-06-01
+//
+// Resulting format is suitable for
+// both query strings (`?...`) and fragment (hash) parameters (`#...`).
+export function exposureQuery(deployments) {
+  return deployments.filter((d) => d.base.id && d.period)
+    .map((d) => `${d.base.id}[]=${d.period.map((m) => m.format('YYYY-MM-01')).join(',')}`)
+    .join('&');
+}
+
+// URL fragment parsing --------------------------------------------------------
+//
 // Parses a URL fragment (the specifier after `#`)
 // into two components (both optional):
 //

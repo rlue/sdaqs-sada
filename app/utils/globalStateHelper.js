@@ -1,6 +1,6 @@
 import moment from 'moment';
 import uid from 'uid';
-import { hashPath, hashParams } from './urlParser';
+import { hashPath, hashParams } from './urlHelper';
 import sites from '../../assets/data/sites.json';
 
 export function createDeployment({ base, period } = { base: {} }) {
