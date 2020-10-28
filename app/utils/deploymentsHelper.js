@@ -21,12 +21,14 @@ export function deploymentsReducer(state, action) {
       return state.slice(0);
     case 'reset':
       return state.slice(-1);
+    case 'reload':
+      return deserializeHashParams();
     default:
       return state.slice(0);
   }
 }
 
-export function initialDeployments() {
+function deserializeHashParams() {
   const deployments = [];
   const params = hashParams();
   const baseIds = Object.keys(params);

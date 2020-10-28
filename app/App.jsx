@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer, useState, useEffect } from 'react';
 import 'antd/dist/antd.css';
 import classNames from 'classnames';
 import '../assets/index.css';
@@ -6,15 +6,21 @@ import SearchPanel from './components/SearchPanel';
 import Map from './components/Map';
 import ChartPage from './components/ChartPage';
 import GuidedTour from './components/GuidedTour';
-import { deploymentsReducer, initialDeployments } from './utils/deploymentsHelper';
+import { deploymentsReducer, createDeployment } from './utils/deploymentsHelper';
 
 export default function App() {
   const [userFlow, setUserFlow] = useState({ mode: 'map' });
   const [deployments, dispatchDeployments] = useReducer(
     deploymentsReducer,
-    initialDeployments(),
+    [createDeployment()],
   );
   const [exposureHistory, setExposureHistory] = useState({});
+
+  useEffect(() => {
+    if (!window.location.hash) return;
+
+    dispatchDeployments({ type: 'reload' });
+  }, []);
 
   return (
     <>
