@@ -1,6 +1,6 @@
 import moment from 'moment';
 import uid from 'uid';
-import { hashPath, hashParams } from './urlHelper';
+import { hashPath, hashParams, exposureQuery } from './urlHelper';
 import sites from '../../assets/data/sites.json';
 
 export function createDeployment({ base, period } = { base: {} }) {
@@ -79,12 +79,17 @@ function validatePeriod(periodString) {
   return [moment(`${fromYYYY}-${fromMM}-01`), moment(`${toYYYY}-${toMM}-01`)];
 }
 
-export function loadHashParams({ dispatchDeployments, setUserFlow }) {
-  dispatchDeployments({ type: 'reload' });
-
+export function processHashParams(args) {
   // waiting for state vars to update is hard,
   // so just grab it from the source
   const deployments = deserializeHashParams();
+
+  loadHashParams({ ...args, deployments });
+  sanitizeHashParams({ deployments });
+}
+
+function loadHashParams({ deployments, dispatchDeployments, setUserFlow }) {
+  dispatchDeployments({ type: 'reload' });
 
   switch (hashPath()) {
     case 'chart':
@@ -95,4 +100,14 @@ export function loadHashParams({ dispatchDeployments, setUserFlow }) {
     case 'map':
       setUserFlow({ mode: 'map' });
   }
+}
+
+function sanitizeHashParams({ deployments }) {
+  if (!window.location.hash) return;
+
+  const pseudopath = hashPath().match(/^(map|chart)$/)?.[0];
+  const queryString = exposureQuery(deployments, { strict: false });
+  const urlFragment = [pseudopath, queryString].filter((part) => part).join('/');
+
+  history.replaceState(history.state, '', `#${urlFragment}`);
 }

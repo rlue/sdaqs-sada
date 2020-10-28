@@ -7,7 +7,6 @@
 * Link application state to browser history / URLs
   * `Submit` should push permalinks of app state to browser history
   * Browser “back” button should restore previous app state
-  * Clear invalid parameters from URL fragment
 * Add export-to-CSV functionality
   (DETERMINE: What format should CSV data follow? Which columns are needed?)
 * Add screenshot of chart mode to guided tour

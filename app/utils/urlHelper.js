@@ -19,9 +19,14 @@
 //
 // Resulting format is suitable for
 // both query strings (`?...`) and fragment (hash) parameters (`#...`).
-export function exposureQuery(deployments) {
-  return deployments.filter((d) => d.base.id && d.period)
-    .map((d) => `${d.base.id}[]=${d.period.map((m) => m.format('YYYY-MM-01')).join(',')}`)
+export function exposureQuery(deployments, options = { strict: true }) {
+  function periodToString(period) {
+    return period?.map((m) => m.format('YYYY-MM-01')).join(',') || ''
+  }
+
+  return deployments
+    .filter((d) => d.base.id && (d.period || !options.strict))
+    .map((d) => `${d.base.id}[]=${periodToString(d.period)}`)
     .join('&');
 }
 
