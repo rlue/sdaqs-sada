@@ -4,12 +4,11 @@
 * [Style background](https://bgjar.com/?ck_subscriber_id=702982198)
 * Fix chart.js hover tracking for multiple datasets covering diff. time
   windows
-* Link application state to browser history / URLs
-  * `Submit` should push permalinks of app state to browser history
-  * Browser “back” button should restore previous app state
 * Add export-to-CSV functionality
   (DETERMINE: What format should CSV data follow? Which columns are needed?)
 * Add screenshot of chart mode to guided tour
+* Refactor/rename `validate` & `validatedHashPath` methods
+* History popstate doesn’t update value of searchunit input
 
 #### Chart mode redesign
 

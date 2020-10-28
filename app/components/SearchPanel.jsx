@@ -4,7 +4,7 @@ import Fuse from 'fuse.js';
 import { LeftOutlined, DownloadOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 import SearchUnit from './SearchUnit';
-import { validate } from '../utils/globalStateHelper';
+import { validate, historyEntry } from '../utils/globalStateHelper';
 import sites from '../../assets/data/sites.json';
 
 export default function SearchPanel({
@@ -38,7 +38,10 @@ export default function SearchPanel({
               'search-panel__back-button--hidden': userFlow.mode === 'map',
             },
           )}
-          onClick={() => setUserFlow({ mode: 'map' })}
+          onClick={() => {
+            history.pushState(...historyEntry({ mode: 'map' }));
+            setUserFlow({ mode: 'map' });
+          }}
         >
           <LeftOutlined />
         </button>
@@ -93,7 +96,10 @@ export default function SearchPanel({
               type="submit"
               disabled={!validate({ deployments })}
               className="btn--primary"
-              onClick={() => setUserFlow({ mode: 'chart' })}
+              onClick={() => {
+                history.pushState(...historyEntry({ mode: 'chart' }));
+                setUserFlow({ mode: 'chart' });
+              }}
             >
               Submit
             </button>

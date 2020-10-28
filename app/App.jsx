@@ -10,7 +10,7 @@ import { exposureQuery } from './utils/urlHelper';
 import {
   createDeployment,
   deploymentsReducer,
-  processHashParams,
+  loadHashParams,
 } from './utils/globalStateHelper';
 
 export default function App() {
@@ -22,12 +22,24 @@ export default function App() {
   const [exposureHistory, setExposureHistory] = useState({});
 
   useEffect(() => {
-    if (window.location.hash) processHashParams({ dispatchDeployments, setUserFlow });
+    if (window.location.hash) {
+      loadHashParams({ dispatchDeployments, setUserFlow });
+    } else {
+      history.replaceState({ userFlow, deployments }, '', '');
+    }
 
-    window.addEventListener(
-      'hashchange',
-      () => processHashParams({ dispatchDeployments, setUserFlow }),
-    );
+    window.addEventListener('hashchange', () => {
+      if (history.state) return;
+
+      loadHashParams({ dispatchDeployments, setUserFlow });
+    });
+
+    window.addEventListener('popstate', ({ state }) => {
+      if (!state) return;
+
+      dispatchDeployments({ type: 'load', value: state.deployments });
+      setUserFlow(state.userFlow);
+    });
   }, []);
 
   useEffect(() => {

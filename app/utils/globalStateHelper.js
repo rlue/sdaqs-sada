@@ -16,23 +16,34 @@ export function validate({ deployments }) {
 
 export function deploymentsReducer(state, action) {
   const target = state.find((el) => el.id === action.id);
+  let newState;
 
   switch (action.type) {
     case 'remove':
-      return state.filter((deployment) => deployment.id !== action.id);
+      newState = state.filter((deployment) => deployment.id !== action.id);
+      break;
     case 'modify':
       target[action.key] = action.value;
 
       if (state.every(({ base }) => base.id)) state.push(createDeployment());
 
-      return state.slice(0);
+      newState = state.slice(0);
+      break;
     case 'reset':
-      return state.slice(-1);
-    case 'reload':
-      return deserializeHashParams();
+      newState = state.slice(-1);
+      break;
+    case 'load':
+      newState = action.value;
+      break;
     default:
-      return state.slice(0);
+      newState = state.slice(0);
   }
+
+  // WARNING! Side effect
+  if (action.type !== 'load')
+    history.pushState(...historyEntry({ deployments: newState }));
+
+  return newState;
 }
 
 function deserializeHashParams() {
@@ -76,35 +87,34 @@ function validatePeriod(string) {
   return [start, end];
 }
 
-export function processHashParams(args) {
+export function loadHashParams({ dispatchDeployments, setUserFlow }) {
   // waiting for state vars to update is hard,
   // so just grab it from the source
   const deployments = deserializeHashParams();
+  const mode = validatedHashPath({ deployments });
 
-  loadHashParams({ ...args, deployments });
-  sanitizeHashParams({ deployments });
+  dispatchDeployments({ type: 'load', value: deployments });
+  setUserFlow({ mode });
+  history.replaceState(...historyEntry({ mode, deployments }));
 }
 
-function loadHashParams({ deployments, dispatchDeployments, setUserFlow }) {
-  dispatchDeployments({ type: 'reload' });
+// returns an array of arguments to use with
+// the History#pushState and History#replaceState methods,
+// based on a given userFlow.mode and deployments (both optional).
+export function historyEntry({ mode, deployments }) {
+  mode = mode || history.state?.userFlow.mode;
+  deployments = deployments || history.state?.deployments;
 
-  switch (hashPath()) {
-    case 'chart':
-      if (validate({ deployments })) {
-        setUserFlow({ mode: 'chart' });
-        break;
-      }
-    case 'map':
-      setUserFlow({ mode: 'map' });
-  }
-}
-
-function sanitizeHashParams({ deployments }) {
-  if (!window.location.hash) return;
-
-  const pseudopath = hashPath().match(/^(map|chart)$/)?.[0];
+  const state = { userFlow: { mode }, deployments };
+  const title = '';
   const queryString = exposureQuery(deployments, { strict: false });
-  const urlFragment = [pseudopath, queryString].filter((part) => part).join('/');
+  const urlFragment = [mode, queryString].filter(Boolean).join('/');
 
-  history.replaceState(history.state, '', `#${urlFragment}`);
+  return [state, title, `#${urlFragment}`];
+}
+
+function validatedHashPath({ deployments }) {
+  if (hashPath() === 'chart' && validate({ deployments })) return 'chart';
+
+  return 'map';
 }
