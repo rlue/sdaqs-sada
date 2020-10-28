@@ -3,6 +3,10 @@ import uid from 'uid';
 import { hashParams } from './urlParser';
 import sites from '../../assets/data/sites.json';
 
+export function createDeployment({ base, period } = { base: {} }) {
+  return { id: uid(), base, period };
+}
+
 export function deploymentsReducer(state, action) {
   const target = state.find((el) => el.id === action.id);
 
@@ -12,9 +16,7 @@ export function deploymentsReducer(state, action) {
     case 'modify':
       target[action.key] = action.value;
 
-      if (state.every(({ base }) => base.id)) {
-        state.push({ id: uid(), base: {}, period: null });
-      }
+      if (state.every(({ base }) => base.id)) state.push(createDeployment());
 
       return state.slice(0);
     case 'reset':
@@ -40,15 +42,11 @@ export function initialDeployments() {
     if (!base) return;
 
     periods.forEach((period) => {
-      deployments.push({
-        id: uid(),
-        base: base,
-        period: period,
-      });
+      deployments.push(createDeployment({ base, period }));
     });
   });
 
-  deployments.push({ id: uid(), base: {}, period: undefined })
+  deployments.push(createDeployment());
 
   return deployments;
 }
