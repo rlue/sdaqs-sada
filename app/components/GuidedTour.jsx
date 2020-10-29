@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Tour from 'reactour';
-import moment from 'moment';
 
 const SAMPLE_BASE = {
   id: 'VA0518',
@@ -13,8 +12,8 @@ const SAMPLE_BASE = {
 };
 
 const SAMPLE_PERIOD = [
-  moment('2006-01-01'),
-  moment('2007-12-01'),
+  new Date(2006,  0, 1),
+  new Date(2007, 11, 1),
 ];
 
 export default function GuidedTour({

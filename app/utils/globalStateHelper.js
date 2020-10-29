@@ -1,4 +1,3 @@
-import moment from 'moment';
 import uid from 'uid';
 import { hashPath, hashParams, exposureQuery } from './urlHelper';
 import sites from '../../assets/data/sites.json';
@@ -61,22 +60,20 @@ function deserializeHashParams() {
   return deployments;
 }
 
-function validatePeriod(periodString) {
-  const dateFormat = /^(\d{4})-(\d{2})-\d{2},(\d{4})-(\d{2})-\d{2}$/;
-  const matchGroups = periodString?.match(dateFormat);
-  if (!matchGroups) return;
+function validatePeriod(string) {
+  const dateFormat = /^(\d{4})-(\d{1,2})-\d{1,2},(\d{4})-(\d{1,2})-\d{1,2}$/;
+  if (!string?.match(dateFormat)) return;
 
-  const [, fromYYYY, fromMM, toYYYY, toMM] = matchGroups.map(Number);
+  const [, fromYYYY, fromMM, toYYYY, toMM] = string?.match(dateFormat).map(Number);
+  const start = new Date(fromYYYY, fromMM - 1, 1);
+  const end = new Date(toYYYY, toMM, 0);
   if (
-    2002 > fromYYYY || fromYYYY > 2018
-    || 1 > fromMM || fromMM > 12
-    || 2002 > toYYYY || toYYYY > 2018
-    || 1 > toMM || toMM > 12
-    || fromYYYY > toYYYY
-    || (fromYYYY === toYYYY && fromMM > toMM)
+    start < new Date(2002, 0, 1)
+    || end > new Date(2019, 0, 0)
+    || start > end
   ) return;
 
-  return [moment(`${fromYYYY}-${fromMM}-01`), moment(`${toYYYY}-${toMM}-01`)];
+  return [start, end];
 }
 
 export function processHashParams(args) {

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useCombobox } from 'downshift';
 import { DatePicker } from 'antd';
+import moment from 'moment';
 import classNames from 'classnames';
 import debounce from 'lodash.debounce';
 import { DeleteFilled } from '@ant-design/icons';
@@ -321,21 +322,20 @@ export default function SearchUnit({
           )}
           picker="month"
           format="MMM YYYY"
-          disabledDate={(current) => current
-            && !current.isBetween(new Date(2002, 0, 1), Date.now())}
-          defaultValue={deployment.period}
-          value={deployment.period}
+          disabledDate={(current) => {
+            return current?.isBefore(new Date(2002, 0, 1))
+              || current?.isAfter(new Date(2019, 0, 0));
+          }}
+          value={deployment.period?.map((date) => moment(date))}
           onChange={(dates) => {
             dispatchDeployments({
               type: 'modify',
               id: deployment.id,
               key: 'period',
-              value: dates,
+              value: dates ? [dates[0].toDate(), dates[1].endOf('month').toDate()] : dates,
             });
 
-            if (dates) {
-              setUserFlow({ mode: 'map' });
-            }
+            if (dates) setUserFlow({ mode: 'map' });
           }}
         />
       </div>

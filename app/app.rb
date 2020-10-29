@@ -61,7 +61,7 @@ class App < Roda
         periods.map { |p| <<~SQL.chomp }.join(' OR ')
           (base_id = '#{base_id}' AND
            date >= '#{Date.parse(p.split(',').first)}'::date AND
-           date <= '#{Date.parse(p.split(',').last).next_month - 1}'::date)
+           date <= '#{Date.parse(p.split(',').last)}'::date)
         SQL
       end.join(' OR ')
 
