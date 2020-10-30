@@ -87,7 +87,11 @@ function validatePeriod(string) {
   return [start, end];
 }
 
-export function loadHashParams({ dispatchDeployments, setUserFlow }) {
+export function loadHashParams({
+  dispatchDeployments,
+  setUserFlow,
+  initialPageLoad,
+}) {
   // waiting for state vars to update is hard,
   // so just grab it from the source
   const deployments = deserializeHashParams();
@@ -95,7 +99,16 @@ export function loadHashParams({ dispatchDeployments, setUserFlow }) {
 
   dispatchDeployments({ type: 'load', value: deployments });
   setUserFlow({ mode });
-  history.replaceState(...historyEntry({ mode, deployments }));
+
+  // in Chart mode, the Back button actually calls `history.back()`,
+  // so if the user manually enters hash params to start the app in Chart mode,
+  // we need to prepend an entry for them to navigate "back" to.
+  if (initialPageLoad && mode === 'chart') {
+    history.replaceState(...historyEntry({ mode: 'map', deployments }));
+    history.pushState(...historyEntry({ mode: 'chart' }));
+  } else {
+    history.replaceState(...historyEntry({ mode, deployments }));
+  }
 }
 
 // returns an array of arguments to use with

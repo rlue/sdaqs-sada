@@ -38,10 +38,7 @@ export default function SearchPanel({
               'search-panel__back-button--hidden': userFlow.mode === 'map',
             },
           )}
-          onClick={() => {
-            history.pushState(...historyEntry({ mode: 'map' }));
-            setUserFlow({ mode: 'map' });
-          }}
+          onClick={() => history.back()}
         >
           <LeftOutlined />
         </button>

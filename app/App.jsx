@@ -23,7 +23,11 @@ export default function App() {
 
   useEffect(() => {
     if (window.location.hash) {
-      loadHashParams({ dispatchDeployments, setUserFlow });
+      loadHashParams({
+        dispatchDeployments,
+        setUserFlow,
+        initialPageLoad: true,
+      });
     } else {
       history.replaceState({ userFlow, deployments }, '', '');
     }
