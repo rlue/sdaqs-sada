@@ -8,7 +8,6 @@
   (DETERMINE: What format should CSV data follow? Which columns are needed?)
 * Add screenshot of chart mode to guided tour
 * Refactor/rename `validate` & `validatedHashPath` methods
-* History popstate doesn’t update value of searchunit input
 
 #### Chart mode redesign
 

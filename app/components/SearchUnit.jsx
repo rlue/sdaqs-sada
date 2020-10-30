@@ -164,6 +164,12 @@ export default function SearchUnit({
     if (selectedForFocus && !hasFocus) inputField.current.focus();
   }, [userFlow.action, userFlow.deploymentId]);
 
+  // keep `controlledInput` in sync with `deployment.base.name`
+  // when paging back and forth through browser history.
+  useEffect(() => {
+    setControlledInput(deployment.base.name || '');
+  }, [deployment]);
+
   function removeHandler() {
     const noDeploymentsRemain = !deployments.filter((d) => d.id !== deployment.id && d.base.id)
       .length;
