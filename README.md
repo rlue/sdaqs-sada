@@ -26,7 +26,7 @@ Deployment
 
 ```sh
 $ export MAPBOXGL_ACCESS_TOKEN="pk.eyJ1Ijoicmx..." # get one at account.mapbox.com
-$ docker-compose up -d
+$ docker-compose up -d --build
 ```
 
 ### Notes
@@ -36,7 +36,7 @@ $ docker-compose up -d
   Deploying to the public Internet and enabling HTTPS
   are beyond the scope of this README.
   For help with these tasks,
-  consider a reverse proxy or edge router like [traefik](https://docs.traefik.io).
+  consider a reverse proxy or edge router like [traefik][].
 
 * The `docker-compose.yml` file bundled in this repo contains some keys
   which relate solely to configuration for the production instance at
@@ -44,6 +44,21 @@ $ docker-compose up -d
 
   These keys (`labels` and `networks`) may be safely removed
   prior to deployment on any other server.
+
+* **Security notice:**
+  By deploying this application,
+  you are exposing your Mapbox access token to your users
+  (and anyone else who can access the site, for that matter).
+
+  This is not an application design flaw;
+  it is a necessary consequence of using a JavaScript library
+  to access a third-party API (namely, [Mapbox GL JS][]).
+  The React SPA needs the access token to query for map data,
+  so the access token must be present in the compiled application file
+  (_i.e.,_ `https://airquality.ryanlue.com/assets/main-<contenthash>.js`).
+
+  For more on access token best practices,
+  read [How to use Mapbox securely][].
 
 ### Requirements
 
@@ -85,8 +100,8 @@ $ createdb sdaqs_development
 $ rake db:migrate
 $ rake db:seed
 
-$ rake console  # launch ruby console
-$ rake server   # launch in development mode
+$ rake console  # or rake c: launch ruby console
+$ rake server   # or rake s: launch in development mode
 ```
 
 ### Fonts
@@ -99,7 +114,7 @@ To embed new fonts into this project:
 
 ### Git Commit Message Codes
 
-This repo establishes a pattern for git commit messages
+This repo follows a pattern for git commit messages
 inspired by [the one used on AngularJS][7].
 
 The first line of each commit should begin
@@ -130,3 +145,6 @@ Copyright © 2020 University of Southern California. All rights reserved.
 [5]: https://www.fontsquirrel.com/tools/webfont-generator
 [6]: https://css-tricks.com/snippets/css/using-font-face/
 [7]: https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y
+[traefik]: https://docs.traefik.io
+[Mapbox GL JS]: https://docs.mapbox.com/mapbox-gl-js/overview/
+[How to use Mapbox securely]: https://docs.mapbox.com/help/troubleshooting/how-to-use-mapbox-securely/

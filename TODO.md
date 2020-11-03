@@ -8,6 +8,9 @@
   (DETERMINE: What format should CSV data follow? Which columns are needed?)
 * Add screenshot of chart mode to guided tour
 * Refactor/rename `validate` & `validatedHashPath` methods
+* Create a warning message component to prominently alert users/sysadmin
+  when `MAPBOXGL_ACCESS_TOKEN` is absent or invalid.
+* Remind user to refresh when a new version is available?
 
 #### Chart mode redesign
 
