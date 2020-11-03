@@ -1,0 +1,15 @@
+*
+!app
+!assets
+assets/webpack-assets.json
+!config
+!config.ru
+!Gemfile
+!Gemfile.lock
+!lib
+!package.json
+!package-lock.json
+!Procfile
+!public
+public/assets/main*.js
+!Rakefile

@@ -19,6 +19,7 @@ ARG MAPBOXGL_ACCESS_TOKEN
 RUN NODE_ENV=production \
     MAPBOXGL_ACCESS_TOKEN=$MAPBOXGL_ACCESS_TOKEN \
     npx webpack --config config/webpack.js
+RUN rm -rf node_modules
 
 EXPOSE 9292
 CMD ["bundle", "exec", "rackup", "-o", "0.0.0.0"]
