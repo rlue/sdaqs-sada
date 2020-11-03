@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# This script is used to enable rudimentary continuous deployment.
+#
+# It is installed to the production server,
+# which holds both a bare, remote copy of this repository
+# and a running Docker container of this application.
+#
+# Adapted from https://stackoverflow.com/a/14453711/4865822.
+#
+# === Installation
+#
+# Add the following to the TOP of your production server's .bashrc:
+#
+#     if ! [[ $- =~ i ]]; then
+#       export SDAQS_DEPLOYMENT_DIR="..."
+#       export MAPBOXGL_ACCESS_TOKEN=pk.eyJ1...
+#       export PATH="$HOME/.local/bin:$PATH"  # or wherever your docker credential provider is stored
+#
+#       return
+#     fi
+
+mkdir "$SDAQS_DEPLOYMENT_DIR" 2>/dev/null
+GIT_WORK_TREE="$SDAQS_DEPLOYMENT_DIR" git checkout -f
+
+cd "$SDAQS_DEPLOYMENT_DIR"
+docker-compose up --detach --build
