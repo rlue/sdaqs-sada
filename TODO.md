@@ -27,6 +27,12 @@
   (Waiting on @chmln to merge flatpickr PR)
 * Ditch moment.js
   (depends on replacing antd with flatpickr)
+* Move `$MAPBOXGL_ACCESS_TOKEN`
+  from `ARG` to BuildKit `--secret`:
+
+  * Pending <https://github.com/docker/compose/pull/7835>
+  * <https://pythonspeed.com/articles/build-secrets-docker-compose/>
+  * <https://docs.docker.com/develop/develop-images/build_enhancements/#new-docker-build-secret-information>
 
 ### Deprioritized
 
