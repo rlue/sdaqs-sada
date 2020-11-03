@@ -11,6 +11,7 @@
 * Create a warning message component to prominently alert users/sysadmin
   when `MAPBOXGL_ACCESS_TOKEN` is absent or invalid.
 * Remind user to refresh when a new version is available?
+* Add `<title>`
 
 #### Chart mode redesign
 
