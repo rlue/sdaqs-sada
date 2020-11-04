@@ -24,4 +24,24 @@ mkdir "$SDAQS_DEPLOYMENT_DIR" 2>/dev/null
 GIT_WORK_TREE="$SDAQS_DEPLOYMENT_DIR" git checkout -f
 
 cd "$SDAQS_DEPLOYMENT_DIR"
+
+# add server-specific configuration to docker-compose.yml
+sed -i -r 's/(\s*)web:/\1  labels:\n\1    traefik.enable: false\n&/' docker-compose.yml
+cat <<EOF >> docker-compose.yml
+    networks:
+      - default
+      - router
+    labels:
+      traefik.http.services.sdaqs.loadbalancer.server.port: 9292
+      traefik.http.routers.sdaqs.entrypoints: websecure
+      traefik.http.routers.sdaqs.rule: Host(\`airquality.ryanlue.com\`)
+      traefik.http.routers.sdaqs.tls: true
+      traefik.http.routers.sdaqs.tls.certresolver: letsencrypt
+      traefik.docker.network: ryanluecom_default
+networks:
+  router:
+    external:
+      name: ryanluecom_default
+EOF
+
 docker-compose up --detach --build

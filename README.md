@@ -24,46 +24,46 @@ including sulfates, nitrates, elemental carbon, organic carbon, and dust.
 Deployment
 ----------
 
+Requires Docker Compose.
+
 ```sh
-$ export MAPBOXGL_ACCESS_TOKEN="pk.eyJ1Ijoicmx..." # get one at account.mapbox.com
+# first, prepare the DB seed data
+$ mv path/to/data_dump.sql tmp/
+
+# then, deploy (or update/re-deploy)
+$ export MAPBOXGL_ACCESS_TOKEN="pk.eyJ1Ijoicmx..."  # see Security Notice
 $ docker-compose up -d --build
 ```
 
-### Notes
+The resulting container will expose the service at <http://localhost:9292>.
 
-* The resulting container will expose the service at <http://localhost:9292>.
+Deploying to the public Internet and enabling HTTPS
+are beyond the scope of this README.
+For help with these tasks,
+consider a reverse proxy or edge router like [traefik][].
 
-  Deploying to the public Internet and enabling HTTPS
-  are beyond the scope of this README.
-  For help with these tasks,
-  consider a reverse proxy or edge router like [traefik][].
+### Security Notice
 
-* The `docker-compose.yml` file bundled in this repo contains some keys
-  which relate solely to configuration for the production instance at
-  <https://airquality.ryanlue.com>.
+This application requires a Mapbox access token.
+Get one at <https://account.mapbox.com>.
 
-  These keys (`labels` and `networks`) may be safely removed
-  prior to deployment on any other server.
+Deploying this application will expose this token
+to anyone who can access the site—it’s not shown in the open,
+but a determined attacker shouldn’t have a hard time finding it.
 
-* **Security notice:**
-  By deploying this application,
-  you are exposing your Mapbox access token to your users
-  (and anyone else who can access the site, for that matter).
+Typically, that’s Not a Good Thing,
+since anyone who obtains your token can use it in their own software
+and eat into your monthly usage allowance
+(or worse yet, rack up a big bill on a pay-as-you-go plan).
+But in this case, it’s just a necessary consequence
+of using a JavaScript library ([Mapbox GL JS][]) to access a third-party API:
+the client-side application can’t query for map data without the token,
+so it must be present in the compiled JS file.
 
-  This is not an application design flaw;
-  it is a necessary consequence of using a JavaScript library
-  to access a third-party API (namely, [Mapbox GL JS][]).
-  The React SPA needs the access token to query for map data,
-  so the access token must be present in the compiled application file
-  (_i.e.,_ `https://airquality.ryanlue.com/assets/main-<contenthash>.js`).
-
-  For more on access token best practices,
-  read [How to use Mapbox securely][].
-
-### Requirements
-
-* Docker Engine 1.13.0+
-* Docker Compose
+Fortunately, Mapbox has a generous free tier,
+so the likelihood of abuse is low.
+For more on access token best practices,
+read [How to use Mapbox securely][].
 
 Development
 -----------
