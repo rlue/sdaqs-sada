@@ -9,6 +9,7 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    anbt-sql-formatter (0.1.0)
     ast (2.4.0)
     benchmark-ips (2.7.2)
     capybara (3.32.2)
@@ -98,6 +99,7 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport (~> 6.0)
+  anbt-sql-formatter (~> 0.1)
   benchmark-ips (~> 2.7)
   capybara
   pg (~> 1.2)

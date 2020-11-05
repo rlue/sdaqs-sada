@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 ruby '2.7.0'
 
 gem 'activesupport', '~> 6.0'
+gem 'anbt-sql-formatter', '~> 0.1', require: 'anbt-sql-formatter/formatter'
 gem 'pg', '~> 1.2'
 gem 'roda', '~> 3.29'
 gem 'sequel', '~> 5.29'

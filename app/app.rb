@@ -4,6 +4,7 @@ require 'rubygems'
 require 'bundler/setup'
 Bundler.require(:default, ENV.fetch('RACK_ENV') { 'production' })
 
+require_relative '../config/initializers'
 require_relative '../config/models'
 require 'json'
 
@@ -57,21 +58,23 @@ class App < Roda
     end
 
     r.get 'exposures' do
-      deployment_conditions = r.params.map do |base_id, periods|
-        periods.map { |p| <<~SQL.chomp }.join(' OR ')
-          (base_id = '#{base_id}' AND
-           date >= '#{Date.parse(p.split(',').first)}'::date AND
-           date <= '#{Date.parse(p.split(',').last)}'::date)
-        SQL
-      end.join(' OR ')
-
-      DB[<<~SQL.chomp].all.group_by { |record| record.delete(:base_name) }
-        SELECT base_name, date, pm25
+      query = "\n  " + SQL_FORMATTER.format(<<~SQL.chomp)
+        SELECT base_id, base_name, date, pm25
         FROM exposures
-        LEFT JOIN bases
-          ON exposures.pixel_id = bases.pixel_id
-        WHERE #{deployment_conditions}
+          LEFT JOIN bases ON exposures.pixel_id = bases.pixel_id
+        WHERE #{deployment_conditions(r.params)}
       SQL
+
+      DB[query].all.group_by { |record| record.delete(:base_id) }
     end
+  end
+
+  def deployment_conditions(params)
+    params.map { |base_id, periods| <<~BASE }.join(' OR ')
+      (base_id = '#{base_id}'
+        AND (#{periods.map { |p| <<~PERIOD }.join(' OR ')}))
+          date BETWEEN '#{p.split(',').first}' AND '#{p.split(',').last}'
+        PERIOD
+    BASE
   end
 end
