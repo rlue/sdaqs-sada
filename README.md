@@ -27,7 +27,8 @@ Deployment
 Requires Docker Compose.
 
 ```sh
-# first, prepare the DB seed data
+# first, copy the requisite sensitive data into the repo
+$ mv path/to/sites.json data/
 $ mv path/to/db_seed.sql data/
 
 # then, deploy (or update/re-deploy)
@@ -89,6 +90,37 @@ export APP_DATABASE_URL="postgres:///sdaqs_${RACK_ENV}"
 export MAPBOXGL_ACCESS_TOKEN="pk.eyJ1Ijoicmx..." # get one at account.mapbox.com
 ```
 
+### Installing secrets
+
+This application contains and uses data which may not be published in the open,
+such as the lat/lng coordinates of US military bases throughout the SADA region.
+
+In order to run the development server,
+you will need to obtain the following:
+
+* `sites.json` is used by the front end (React SPA)
+  to populate the results in the search bar
+  and translate selections to pins on the map.
+
+  Without it, the frontend application will fail to compile
+  (_i.e.,_ `npm run build` and `npx webpack-dev-server` will fail).
+
+* `db_seed.sql` is a SQL dump of the contaminant exposure data
+  that this application provides an interface to.
+
+  Without it, database queries made by the backend application will be empty,
+  and the charts presented in the frontend application will contain no data.
+
+```sh
+$ mv path/to/sites.json data/
+$ mv path/to/db_seed.sql data/
+
+# set up database
+$ createdb sdaqs_development
+$ rake db:migrate
+$ rake db:seed
+```
+
 ### Common Tasks
 
 ```sh
@@ -96,13 +128,11 @@ export MAPBOXGL_ACCESS_TOKEN="pk.eyJ1Ijoicmx..." # get one at account.mapbox.com
 $ bundle install
 $ npm install
 
-# set up database
-$ createdb sdaqs_development
-$ rake db:migrate
-$ rake db:seed
+# launch ruby console
+$ rake console  # or rake c
 
-$ rake console  # or rake c: launch ruby console
-$ rake server   # or rake s: launch in development mode
+# launch in development mode
+$ rake server   # or rake s
 ```
 
 ### Fonts

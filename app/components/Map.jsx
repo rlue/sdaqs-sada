@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import mapboxgl from 'mapbox-gl';
 import { addMarker, collectionBounds } from '../utils/mapboxglHelper';
-import sites from '../../assets/data/sites.json';
+import sites from '../../data/sites.json';
 import * as Icons from './Icons';
 
 mapboxgl.accessToken = MAPBOXGL_ACCESS_TOKEN;

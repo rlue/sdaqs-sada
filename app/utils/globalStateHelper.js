@@ -1,6 +1,6 @@
 import uid from 'uid';
 import { hashPath, hashParams, exposureQuery } from './urlHelper';
-import sites from '../../assets/data/sites.json';
+import sites from '../../data/sites.json';
 
 export function createDeployment({ base, period } = { base: {} }) {
   return { id: uid(), base, period };
