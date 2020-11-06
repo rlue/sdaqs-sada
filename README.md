@@ -33,6 +33,21 @@ Deployment
 
 Requires Docker Compose.
 
+<a href="https://docs.docker.com/">
+  <img
+    src="https://www.docker.com/sites/default/files/social/docker_facebook_share.png"
+    height="64"
+    width="75"
+  />
+</a>
+<a href="https://docs.docker.com/compose/">
+  <img
+    src="https://www.docker.com/blog/wp-content/uploads/2020/02/Compose.png"
+    height="64"
+    width="58"
+  />
+</a>
+
 ```sh
 # first, copy the requisite non-public data into the repo
 # (see “Installing Non-Public Data” below)
@@ -56,6 +71,14 @@ consider a reverse proxy or edge router like [traefik][].
 This application requires a Mapbox access token.
 Get one at <https://account.mapbox.com>.
 
+<a href="https://account.mapbox.com">
+  <img
+    src="https://upload.wikimedia.org/wikipedia/commons/c/c4/Mapbox_logo_2017.svg"
+    height="64"
+    width="284"
+  />
+</a>
+
 Deploying this application will expose this token
 to anyone who can access the site—it’s not shown in the open,
 but a determined attacker shouldn’t have a hard time finding it.
@@ -78,6 +101,21 @@ Development
 -----------
 
 SDAQS-SADA is built using Roda + React.
+
+<a href="https://roda.jeremyevans.net">
+  <img
+    src="http://roda.jeremyevans.net/images/roda-logo.svg"
+    height="64"
+    width="246"
+  />
+</a>
+<a href="https://reactjs.org">
+  <img
+    src="https://tse2.mm.bing.net/th?id=OIP.LpDrkHxE25QIzQbSF-flFAHaHa"
+    height="64px"
+    width="64px"
+  />
+</a>
 
 ### Requirements
 
