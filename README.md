@@ -27,6 +27,15 @@ including sulfates, nitrates, elemental carbon, organic carbon, and dust.
 * **Clinical:** Department of Veterans’ Affairs [CSP #595][1]
 * **Research:** Department of Defense [Millennium Cohort Study][2]
 
+### Project Team
+
+* Meredith Franklin, Ph.D. (University of Southern California)
+* Petros Koutrakis, Ph.D. (Harvard University)
+* Eric Garshick, M.D. (VA Boston Healthcare)
+* Olga Kalashnikova, Ph.D. (JPL)
+* Joel Schwartz, Ph.D. (Harvard University)
+* Harvard School of Public Health Environmental Chemistry Lab
+
 Deployment
 ----------
 
