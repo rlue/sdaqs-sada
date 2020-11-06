@@ -12,8 +12,7 @@ for Southwest Asia, Djibouti, and Afghanistan_
 is an air quality reporting tool built for
 [U.S. federal grant 80NSSC19K0225][0].
 
-
-[TODO: insert screenshot]
+![](./.i/screenshot-map.png)
 
 Generate a **chart** and **downloadable CSV file** of air contaminant levels
 for over 1,600 sites throughout the SADA region,
