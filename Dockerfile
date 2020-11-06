@@ -16,8 +16,7 @@ RUN bundle install
 RUN apk add --no-cache --update npm
 RUN npm install
 ARG MAPBOXGL_ACCESS_TOKEN
-RUN NODE_ENV=production \
-    MAPBOXGL_ACCESS_TOKEN=$MAPBOXGL_ACCESS_TOKEN \
+RUN MAPBOXGL_ACCESS_TOKEN=$MAPBOXGL_ACCESS_TOKEN \
     npx webpack --config config/webpack.js
 RUN rm -rf node_modules
 

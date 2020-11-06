@@ -4,7 +4,7 @@ const AssetsPlugin = require('assets-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  mode: process.env.NODE_ENV === 'development' ? 'development' : 'production',
   entry: './assets/index.jsx',
   module: {
     rules: [

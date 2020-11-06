@@ -84,6 +84,7 @@ SDAQS-SADA is built using Roda + React.
 ```sh
 # .envrc (for direnv)
 export RACK_ENV="development"
+export NODE_ENV="development"
 export APP_DATABASE_URL="postgres:///sdaqs_${RACK_ENV}"
 export MAPBOXGL_ACCESS_TOKEN="pk.eyJ1Ijoicmx..." # get one at account.mapbox.com
 ```
