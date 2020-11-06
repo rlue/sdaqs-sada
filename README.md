@@ -1,16 +1,22 @@
 <h1>
   <img
     src="./public/android-chrome-256x256.png"
-    height="24px"
-    width="24px"
+    height="24"
+    width="24"
   />
   SDAQS-SADA
+  <img
+    src="http://1.bp.blogspot.com/-K1zf0nwrZ9w/UE6d1Oz10EI/AAAAAAAACRg/oWgtj0tkmJo/s1600/nasa-logo.jpg"
+    height="24"
+    width="29"
+  />
 </h1>
 
 This _Source-Differentiated Air Quality System
 for Southwest Asia, Djibouti, and Afghanistan_
 is an air quality reporting tool built for
-[U.S. federal grant 80NSSC19K0225][0].
+[U.S. federal grant 80NSSC19K0225][0]
+and funded by the NASA Shared Services Center.
 
 ![](./.i/screenshot-map.png)
 
@@ -26,6 +32,15 @@ including sulfates, nitrates, elemental carbon, organic carbon, and dust.
 
 * **Clinical:** Department of Veterans’ Affairs [CSP #595][1]
 * **Research:** Department of Defense [Millennium Cohort Study][2]
+
+### Project Team
+
+* Meredith Franklin, Ph.D. (University of Southern California)
+* Petros Koutrakis, Ph.D. (Harvard University)
+* Eric Garshick, M.D. (VA Boston Healthcare)
+* Olga Kalashnikova, Ph.D. (JPL)
+* Joel Schwartz, Ph.D. (Harvard University)
+* Harvard School of Public Health Environmental Chemistry Lab
 
 Deployment
 ----------
@@ -111,8 +126,8 @@ SDAQS-SADA is built using Roda + React.
 <a href="https://reactjs.org">
   <img
     src="https://tse2.mm.bing.net/th?id=OIP.LpDrkHxE25QIzQbSF-flFAHaHa"
-    height="64px"
-    width="64px"
+    height="64"
+    width="64"
   />
 </a>
 
