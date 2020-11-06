@@ -1,10 +1,17 @@
-SDAQS-SADA
-==========
+<h1>
+  <img
+    src="./public/android-chrome-256x256.png"
+    height="24px"
+    width="24px"
+  />
+  SDAQS-SADA
+</h1>
 
 This _Source-Differentiated Air Quality System
 for Southwest Asia, Djibouti, and Afghanistan_
 is an air quality reporting tool built for
 [U.S. federal grant 80NSSC19K0225][0].
+
 
 [TODO: insert screenshot]
 
