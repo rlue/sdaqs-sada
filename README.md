@@ -28,7 +28,7 @@ Requires Docker Compose.
 
 ```sh
 # first, prepare the DB seed data
-$ mv path/to/data_dump.sql tmp/
+$ mv path/to/db_seed.sql data/
 
 # then, deploy (or update/re-deploy)
 $ export MAPBOXGL_ACCESS_TOKEN="pk.eyJ1Ijoicmx..."  # see Security Notice

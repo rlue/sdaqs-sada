@@ -3,7 +3,7 @@ services:
   db:
     image: postgis/postgis
     volumes:
-      - ./tmp/me_sample_db.sql:/docker-entrypoint-initdb.d/me_sample_db.sql:ro
+      - ./data/db_seed.sql:/docker-entrypoint-initdb.d/db_seed.sql:ro
     environment:
       POSTGRES_DB: sdaqs_production
       POSTGRES_PASSWORD: password

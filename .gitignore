@@ -4,6 +4,10 @@
 /public/assets/main*.js
 /assets/webpack-assets.json
 
+# Raw data
+/data/bases.csv
+/data/db_seed.sql
+
 # RSpec
 /spec/examples.txt
 

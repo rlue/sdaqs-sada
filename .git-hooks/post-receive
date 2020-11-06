@@ -44,4 +44,4 @@ networks:
       name: ryanluecom_default
 EOF
 
-docker-compose up --detach --build
+rake deploy
