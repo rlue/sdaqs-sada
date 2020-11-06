@@ -12,6 +12,8 @@
   when `MAPBOXGL_ACCESS_TOKEN` is absent or invalid.
 * Remind user to refresh when a new version is available?
 * Add `<title>`
+* Add more screenshots to README
+* Fix db:seed rake task
 
 #### Chart mode redesign
 
@@ -47,3 +49,4 @@
 * Tabbing from last (empty) deployment should move focus to Submit
 * Fix last step of tour (clicking “submit” should exit)
   ...seems to be fixed now??
+* Migrate from PropTypes to TypeScript
