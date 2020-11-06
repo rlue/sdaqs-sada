@@ -5,7 +5,7 @@
 /assets/webpack-assets.json
 
 # Raw data
-/data/bases.csv
+/data/sites.json
 /data/db_seed.sql
 
 # RSpec

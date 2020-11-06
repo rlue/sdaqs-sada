@@ -4,6 +4,7 @@
 assets/webpack-assets.json
 !config
 !config.ru
+!data/sites.json
 !Gemfile
 !Gemfile.lock
 !lib

@@ -5,7 +5,7 @@ import { LeftOutlined, DownloadOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 import SearchUnit from './SearchUnit';
 import { validate, historyEntry } from '../utils/globalStateHelper';
-import sites from '../../assets/data/sites.json';
+import sites from '../../data/sites.json';
 
 export default function SearchPanel({
   userFlow,
