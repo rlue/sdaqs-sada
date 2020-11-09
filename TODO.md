@@ -14,6 +14,7 @@
 * Add `<title>`
 * Add more screenshots to README
 * Ask Meredith/Ken for a pixels-lat/lng table in SQL dump
+* Fix SQL query in secrets:generate rake task
 
 #### Chart mode redesign
 
