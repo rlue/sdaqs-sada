@@ -13,7 +13,7 @@
 * Remind user to refresh when a new version is available?
 * Add `<title>`
 * Add more screenshots to README
-* Fix db:seed rake task
+* Ask Meredith/Ken for a pixels-lat/lng table in SQL dump
 
 #### Chart mode redesign
 
