@@ -10,8 +10,7 @@ namespace :db do
   task :seed => :validate_seed do
     db_name = (ENV['APP_DATABASE_URL'] || ENV['DATABASE_URL'])[%r{(?<=/)[^/]+$}]
 
-    system("sed 's/^\\\\c.*/\\\\c #{db_name};/' '#{DB_SEED}'" \
-           " | psql #{db_name}")
+    system("cat '#{DB_SEED}' | psql #{db_name}")
   end
 
   desc 'Dependency check for confidential SQL dump file'

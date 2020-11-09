@@ -63,22 +63,34 @@ Requires Docker Compose.
 </a>
 
 ```sh
-# first, copy the requisite non-public data into the repo
-# (see “Installing Non-Public Data” below)
-$ mv path/to/sites.json data/
+# setup
 $ mv path/to/db_seed.sql data/
+$ export MAPBOXGL_ACCESS_TOKEN="pk.eyJ1Ijoicmx..."
 
-# then, deploy (or update/re-deploy)
-$ export MAPBOXGL_ACCESS_TOKEN="pk.eyJ1Ijoicmx..."  # see Security Notice
+# (re-)deploy
 $ docker-compose up -d --build
 ```
 
 The resulting container will expose the service at <http://localhost:9292>.
 
+(Learn more about the setup steps in
+[Installing Non-Public Data](#installing-non-public-data)
+and [Security Notice](#security-notice) below.)
+
 Deploying to the public Internet and enabling HTTPS
 are beyond the scope of this README.
 For help with these tasks,
 consider a reverse proxy or edge router like [traefik][].
+
+### Installing Non-Public Data
+
+This application depends on air contaminant exposure data
+which cannot be distributed publicly,
+as they reference the geo-coordinates of various US military bases.
+
+Before the application can be deployed,
+you will need to obtain a SQL dump of this data from the project team
+and save it to `data/db_seed.sql`.
 
 ### Security Notice
 
@@ -150,32 +162,6 @@ export APP_DATABASE_URL="postgres:///sdaqs_${RACK_ENV}"
 export MAPBOXGL_ACCESS_TOKEN="pk.eyJ1Ijoicmx..." # get one at account.mapbox.com
 ```
 
-### Installing Non-Public Data
-
-This application contains and uses data which may not be published in the open,
-such as the lat/lng coordinates of US military bases throughout the SADA region.
-
-In order to run the development server,
-you will need to obtain the following:
-
-* `sites.json` is used by the front end (React SPA)
-  to populate the results in the search bar
-  and translate selections to pins on the map.
-
-  Without it, the frontend application will fail to compile
-  (_i.e.,_ `npm run build` and `npx webpack-dev-server` will fail).
-
-* `db_seed.sql` is a SQL dump of the contaminant exposure data
-  that this application provides an interface to.
-
-  Without it, database queries made by the backend application will be empty,
-  and the charts presented in the frontend application will contain no data.
-
-```sh
-$ mv path/to/sites.json data/
-$ mv path/to/db_seed.sql data/
-```
-
 ### Common Tasks
 
 ```sh
@@ -187,6 +173,10 @@ $ npm install
 $ createdb sdaqs_development
 $ dropdb sdaqs_development
 $ rake db:seed
+
+# generate confidential frontend assets
+# (required for compilation of frontend app)
+$ rake secrets:generate  # or rake secrets:g
 
 # launch ruby console
 $ rake console  # or rake c
