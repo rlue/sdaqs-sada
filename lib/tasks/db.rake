@@ -1,23 +1,21 @@
 # frozen_string_literal: true
 
+require 'pathname'
+
+PROJECT_ROOT = Pathname.new(__dir__).parent.parent
+DB_SEED = PROJECT_ROOT.join('data', 'db_seed.sql')
+
 namespace :db do
-  desc 'Run migrations'
-  task :migrate, [:version] do |_, args|
-    require 'sequel/core'
+  desc 'Populate database with seed data'
+  task :seed => :validate_seed do
+    db_name = (ENV['APP_DATABASE_URL'] || ENV['DATABASE_URL'])[%r{(?<=/)[^/]+$}]
 
-    Sequel.extension :migration
-    version = args[:version].to_i if args[:version]
-
-    Sequel.connect(ENV.fetch('APP_DATABASE_URL')) do |db|
-      Sequel::Migrator.run(db, 'db/migrate', target: version)
-    end
+    system("sed 's/^\\\\c.*/\\\\c #{db_name};/' '#{DB_SEED}'" \
+           " | psql #{db_name}")
   end
 
-  desc 'Populate database with seed data'
-  task :seed do
-    require './config/models'
-
-    DB.logger = nil
-    load 'db/seeds.rb'
+  desc 'Dependency check for confidential SQL dump file'
+  task :validate_seed do
+    abort('data/db_seed.sql: file not found') unless DB_SEED.file?
   end
 end

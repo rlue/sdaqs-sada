@@ -174,11 +174,6 @@ you will need to obtain the following:
 ```sh
 $ mv path/to/sites.json data/
 $ mv path/to/db_seed.sql data/
-
-# set up database
-$ createdb sdaqs_development
-$ rake db:migrate
-$ rake db:seed
 ```
 
 ### Common Tasks
@@ -187,6 +182,11 @@ $ rake db:seed
 # install dependencies
 $ bundle install
 $ npm install
+
+# set up database
+$ createdb sdaqs_development
+$ dropdb sdaqs_development
+$ rake db:seed
 
 # launch ruby console
 $ rake console  # or rake c

@@ -2,7 +2,7 @@
 
 require 'logger'
 require 'sequel/model'
-require_relative 'db'
+require './config/db'
 
 class Roda
   module Config
