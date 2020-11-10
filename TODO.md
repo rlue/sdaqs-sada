@@ -1,6 +1,5 @@
 ### Up Next
 
-* Add error handling to JS fetch logic
 * [Style background](https://bgjar.com/?ck_subscriber_id=702982198)
 * Fix chart.js hover tracking for multiple datasets covering diff. time
   windows

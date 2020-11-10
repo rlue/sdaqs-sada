@@ -11,6 +11,7 @@ require 'json'
 class App < Roda
   plugin :public
   plugin :json
+  plugin :symbol_status
 
   plugin :not_found do
     <<~HTML
@@ -66,6 +67,20 @@ class App < Roda
       SQL
 
       DB[query].all.group_by { |record| record.delete(:base_id) }
+    rescue Sequel::DatabaseError => e
+      raise unless e.message.start_with?('PG::SyntaxError')
+
+      if r.params.present?
+        response.status = :bad_request
+        response['X-Error-Message'] = 'invalid query'
+      else
+        response.status = :no_content
+        response['X-Error-Message'] = 'no deployments given'
+
+        # or else Rack::Lint::LintError:
+        # Content-Type header found in 204 response, not allowed
+        return
+      end
     end
   end
 

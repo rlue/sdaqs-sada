@@ -49,12 +49,15 @@ export default function App() {
   useEffect(() => {
     if (userFlow.mode !== 'chart') return;
 
-    const queryString = exposureQuery(deployments);
-    if (!queryString) return;
+    fetch(`/exposures?${exposureQuery(deployments)}`)
+      .then((response) => {
+        const error = response.headers.get('X-Error-Message');
+        if (error) throw new Error(`Failed to fetch exposure data (${error})`);
 
-    fetch(`/exposures?${queryString}`)
-      .then((response) => response.json())
-      .then(setExposureHistory);
+        return response.json();
+      })
+      .then(setExposureHistory)
+      .catch(console.error);
   }, [userFlow.mode, deployments]);
 
   return (
