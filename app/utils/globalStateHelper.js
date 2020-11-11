@@ -6,14 +6,6 @@ export function createDeployment({ base, period } = { base: {} }) {
   return { id: uid(), base, period };
 }
 
-export function validate({ deployments }) {
-  const initializedDeployments = deployments.filter(({ base }) => base.id);
-  const completedDeployments = initializedDeployments.filter(({ period }) => period);
-
-  return initializedDeployments.length
-    && initializedDeployments.length === completedDeployments.length;
-}
-
 export function deploymentsReducer(state, action) {
   const target = state.find((el) => el.id === action.id);
   let newState;
@@ -44,6 +36,45 @@ export function deploymentsReducer(state, action) {
     history.pushState(...historyEntry({ deployments: newState }));
 
   return newState;
+}
+
+// returns an array of arguments to use with
+// the History#pushState and History#replaceState methods,
+// based on a given userFlow.mode and deployments (both optional).
+export function historyEntry({ mode, deployments }) {
+  mode = mode || history.state?.userFlow.mode;
+  deployments = deployments || history.state?.deployments;
+
+  const state = { userFlow: { mode }, deployments };
+  const title = '';
+  const queryString = exposureQuery(deployments, { strict: false });
+  const urlFragment = [mode, queryString].filter(Boolean).join('/');
+
+  return [state, title, `#${urlFragment}`];
+}
+
+export function loadHashParams({
+  dispatchDeployments,
+  setUserFlow,
+  initialPageLoad,
+}) {
+  // waiting for state vars to update is hard,
+  // so just grab it from the source
+  const deployments = deserializeHashParams();
+  const mode = validateHashPath({ hashPath: hashPath(), deployments });
+
+  dispatchDeployments({ type: 'load', value: deployments });
+  setUserFlow({ mode });
+
+  // in Chart mode, the Back button actually calls `history.back()`,
+  // so if the user manually enters hash params to start the app in Chart mode,
+  // we need to prepend an entry for them to navigate "back" to.
+  if (initialPageLoad && mode === 'chart') {
+    history.replaceState(...historyEntry({ mode: 'map', deployments }));
+    history.pushState(...historyEntry({ mode: 'chart' }));
+  } else {
+    history.replaceState(...historyEntry({ mode, deployments }));
+  }
 }
 
 function deserializeHashParams() {
@@ -87,47 +118,27 @@ function validatePeriod(string) {
   return [start, end];
 }
 
-export function loadHashParams({
-  dispatchDeployments,
-  setUserFlow,
-  initialPageLoad,
-}) {
-  // waiting for state vars to update is hard,
-  // so just grab it from the source
-  const deployments = deserializeHashParams();
-  const mode = validatedHashPath({ deployments });
-
-  dispatchDeployments({ type: 'load', value: deployments });
-  setUserFlow({ mode });
-
-  // in Chart mode, the Back button actually calls `history.back()`,
-  // so if the user manually enters hash params to start the app in Chart mode,
-  // we need to prepend an entry for them to navigate "back" to.
-  if (initialPageLoad && mode === 'chart') {
-    history.replaceState(...historyEntry({ mode: 'map', deployments }));
-    history.pushState(...historyEntry({ mode: 'chart' }));
+function validateHashPath({ hashPath, deployments }) {
+  if (hashPath === 'chart' && selectionProgress(deployments) === 'complete') {
+    return 'chart';
   } else {
-    history.replaceState(...historyEntry({ mode, deployments }));
+    return 'map';
   }
 }
 
-// returns an array of arguments to use with
-// the History#pushState and History#replaceState methods,
-// based on a given userFlow.mode and deployments (both optional).
-export function historyEntry({ mode, deployments }) {
-  mode = mode || history.state?.userFlow.mode;
-  deployments = deployments || history.state?.deployments;
+export function selectionProgress(deployments) {
+  const completedDeployments = deployments.filter(
+    ({ base, period }) => base.id && period
+  );
+  const partialDeployments = deployments.filter(
+    ({ base, period }) => base.id && !period
+  );
 
-  const state = { userFlow: { mode }, deployments };
-  const title = '';
-  const queryString = exposureQuery(deployments, { strict: false });
-  const urlFragment = [mode, queryString].filter(Boolean).join('/');
-
-  return [state, title, `#${urlFragment}`];
-}
-
-function validatedHashPath({ deployments }) {
-  if (hashPath() === 'chart' && validate({ deployments })) return 'chart';
-
-  return 'map';
+  if (partialDeployments.length) {
+    return 'partial';
+  } else if (completedDeployments.length) {
+    return 'complete';
+  } else {
+    return 'empty';
+  }
 }

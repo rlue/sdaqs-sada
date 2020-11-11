@@ -4,7 +4,7 @@ import Fuse from 'fuse.js';
 import { LeftOutlined, DownloadOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 import SearchUnit from './SearchUnit';
-import { validate, historyEntry } from '../utils/globalStateHelper';
+import { selectionProgress, historyEntry } from '../utils/globalStateHelper';
 import sites from '../../data/sites.json';
 
 export default function SearchPanel({
@@ -91,7 +91,7 @@ export default function SearchPanel({
             </button>
             <button
               type="submit"
-              disabled={!validate({ deployments })}
+              disabled={selectionProgress(deployments) !== 'complete'}
               className="btn--primary"
               onClick={() => {
                 history.pushState(...historyEntry({ mode: 'chart' }));

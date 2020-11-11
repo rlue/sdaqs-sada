@@ -6,7 +6,6 @@
 * Add export-to-CSV functionality
   (DETERMINE: What format should CSV data follow? Which columns are needed?)
 * Add screenshot of chart mode to guided tour
-* Refactor/rename `validate` & `validatedHashPath` methods
 * Remind user to refresh when a new version is available?
 * Add more screenshots to README
 * Ask Meredith/Ken for a pixels-lat/lng table in SQL dump
