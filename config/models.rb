@@ -45,14 +45,14 @@ case ENV['RACK_ENV']
 when 'development'
   require 'rack/unreloader'
 
-  Roda::Config::Models.add_logger
   Roda::Config::Models.configure_sequel(cached: false, subclasses: false)
   Roda::Config::Models.unreload_models
+  Roda::Config::Models.add_logger
 when 'test'
-  Roda::Config::Models.add_logger(:fatal)
   Roda::Config::Models.configure_sequel
   Roda::Config::Models.load_models
   Roda::Config::Models.make_immutable
+  Roda::Config::Models.add_logger(:fatal)
 else
   Roda::Config::Models.configure_sequel
   Roda::Config::Models.load_models
