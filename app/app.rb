@@ -4,7 +4,6 @@ require 'rubygems'
 require 'bundler/setup'
 Bundler.require(:default, ENV.fetch('RACK_ENV') { 'production' })
 
-require_relative '../config/initializers'
 require_relative '../config/models'
 require 'json'
 
@@ -59,37 +58,28 @@ class App < Roda
     end
 
     r.get 'exposures' do
-      query = "\n  " + SQL_FORMATTER.format(<<~SQL.chomp)
-        SELECT base_id, base_name, date, pm25
-        FROM exposures
-          LEFT JOIN bases ON exposures.pixel_id = bases.pixel_id
-        WHERE #{deployment_conditions(r.params)}
-      SQL
-
-      DB[query].all.group_by { |record| record.delete(:base_id) }
-    rescue Sequel::DatabaseError => e
-      raise unless e.message.start_with?('PG::SyntaxError')
-
-      if r.params.present?
+      Exposure.at(**deployment_conditions(r.params))
+        .all.map(&:values).group_by { |record| record[:base_id] }
+    rescue ArgumentError, Sequel::Error => e
+      case e.message
+      when 'invalid query', 'The OR operator requires at least 1 argument'
         response.status = :bad_request
         response['X-Error-Message'] = 'invalid query'
       else
-        response.status = :no_content
-        response['X-Error-Message'] = 'no deployments given'
-
-        # or else Rack::Lint::LintError:
-        # Content-Type header found in 204 response, not allowed
-        return
+        raise
       end
     end
   end
 
   def deployment_conditions(params)
-    params.map { |base_id, periods| <<~BASE }.join(' OR ')
-      (base_id = '#{base_id}'
-        AND (#{periods.map { |p| <<~PERIOD }.join(' OR ')}))
-          date BETWEEN '#{p.split(',').first}' AND '#{p.split(',').last}'
-        PERIOD
-    BASE
+    params.transform_values do |periods|
+      periods.map do |period|
+        Range.new(*period.split(',').map(&Date.method(:parse)))
+      end
+    end
+  rescue NoMethodError, Date::Error => e
+    raise unless e.message.match?(/(undefined method `map'|invalid date)/)
+
+    raise ArgumentError, 'invalid query'
   end
 end
