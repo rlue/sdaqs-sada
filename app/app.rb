@@ -45,6 +45,7 @@ class App < Roda
           <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
           <meta name="msapplication-TileColor" content="#da532c">
           <meta name="theme-color" content="#ffffff">
+          <title>SDAQS | Historical Air Quality Data for the SADA Region</title>
         </head>
         <body>
           <div class="app-root fixed inset-0 overflow-hidden"></div>

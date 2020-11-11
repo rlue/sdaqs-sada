@@ -8,7 +8,6 @@
 * Add screenshot of chart mode to guided tour
 * Refactor/rename `validate` & `validatedHashPath` methods
 * Remind user to refresh when a new version is available?
-* Add `<title>`
 * Add more screenshots to README
 * Ask Meredith/Ken for a pixels-lat/lng table in SQL dump
 
