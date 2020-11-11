@@ -1,5 +1,5 @@
 # syntax = docker/dockerfile:1.1-experimental
-FROM ruby:2.7.0-alpine
+FROM ruby:2.7.2-alpine
 MAINTAINER Ryan Lue <hello@ryanlue.com>
 
 WORKDIR /app

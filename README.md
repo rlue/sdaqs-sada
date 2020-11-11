@@ -133,8 +133,8 @@ SDAQS-SADA is built using Roda + React.
 
 ### Requirements
 
-* Ruby 2.7.0
-* Bundler 2.1.2
+* Ruby 2.7.2
+* Bundler 2.1.4
 * npm 6.0+
 * PostgreSQL
 * [forego][3]
