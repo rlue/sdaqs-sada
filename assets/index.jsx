@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from '../app/App';
-import WebGLSupportCheck from '../app/components/WebGLSupportCheck';
+import MapboxSupportCheck from '../app/components/preflight/MapboxSupportCheck';
 
 ReactDOM.render(
-  <WebGLSupportCheck><App /></WebGLSupportCheck>,
+  <MapboxSupportCheck><App /></MapboxSupportCheck>,
   document.querySelector('.app-root'),
 );

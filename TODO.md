@@ -7,8 +7,6 @@
   (DETERMINE: What format should CSV data follow? Which columns are needed?)
 * Add screenshot of chart mode to guided tour
 * Refactor/rename `validate` & `validatedHashPath` methods
-* Create a warning message component to prominently alert users/sysadmin
-  when `MAPBOXGL_ACCESS_TOKEN` is absent or invalid.
 * Remind user to refresh when a new version is available?
 * Add `<title>`
 * Add more screenshots to README
@@ -49,3 +47,4 @@
 * Fix last step of tour (clicking “submit” should exit)
   ...seems to be fixed now??
 * Migrate from PropTypes to TypeScript
+* Find a better way to test Mapbox access token validity than `fetch('<endpoint>')`
