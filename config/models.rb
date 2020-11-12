@@ -2,6 +2,7 @@
 
 require 'logger'
 require 'sequel/model'
+require './lib/sequel/model'
 require './config/db'
 
 class Roda
@@ -15,6 +16,7 @@ class Roda
       def self.configure_sequel(cached: true, subclasses: true)
         Sequel::Model.cache_associations = cached
         Sequel::Model.plugin :auto_validations
+        Sequel::Model.plugin :csv_serializer, write_headers: true
         Sequel::Model.plugin :prepared_statements
         Sequel::Model.plugin :subclasses if subclasses
       end

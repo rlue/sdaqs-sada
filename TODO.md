@@ -1,5 +1,8 @@
 ### Up Next
 
+* Add export-to-CSV functionality
+  (DETERMINE: What format should CSV data follow? Which columns are needed?)
+
 #### Chart mode redesign
 
 * Add aggregate figures (average, standard deviation) to charts
@@ -29,13 +32,9 @@
   * <https://pythonspeed.com/articles/build-secrets-docker-compose/>
   * <https://docs.docker.com/develop/develop-images/build_enhancements/#new-docker-build-secret-information>
 
-* Add export-to-CSV functionality
-  (DETERMINE: What format should CSV data follow? Which columns are needed?)
-
-  * Pending <https://github.com/jeremyevans/sequel/pull/1735>
-
 ### Deprioritized
 
+* Add an option to rename the exported exposures.csv file
 * [Style background](https://bgjar.com/?ck_subscriber_id=702982198)
 * Fix chart.js hover tracking for multiple datasets covering diff. time
   windows

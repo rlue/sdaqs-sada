@@ -70,6 +70,19 @@ class App < Roda
         raise
       end
     end
+
+    r.get 'exposures.csv' do
+      Exposure.at(**deployment_conditions(r.params)).to_csv
+        .tap { response['Content-Type'] = 'text/csv' }
+    rescue ArgumentError, Sequel::Error => e
+      case e.message
+      when 'invalid query', 'The OR operator requires at least 1 argument'
+        response.status = :bad_request
+        response['X-Error-Message'] = 'invalid query'
+      else
+        raise
+      end
+    end
   end
 
   def deployment_conditions(params)
