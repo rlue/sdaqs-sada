@@ -6,7 +6,6 @@ class Exposure < Sequel::Model
   dataset_module do
     def at(**deployments)
       association_left_join(:bases)
-        .select(:base_id, :base_name, :date, :pm25)
         .where do
           Sequel.|(*deployments.map do |base_id, periods|
             Sequel.&(

@@ -2,12 +2,16 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import Chart from './Chart';
 import ExposureSummary from './ExposureSummary';
+import sites from '../../data/sites.json';
 
-function title(exposureHistory) {
-  const firstQueriedBase = Object.keys(exposureHistory)[0];
-  const queriedBaseCount = Object.keys(exposureHistory).length;
+function title(exposures) {
+  const queriedBases = Object.values(exposures)
+    .map(Object.keys).flat()
+    .filter((value, index, self) => self.indexOf(value) === index) // .uniq
 
-  switch (queriedBaseCount) {
+  const firstQueriedBase = sites.find(({ id }) => queriedBases[0] === id)?.name
+
+  switch (queriedBases.length) {
     case 0:
       return '';
     case 1:
@@ -15,23 +19,21 @@ function title(exposureHistory) {
     case 2:
       return `${firstQueriedBase} and 1 other`;
     default:
-      return `${firstQueriedBase} and ${queriedBaseCount - 1} others`;
+      return `${firstQueriedBase} and ${queriedBases.length - 1} others`;
   }
 }
 
-function subtitle(exposureHistory) {
-  const perDeploymentDateBounds = Object.values(exposureHistory)
-    .map((deploymentDays) =>
-      [deploymentDays[0], ...deploymentDays.slice(-1)]
-        .map(({ date }) => date.split('-'))
-        .map(([year, month, day]) => new Date(year, month - 1, day))
-    ).flat()
+function subtitle(exposures) {
+  const queriedDates = Object.values(exposures)
+    .map(Object.values).flat()
+    .map(Object.keys).flat()
+    .sort()
 
-  if (!perDeploymentDateBounds.length) return '';
+  if (!queriedDates.length) return '';
 
   const overallDateBounds = [
-    new Date(Math.min(...perDeploymentDateBounds)),
-    new Date(Math.max(...perDeploymentDateBounds)),
+    new Date(queriedDates[0]),
+    new Date(queriedDates.slice(-1)[0]),
   ]
 
   const humanizeDate = (date) =>
@@ -43,17 +45,17 @@ function subtitle(exposureHistory) {
   return overallDateBounds.map(humanizeDate).join(' to ');
 }
 
-export default function ChartPage({ exposureHistory, userFlow }) {
+export default function ChartPage({ exposures, userFlow }) {
   return (
     <div className="exposure-container flex w-screen min-h-screen overflow-x-hidden">
       <div className="exposure-shim" />
       <div className="flex-grow m-8">
-        <h1 className="text-5xl leading-normal">{title(exposureHistory)}</h1>
-        <h2 className="text-3xl leading-normal">{subtitle(exposureHistory)}</h2>
+        <h1 className="text-5xl leading-normal">{title(exposures)}</h1>
+        <h2 className="text-3xl leading-normal">{subtitle(exposures)}</h2>
         <div className="my-4">
           {userFlow.contaminant
-            ? <Chart contaminant={userFlow.contaminant} {...{ exposureHistory }} />
-            : <ExposureSummary {...{ exposureHistory }} />
+            ? <Chart {...{ exposures, userFlow }} />
+            : <ExposureSummary {...{ exposures }} />
           }
         </div>
       </div>
@@ -62,13 +64,12 @@ export default function ChartPage({ exposureHistory, userFlow }) {
 }
 
 ChartPage.propTypes = {
-  exposureHistory: PropTypes.objectOf( // key: <baseId> (e.g., VA0518)
-    PropTypes.arrayOf(
-      PropTypes.shape({
-        date: PropTypes.string.isRequired,
-        pm25: PropTypes.string.isRequired,
-      }).isRequired,
-    ),
+  exposures: PropTypes.objectOf( // key: <contaminant> ("pm25")
+    PropTypes.objectOf( // key: <baseId> ("VA1259")
+      PropTypes.objectOf( // key: <date> ("2012-02-14")
+        PropTypes.string.isRequired,
+      ).isRequired,
+    ).isRequired,
   ).isRequired,
   userFlow: PropTypes.shape({
     mode: PropTypes.string,

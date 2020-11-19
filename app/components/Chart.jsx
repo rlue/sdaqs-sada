@@ -3,26 +3,31 @@ import PropTypes from 'prop-types';
 import {Chart as ChartJS} from 'chart.js';
 import 'chartjs-plugin-colorschemes';
 
-function exposuresToChartJSDataset(contaminant, exposureHistory) {
+// NOTE the difference:
+// this `exposures` var            -> exposures[base_name][date]
+// top-level `exposures` state var -> exposures[contaminant][base_name][date]
+function exposuresToChartJSDataset(exposures) {
   return {
-    datasets: Object.keys(exposureHistory).map((baseName) => ({
-      label: baseName,
-      data: exposureHistory[baseName].map((record) => ({
-        x: record.date,
-        y: record[contaminant],
+    datasets: Object.keys(exposures)
+      .map((baseName) => ({
+        label: baseName,
+        data: Object.entries(exposures[baseName])
+          .map(([date, concentration]) => ({
+            x: date,
+            y: concentration,
+          })),
       })),
-    })),
   };
 }
 
-export default function Chart({ contaminant, exposureHistory }) {
+export default function Chart({ exposures, userFlow }) {
   const chartCanvas = useRef();
   const chart = useRef();
 
   useEffect(() => {
     chart.current = new ChartJS(chartCanvas.current, {
       type: 'line',
-      data: exposuresToChartJSDataset(contaminant, exposureHistory),
+      data: exposuresToChartJSDataset(exposures[userFlow.contaminant]),
       options: {
         elements: {
           point: {
@@ -30,7 +35,7 @@ export default function Chart({ contaminant, exposureHistory }) {
           },
         },
         legend: {
-          display: Object.keys(exposureHistory).length > 1,
+          display: Object.keys(exposures).length > 1,
         },
         plugins: {
           colorschemes: {
@@ -69,21 +74,32 @@ export default function Chart({ contaminant, exposureHistory }) {
   }, []);
 
   useEffect(() => {
-    chart.current.data = exposuresToChartJSDataset(contaminant, exposureHistory);
+    chart.current.data = exposuresToChartJSDataset(exposures[userFlow.contaminant]);
     chart.current.update();
-  }, [exposureHistory]);
+  }, [exposures]);
 
   return <canvas ref={chartCanvas} />;
 }
 
 Chart.propTypes = {
-  contaminant: PropTypes.string.isRequired,
-  exposureHistory: PropTypes.objectOf( // key: <baseId> (e.g., VA0518)
-    PropTypes.arrayOf(
-      PropTypes.shape({
-        date: PropTypes.string.isRequired,
-        pm25: PropTypes.string.isRequired,
-      }).isRequired,
-    ),
+  exposures: PropTypes.objectOf( // key: <contaminant> ("pm25"),
+    PropTypes.objectOf( // key: <baseId> ("VA1259")
+      PropTypes.objectOf( // key: <date> ("2012-02-14")
+        PropTypes.string.isRequired,
+      ).isRequired,
+    ).isRequired,
   ).isRequired,
+  userFlow: PropTypes.shape({
+    mode: PropTypes.string,
+    for: PropTypes.string,
+    results: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string,
+        lat: PropTypes.string,
+        lng: PropTypes.string,
+      }),
+    ),
+    contaminant: PropTypes.string,
+  }).isRequired,
 };

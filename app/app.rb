@@ -7,6 +7,7 @@ Bundler.require(:default, ENV.fetch('RACK_ENV') { 'production' })
 require_relative '../config/models'
 require 'json'
 
+CONTAMINANTS = (Exposure.columns - %i[pixel_id date]).freeze
 class App < Roda
   plugin :public
   plugin :json
@@ -59,8 +60,17 @@ class App < Roda
     end
 
     r.get 'exposures' do
-      Exposure.at(**deployment_conditions(r.params))
-        .all.map(&:values).group_by { |record| record[:base_id] }
+      records = Exposure.at(**deployment_conditions(r.params))
+        .select { Exposure.columns + Base.columns - [:pixel_id] }
+        .map(&:values)
+
+      CONTAMINANTS.each.with_object({}) do |c, hash|
+        records.each do |record|
+          hash[c] ||= {}
+          hash[c][record[:base_id]] ||= {}
+          hash[c][record[:base_id]][record[:date]] = record[c]
+        end
+      end
     rescue ArgumentError, Sequel::Error => e
       case e.message
       when 'invalid query', 'The OR operator requires at least 1 argument'
@@ -72,8 +82,9 @@ class App < Roda
     end
 
     r.get 'exposures.csv' do
-      Exposure.at(**deployment_conditions(r.params)).to_csv
-        .tap { response['Content-Type'] = 'text/csv' }
+      Exposure.at(**deployment_conditions(r.params))
+        .select(*(Exposure.columns - [:pixel_id] + %i[base_id base_name]))
+        .to_csv.tap { response['Content-Type'] = 'text/csv' }
     rescue ArgumentError, Sequel::Error => e
       case e.message
       when 'invalid query', 'The OR operator requires at least 1 argument'

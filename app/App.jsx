@@ -19,7 +19,7 @@ export default function App() {
     deploymentsReducer,
     [createDeployment()],
   );
-  const [exposureHistory, setExposureHistory] = useState({});
+  const [exposures, setExposures] = useState({});
 
   useEffect(() => {
     if (window.location.hash) {
@@ -56,7 +56,7 @@ export default function App() {
 
         return response.json();
       })
-      .then(setExposureHistory)
+      .then(setExposures)
       .catch(console.error);
   }, [userFlow.mode, deployments]);
 
@@ -96,7 +96,7 @@ export default function App() {
         />
         <ChartPage
           {...{
-            exposureHistory,
+            exposures,
             userFlow,
           }}
         />
