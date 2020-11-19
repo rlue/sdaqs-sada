@@ -8,6 +8,8 @@ require_relative '../config/models'
 require 'json'
 
 CONTAMINANTS = (Exposure.columns - %i[pixel_id date]).freeze
+AGGREGATE_FUNCTIONS = %i[stddev avg].freeze
+
 class App < Roda
   plugin :public
   plugin :json
@@ -69,6 +71,29 @@ class App < Roda
           hash[c] ||= {}
           hash[c][record[:base_id]] ||= {}
           hash[c][record[:base_id]][record[:date]] = record[c]
+        end
+      end
+    rescue ArgumentError, Sequel::Error => e
+      case e.message
+      when 'invalid query', 'The OR operator requires at least 1 argument'
+        response.status = :bad_request
+        response['X-Error-Message'] = 'invalid query'
+      else
+        raise
+      end
+    end
+
+    r.get 'exposure_stats' do
+      stats = Exposure.at(**deployment_conditions(r.params))
+        .select do
+          AGGREGATE_FUNCTIONS.product(CONTAMINANTS)
+            .map { |func, c| Sequel.function(func, c).as("#{c}_#{func}") }
+        end.map(&:values).first
+
+      CONTAMINANTS.each.with_object({}) do |c, hash|
+        AGGREGATE_FUNCTIONS.each do |func|
+          hash[c] ||= {}
+          hash[c][func] = stats[:"#{c}_#{func}"]
         end
       end
     rescue ArgumentError, Sequel::Error => e

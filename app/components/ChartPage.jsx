@@ -45,7 +45,7 @@ function subtitle(exposures) {
   return overallDateBounds.map(humanizeDate).join(' to ');
 }
 
-export default function ChartPage({ exposures, userFlow }) {
+export default function ChartPage({ exposures, exposureStats, userFlow }) {
   return (
     <div className="exposure-container flex w-screen min-h-screen overflow-x-hidden">
       <div className="exposure-shim" />
@@ -55,7 +55,7 @@ export default function ChartPage({ exposures, userFlow }) {
         <div className="my-4">
           {userFlow.contaminant
             ? <Chart {...{ exposures, userFlow }} />
-            : <ExposureSummary {...{ exposures }} />
+            : <ExposureSummary {...{ exposures, exposureStats }} />
           }
         </div>
       </div>
@@ -69,6 +69,11 @@ ChartPage.propTypes = {
       PropTypes.objectOf( // key: <date> ("2012-02-14")
         PropTypes.string.isRequired,
       ).isRequired,
+    ).isRequired,
+  ).isRequired,
+  exposureStats: PropTypes.objectOf( // key: <contaminant> ("pm25")
+    PropTypes.objectOf( // key: <type> ("avg" | "stddev")
+      PropTypes.string.isRequired,
     ).isRequired,
   ).isRequired,
   userFlow: PropTypes.shape({

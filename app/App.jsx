@@ -20,6 +20,7 @@ export default function App() {
     [createDeployment()],
   );
   const [exposures, setExposures] = useState({});
+  const [exposureStats, setExposureStats] = useState({});
 
   useEffect(() => {
     if (window.location.hash) {
@@ -57,6 +58,16 @@ export default function App() {
         return response.json();
       })
       .then(setExposures)
+      .catch(console.error);
+
+    fetch(`/exposure_stats?${exposureQuery(deployments)}`)
+      .then((response) => {
+        const error = response.headers.get('X-Error-Message');
+        if (error) throw new Error(`Failed to fetch exposure data (${error})`);
+
+        return response.json();
+      })
+      .then(setExposureStats)
       .catch(console.error);
   }, [userFlow.mode, deployments]);
 
@@ -97,6 +108,7 @@ export default function App() {
         <ChartPage
           {...{
             exposures,
+            exposureStats,
             userFlow,
           }}
         />
