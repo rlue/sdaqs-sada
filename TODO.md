@@ -16,9 +16,6 @@
 
 ### Blocked
 
-* Build out backend API with sample data
-  (Waiting on Ken / Meredith for sample data)
-
 * Replace antd RangePicker with flatpickr
 
   * Pending <https://github.com/flatpickr/flatpickr/pull/2297>

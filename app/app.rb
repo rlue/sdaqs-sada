@@ -7,7 +7,6 @@ Bundler.require(:default, ENV.fetch('RACK_ENV') { 'production' })
 require_relative '../config/models'
 require 'json'
 
-CONTAMINANTS = (Exposure.columns - %i[pixel_id date]).freeze
 AGGREGATE_FUNCTIONS = %i[stddev avg].freeze
 
 class App < Roda
@@ -62,11 +61,11 @@ class App < Roda
     end
 
     r.get 'exposures' do
-      records = Exposure.at(**deployment_conditions(r.params))
-        .select { Exposure.columns + Base.columns - [:pixel_id] }
+      records = Base.exposures(**deployment_conditions(r.params))
+        .select { [:base_id, :base_name, Sequel[:pm][:date].as(:date)] + Base::CONTAMINANTS }
         .map(&:values)
 
-      CONTAMINANTS.each.with_object({}) do |c, hash|
+      Base::CONTAMINANTS.each.with_object({}) do |c, hash|
         records.each do |record|
           hash[c] ||= {}
           hash[c][record[:base_id]] ||= {}
@@ -84,13 +83,13 @@ class App < Roda
     end
 
     r.get 'exposure_stats' do
-      stats = Exposure.at(**deployment_conditions(r.params))
+      stats = Base.exposures(**deployment_conditions(r.params))
         .select do
-          AGGREGATE_FUNCTIONS.product(CONTAMINANTS)
+          AGGREGATE_FUNCTIONS.product(Base::CONTAMINANTS)
             .map { |func, c| Sequel.function(func, c).as("#{c}_#{func}") }
         end.map(&:values).first
 
-      CONTAMINANTS.each.with_object({}) do |c, hash|
+      Base::CONTAMINANTS.each.with_object({}) do |c, hash|
         AGGREGATE_FUNCTIONS.each do |func|
           hash[c] ||= {}
           hash[c][func] = stats[:"#{c}_#{func}"]
@@ -107,8 +106,8 @@ class App < Roda
     end
 
     r.get 'exposures.csv' do
-      Exposure.at(**deployment_conditions(r.params))
-        .select(*(Exposure.columns - [:pixel_id] + %i[base_id base_name]))
+      Base.exposures(**deployment_conditions(r.params))
+        .select { [:base_id, :base_name, Sequel[:pm][:date].as(:date)] + Base::CONTAMINANTS }
         .to_csv.tap { response['Content-Type'] = 'text/csv' }
     rescue ArgumentError, Sequel::Error => e
       case e.message
