@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+#
+# This script is used to support
+# DB schema verification during deployment.
+
+require 'pathname'
+PROJECT_ROOT = Pathname.new(__dir__).parent
+DB_SCHEMA = PROJECT_ROOT.join('data', 'schema.rb')
+
+require PROJECT_ROOT.join('config', 'db')
+DB.extension(:schema_dumper)
+
+if File.exist?(DB_SCHEMA)
+  comments, old_schema = File.readlines(DB_SCHEMA)
+    .partition { |line| line.start_with?('#') }
+    .map(&:join)
+end
+new_schema = DB.dump_schema_migration.gsub(/[^\S\r\n]+$/, '') # trim non-newline whitespace
+
+exit if old_schema == new_schema
+
+if old_schema.nil?
+  puts('No schema migration found; generating new one')
+else
+  puts('DB schema has changed; generating new migration')
+end
+
+comments ||= DATA
+
+File.write(DB_SCHEMA, comments + new_schema)
+system("git add #{DB_SCHEMA}")
+
+__END__
+# This file is solely intended to verify the DB schema
+# (via `rake db:verify_schema`).
+# It should never need to be executed.
+#
+# See the README to learn how to prepare the database.
+#

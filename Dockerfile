@@ -30,14 +30,16 @@ RUN apk add --no-cache --update \
 # generate frontend assets
 ENV LANG en_US.utf8
 ENV PGDATA /var/lib/postgresql/data
+ENV APP_DATABASE_URL postgres:///sdaqs_production
 RUN apk add --no-cache --update postgresql \
     ; su postgres -c initdb \
     ; mkdir /run/postgresql && chown postgres.postgres /run/postgresql \
     ; su postgres -c "pg_ctl start" \
     ; createdb -U postgres sdaqs_production \
-    ; su postgres -c "APP_DATABASE_URL='postgres:///sdaqs_production' bundle exec rake db:seed" \
+    ; su postgres -c "bundle exec rake db:seed" \
+    ; su postgres -c "bundle exec rake db:verify_schema" || exit 1 \
     ; chmod o+w data \
-    ; su postgres -c "APP_DATABASE_URL='postgres:///sdaqs_production' bundle exec rake secrets:g" \
+    ; su postgres -c "bundle exec rake secrets:g" \
     ; chmod o-w data && chown root.root data/sites.json \
     ; dropdb -U postgres sdaqs_production \
     ; rm data/db_seed.sql \

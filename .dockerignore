@@ -5,6 +5,7 @@ assets/webpack-assets.json
 !config
 !config.ru
 !data/db_seed.sql
+!data/schema.rb
 !Gemfile
 !Gemfile.lock
 !lib
