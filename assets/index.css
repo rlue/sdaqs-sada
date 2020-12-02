@@ -245,6 +245,22 @@ svg.map-pin--highlighted {
   max-width: 35rem;
 }
 
+.exposure-tile {
+  max-width: 35rem;
+}
+
+.exposure-tile__title {
+  top: -2.55rem;
+  left: 0;
+  right: 0;
+}
+
+.exposure-tile__average::after,
+.exposure-tile__std-dev::after {
+  @apply font-normal text-xs;
+  content: " μg/m³";
+}
+
 /* GUIDED TOUR ============================================================== */
 
 #___reactour .reactour__helper {

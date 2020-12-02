@@ -50,14 +50,12 @@ export default function ChartPage({ exposures, exposureStats, userFlow }) {
     <div className="exposure-container flex w-screen min-h-screen overflow-x-hidden">
       <div className="exposure-shim" />
       <div className="flex-grow m-8">
-        <h1 className="text-5xl leading-normal">{title(exposures)}</h1>
-        <h2 className="text-3xl leading-normal">{subtitle(exposures)}</h2>
-        <div className="my-4">
-          {userFlow.contaminant
-            ? <Chart {...{ exposures, userFlow }} />
-            : <ExposureSummary {...{ exposures, exposureStats }} />
-          }
-        </div>
+        <h1 className="text-5xl">{title(exposures)}</h1>
+        <h2 className="text-3xl mb-4">{subtitle(exposures)}</h2>
+        {userFlow.contaminant
+          ? <Chart {...{ exposures, userFlow }} />
+          : <ExposureSummary {...{ exposures, exposureStats }} />
+        }
       </div>
     </div>
   );

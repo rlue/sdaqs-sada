@@ -1,22 +1,24 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
+import ExposureTile from './ExposureTile';
+import { exposureMap } from '../utils/chartHelper';
+
+const reportedContaminants = Object.keys(exposureMap);
+
+function reportedExposureStats(exposureStats) {
+  return exposureStats.filter(([contaminant, values]) =>
+    reportedContaminants.includes(contaminant)
+  );
+}
 
 export default function ExposureSummary({ exposures, exposureStats }) {
   return (
-    <div>
-      {Object.entries(exposureStats).map(([contaminant, { avg, stddev }]) => {
-        return (
-          <div key={contaminant}>
-            <h3>{contaminant}</h3>
-            <dl>
-              <dt>Average</dt>
-              <dd>{new Number(avg).toFixed(2)} μg/m³</dd>
-              <dt>Standard Deviation</dt>
-              <dd>{new Number(stddev).toFixed(2)} μg/m³</dd>
-            </dl>
-          </div>
-        )
-      })}
+    <div className="flex flex-wrap">
+      {Object.entries(exposureStats)
+          .filter(([contaminant,]) => reportedContaminants.includes(contaminant))
+          .map(([contaminant, { avg, stddev }]) =>
+            <ExposureTile key={contaminant} {...{ contaminant, avg, stddev }} />
+          )}
     </div>
   );
 }

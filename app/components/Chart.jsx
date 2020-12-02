@@ -76,7 +76,7 @@ export default function Chart({ exposures, userFlow }) {
   useEffect(() => {
     chart.current.data = exposuresToChartJSDataset(exposures[userFlow.contaminant]);
     chart.current.update();
-  }, [exposures]);
+  }, [exposures, userFlow.contaminant]);
 
   return <canvas ref={chartCanvas} />;
 }

@@ -5,6 +5,7 @@ import { LeftOutlined, DownloadOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 import SearchUnit from './SearchUnit';
 import { selectionProgress, historyEntry } from '../utils/globalStateHelper';
+import { exposureMap } from '../utils/chartHelper';
 import sites from '../../data/sites.json';
 
 export default function SearchPanel({
@@ -118,51 +119,17 @@ export default function SearchPanel({
               Summary
             </button>
           </li>
-          <li>
-            <button
-              type="button"
-              className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
-              onClick={() => setUserFlow({ mode: 'chart', contaminant: 'pm25' })}
-            >
-              PM<sub>2.5</sub>
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
-              onClick={() => setUserFlow({ mode: 'chart', contaminant: 'pm10' })}
-            >
-              PM<sub>10</sub>
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
-              onClick={() => setUserFlow({ mode: 'chart', contaminant: 'dust' })}
-            >
-              Dust
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
-              onClick={() => setUserFlow({ mode: 'chart', contaminant: 'nitrates' })}
-            >
-              Nitrates
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
-              onClick={() => setUserFlow({ mode: 'chart', contaminant: 'sulfates' })}
-            >
-              Sulfates
-            </button>
-          </li>
+          {Object.entries(exposureMap).map(([contaminant, { name }]) =>
+            <li key={contaminant}>
+              <button
+                type="button"
+                className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+                onClick={() => setUserFlow({ mode: 'chart', contaminant })}
+              >
+                {name}
+              </button>
+            </li>
+          )}
           <li>
             <button
               type="button"
