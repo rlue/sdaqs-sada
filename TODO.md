@@ -1,8 +1,5 @@
 ### Up Next
 
-* Add export-to-CSV functionality
-  (DETERMINE: What format should CSV data follow? Which columns are needed?)
-
 #### Chart mode redesign
 
 * Add aggregate figures (average, standard deviation) to charts

@@ -134,6 +134,7 @@ export default function SearchPanel({
             <button
               type="button"
               className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+              onClick={() => window.location.href = `/exposures.csv?${window.location.hash.split('/', 2)[1]}`}
             >
               <DownloadOutlined />
               {' '}
