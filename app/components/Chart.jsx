@@ -78,7 +78,7 @@ export default function Chart({ exposures, userFlow }) {
     chart.current.update();
   }, [exposures, userFlow.contaminant]);
 
-  return <canvas ref={chartCanvas} />;
+  return <canvas ref={chartCanvas} className="bg-white p-2 rounded-lg shadow-md" />;
 }
 
 Chart.propTypes = {

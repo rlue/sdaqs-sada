@@ -6,7 +6,7 @@ export default function ExposureTile({ contaminant, avg, stddev }) {
   const { name, description } = exposureMap[contaminant];
 
   return (
-    <div className={`exposure-tile relative my-7 p-2 w-full border rounded bg-gradient-to-br from-transparent to-yellow-100 border-yellow-500 text-yellow-900 shadow-md`}>
+    <div className={`exposure-tile relative my-7 p-2 w-full border rounded bg-gradient-to-br from-white to-yellow-100 border-yellow-500 text-yellow-900 shadow-md`}>
       <h3 className={`exposure-tile__title relative whitespace-nowrap text-4xl text-yellow-900`}>
         {name}
         <div className="truncate text-lg">{description}</div>
