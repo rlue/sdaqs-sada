@@ -5,7 +5,7 @@ import { DatePicker } from 'antd';
 import moment from 'moment';
 import classNames from 'classnames';
 import debounce from 'lodash.debounce';
-import { DeleteFilled } from '@ant-design/icons';
+import { Trash } from './Icons';
 import SearchResults from './SearchResults';
 
 const INPUT_DEBOUNCE_WAIT = 300;
@@ -306,11 +306,16 @@ export default function SearchUnit({
             'focus:outline-none',
             { hidden: !deployment.base.id || status.match(/^(debouncing|no results|success)$/) },
             'js-search-unit-delete',
+            'opacity-25',
+            'transition-opacity',
+            'duration-200',
+            'hover:opacity-100',
+            'focus:opacity-100',
           )}
           type="button"
           onClick={removeHandler}
         >
-          <DeleteFilled />
+          <Trash className="w-4 h-4" fill="#333" />
         </button>
       </div>
 

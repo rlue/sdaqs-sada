@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Fuse from 'fuse.js';
-import { LeftOutlined, DownloadOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
+import { ChevronLeft, Download } from './Icons';
 import SearchUnit from './SearchUnit';
 import { selectionProgress, historyEntry } from '../utils/globalStateHelper';
 import { exposureMap } from '../utils/chartHelper';
@@ -43,7 +43,7 @@ export default function SearchPanel({
           )}
           onClick={() => history.back()}
         >
-          <LeftOutlined />
+          <ChevronLeft className="w-3 h-3 m-2" fill="#333" />
         </button>
       </div>
       <div
@@ -152,8 +152,8 @@ export default function SearchPanel({
               }}
             >
               {csvSpinner
-                ? <span className="spinner inline-block w-4 h-4 mr-2" />
-                : <DownloadOutlined className="w-4 h-4 mr-2" />}
+                ? <span className="spinner inline-block w-5 h-5 mr-2" />
+                : <Download className="inline-block align-text-top w-5 h-5 mr-2" fill="#333" />}
               Export to CSV
             </button>
           </li>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Spin } from 'antd';
 import mapboxgl from 'mapbox-gl';
 
 export default function MapboxSupportCheck({ children }) {
@@ -34,7 +33,7 @@ export default function MapboxSupportCheck({ children }) {
   } else if (tokenValidity === null) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <Spin size="large" />
+        <div className="spinner" />
       </div>
     )
   } else if (tokenValidity === false) {

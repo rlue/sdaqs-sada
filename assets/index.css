@@ -95,7 +95,7 @@
 }
 
 .search-panel__back-button {
-  @apply block absolute w-8 h-8 z-10 rounded-full bg-white shadow-md;
+  @apply block absolute z-10 rounded-full bg-white shadow-md;
 
   transition-property: visibility, transform, opacity;
   transition-duration: 0s, 300ms, 300ms;
@@ -118,18 +118,9 @@
   transition-delay: 300s, 0s, 150ms;
 }
 
-/* Delete button ------------------------------------------------------------ */
+/* Calendar button ---------------------------------------------------------- */
 
-.anticon-delete {
-  @apply opacity-25 transition-opacity duration-200;
-}
-
-button:hover > .anticon-delete,
-button:focus > .anticon-delete {
-  @apply opacity-100;
-}
-
-.anticon { /* also apply to calendar icon--not crucial though */
+.anticon {
   @apply align-baseline;
 }
 
