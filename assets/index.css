@@ -1,7 +1,8 @@
+@import "./css/backgrounds.css";
+@import "./css/spinners.css";
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-@import "./css/bgjar.css";
 
 @font-face {
   font-family: 'Lato';

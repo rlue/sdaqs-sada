@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Fuse from 'fuse.js';
 import { LeftOutlined, DownloadOutlined } from '@ant-design/icons';
@@ -25,6 +25,8 @@ export default function SearchPanel({
       keys: ['name'],
     }),
   );
+
+  const [csvSpinner, setCsvSpinner] = useState(false);
 
   return (
     <div className="search-panel">
@@ -134,10 +136,24 @@ export default function SearchPanel({
             <button
               type="button"
               className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
-              onClick={() => window.location.href = `/exposures.csv?${window.location.hash.split('/', 2)[1]}`}
+              onClick={({ target }) => {
+                const iframe = document.createElement('iframe');
+
+                iframe.src = `/exposures.csv?${window.location.hash.split('/', 2)[1]}`;
+                iframe.onload = () => {
+                  setCsvSpinner(false);
+                  target.disabled = false;
+                  document.body.removeChild(iframe);
+                };
+
+                setCsvSpinner(true);
+                target.disabled = true;
+                document.body.appendChild(iframe);
+              }}
             >
-              <DownloadOutlined />
-              {' '}
+              {csvSpinner
+                ? <span className="spinner inline-block w-4 h-4 mr-2" />
+                : <DownloadOutlined className="w-4 h-4 mr-2" />}
               Export to CSV
             </button>
           </li>

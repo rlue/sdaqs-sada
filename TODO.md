@@ -1,5 +1,7 @@
 ### Up Next
 
+* Add loading spinner to chart page transition
+
 #### Chart mode redesign
 
 * Add aggregate figures (average, standard deviation) to charts

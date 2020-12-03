@@ -1,0 +1,19 @@
+/* adapted from https://codepen.io/Paolo-Duzioni/pen/ZoRabJ */
+
+.spinner {
+  width: 4rem;
+  height: 4rem;
+  border: 3px solid hsla(0, 0%, 0%, .1);
+  border-top-color: hsla(0, 0%, 0%, .4);
+  border-radius: 50%;
+  animation: rotation .8s ease infinite;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
