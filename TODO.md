@@ -26,18 +26,18 @@
   * <https://pythonspeed.com/articles/build-secrets-docker-compose/>
   * <https://docs.docker.com/develop/develop-images/build_enhancements/#new-docker-build-secret-information>
 
+* Fix chart.js hover tracking for multiple datasets covering diff. time windows
+
+  * Pending <https://github.com/chartjs/Chart.js/issues/8126>
+
 ### Deprioritized
 
 * Validate string value of `userFlow.contaminant`
-* Add an option to rename the exported exposures.csv file
-* Fix chart.js hover tracking for multiple datasets covering diff. time
-  windows
 * Configure eslint/prettier (and document usage in README)
 * WORKAROUND IMPLEMENTED: update to mapbox-gl v1.9.0+
   (1.9.0 adds support for a “padding” option on flyTo)
   * submit bug report for map fit weirdness from 1.9.0 upgrade
 * Tabbing from last (empty) deployment should move focus to Submit
-* Fix last step of tour (clicking “submit” should exit)
-  ...seems to be fixed now??
+  (set `tabindex="-1"` for date picker when preceding search box is empty)
 * Migrate from PropTypes to TypeScript
 * Find a better way to test Mapbox access token validity than `fetch('<endpoint>')`
