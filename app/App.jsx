@@ -55,6 +55,8 @@ export default function App() {
     if (fetchQuery === mostRecentFetchQuery.current) return;
 
     mostRecentFetchQuery.current = fetchQuery;
+    setExposures({});
+    setExposureStats({});
 
     fetch(`/exposures?${fetchQuery}`)
       .then((response) => {
