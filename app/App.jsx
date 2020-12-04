@@ -1,4 +1,4 @@
-import React, { useReducer, useState, useEffect } from 'react';
+import React, { useReducer, useState, useEffect, useRef } from 'react';
 import 'antd/dist/antd.css';
 import classNames from 'classnames';
 import '../assets/index.css';
@@ -21,6 +21,7 @@ export default function App() {
   );
   const [exposures, setExposures] = useState({});
   const [exposureStats, setExposureStats] = useState({});
+  const mostRecentFetchQuery = useRef('');
 
   useEffect(() => {
     if (window.location.hash) {
@@ -50,7 +51,12 @@ export default function App() {
   useEffect(() => {
     if (userFlow.mode !== 'chart') return;
 
-    fetch(`/exposures?${exposureQuery(deployments)}`)
+    const fetchQuery = exposureQuery(deployments);
+    if (fetchQuery === mostRecentFetchQuery.current) return;
+
+    mostRecentFetchQuery.current = fetchQuery;
+
+    fetch(`/exposures?${fetchQuery}`)
       .then((response) => {
         const error = response.headers.get('X-Error-Message');
         if (error) throw new Error(`Failed to fetch exposure data (${error})`);
@@ -60,7 +66,7 @@ export default function App() {
       .then(setExposures)
       .catch(console.error);
 
-    fetch(`/exposure_stats?${exposureQuery(deployments)}`)
+    fetch(`/exposure_stats?${fetchQuery}`)
       .then((response) => {
         const error = response.headers.get('X-Error-Message');
         if (error) throw new Error(`Failed to fetch exposure data (${error})`);
