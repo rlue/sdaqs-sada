@@ -26,10 +26,6 @@
   * <https://pythonspeed.com/articles/build-secrets-docker-compose/>
   * <https://docs.docker.com/develop/develop-images/build_enhancements/#new-docker-build-secret-information>
 
-* Fix chart.js hover tracking for multiple datasets covering diff. time windows
-
-  * Pending <https://github.com/chartjs/Chart.js/issues/8126>
-
 ### Deprioritized
 
 * Validate string value of `userFlow.contaminant`
