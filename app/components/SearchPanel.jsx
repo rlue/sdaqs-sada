@@ -15,7 +15,7 @@ export default function SearchPanel({
   dispatchDeployments,
 }) {
   const fuse = useRef(
-    new Fuse(sites, {
+    new Fuse(Object.values(sites), {
       shouldSort: true,
       threshold: 0.25,
       location: 0,

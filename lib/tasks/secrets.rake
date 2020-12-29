@@ -14,7 +14,7 @@ namespace :secrets do
     require './config/db'
     ENV['APP_DATABASE_URL'] ||= DB.uri
 
-    File.write(SITES_JSON, DB[<<~SQL.chomp].all.to_json)
+    DB[<<~SQL.chomp]
       SELECT
         base_id AS id,
         country,
@@ -24,6 +24,8 @@ namespace :secrets do
       FROM
         bases
     SQL
+      .reduce({}) { |hash, record| hash.merge(record[:id] => record) }
+      .then { |site_hash| File.write(SITES_JSON, site_hash.to_json) }
 
     puts('done!')
   end

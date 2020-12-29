@@ -9,7 +9,7 @@ function title(exposures) {
     .map(Object.keys).flat()
     .filter((value, index, self) => self.indexOf(value) === index) // .uniq
 
-  const firstQueriedBase = sites.find(({ id }) => queriedBases[0] === id)?.name
+  const firstQueriedBase = sites[queriedBases[0]]?.name
 
   switch (queriedBases.length) {
     case 0:

@@ -83,7 +83,7 @@ function deserializeHashParams() {
   const baseIds = Object.keys(params);
 
   baseIds?.forEach((baseId) => {
-    const base = sites.find(({ id }) => id === baseId);
+    const base = sites[baseId];
     const periods = (
       params[baseId] instanceof Array
         ? params[baseId]

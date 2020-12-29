@@ -7,7 +7,7 @@ import * as Icons from './Icons';
 
 mapboxgl.accessToken = MAPBOXGL_ACCESS_TOKEN;
 
-const DEFAULT_MAP_BOUNDS = collectionBounds(sites);
+const DEFAULT_MAP_BOUNDS = collectionBounds(Object.values(sites));
 
 export default function Map({
   deployments,
