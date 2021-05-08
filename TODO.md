@@ -1,7 +1,10 @@
 ### Up Next
 
+* Generate fake sample data for public demo version
+
 #### Chart mode redesign
 
+* Split up aggregate figures on a per-deployment basis
 * Add aggregate figures (average, standard deviation) to charts
 * Animate switch from search form to exposure menu
 * Rename SearchPanel component
