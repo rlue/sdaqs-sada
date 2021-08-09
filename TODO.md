@@ -1,6 +1,8 @@
 ### Up Next
 
 * Generate fake sample data for public demo version
+* Deployment: Does `post-receive` hook need to incorporate
+  secrets from `data/` directory?
 
 #### Chart mode redesign
 
