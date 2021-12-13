@@ -8,22 +8,33 @@
 #
 # Adapted from https://stackoverflow.com/a/14453711/4865822.
 #
-# === Installation
+# === Requirements
 #
-# Add the following to the TOP of your production server's .bashrc:
+# The production server must have:
 #
-#     if ! [[ $- =~ i ]]; then
-#       export SDAQS_DEPLOYMENT_DIR="..."
-#       export MAPBOXGL_ACCESS_TOKEN=pk.eyJ1...
-#       export PATH="$HOME/.local/bin:$PATH"  # or wherever your docker credential provider is stored
+#   * Ruby (any supported version)
+#   * docker-compose (with a docker credential helper on $PATH, if relevant)
+#   * pass <https://passwordstore.org>
+#   * a Mapbox GL access token at `pass apis/mapbox/access_token`
 #
-#       return
-#     fi
+# === Setup
+#
+#    # ~/.bashrc
+#
+#    # Only run for interactive shells ==============================================
+#    if ! [[ $- =~ i ]]; then
+#      export GNUPGHOME="$HOME/.config/gnupg"
+#      export PASSWORD_STORE_DIR="$HOME/.config/pass"
+#      export PATH="$HOME/.local/bin:$PATH"
+#
+#      return
+#    fi
 
-mkdir "$SDAQS_DEPLOYMENT_DIR" 2>/dev/null
-GIT_WORK_TREE="$SDAQS_DEPLOYMENT_DIR" git checkout -f
+DEPLOYMENT_DIR="$(mktemp -d)"
+GIT_WORK_TREE="$DEPLOYMENT_DIR" git checkout -f
 
-cd "$SDAQS_DEPLOYMENT_DIR"
+cd "$DEPLOYMENT_DIR"
+cp /home/rlue/ryanlue.com/src/sdaqs/data/db_seed.sql "${DEPLOYMENT_DIR}/data" # FIXME
 
 # add server-specific configuration to docker-compose.yml
 sed -i -r 's/(\s*)web:/\1  labels:\n\1    traefik.enable: false\n&/' docker-compose.yml
@@ -44,4 +55,6 @@ networks:
       name: ryanluecom_default
 EOF
 
-rake deploy
+MAPBOXGL_ACCESS_TOKEN="$(pass apis/mapbox/access_token)" rake deploy
+
+rm -rf "$DEPLOYMENT_DIR"

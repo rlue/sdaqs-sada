@@ -1,8 +1,6 @@
 ### Up Next
 
 * Generate fake sample data for public demo version
-* Deployment: Does `post-receive` hook need to incorporate
-  secrets from `data/` directory?
 
 #### Chart mode redesign
 
@@ -33,6 +31,7 @@
 
 ### Deprioritized
 
+* Rethink how to pull `db_seed.sql` in post-receive deployment hook
 * Validate string value of `userFlow.contaminant`
 * Configure eslint/prettier (and document usage in README)
 * WORKAROUND IMPLEMENTED: update to mapbox-gl v1.9.0+
