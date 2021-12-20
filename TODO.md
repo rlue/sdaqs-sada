@@ -1,12 +1,21 @@
 ### Up Next
 
-* Generate fake sample data for public demo version
 
 #### Chart mode redesign
 
+* Feature idea: colorize aggregate figures on summary page to indicate
+  danger/severity of results?
+
 * Split up aggregate figures on a per-deployment basis
+
+  🤔 Separate “tabs” with aggregate figures for each deployment,
+  or all on one page in tabular format?
+
 * Add aggregate figures (average, standard deviation) to charts
-* Animate switch from search form to exposure menu
+
+  🤔 average/stddev across all deployments, or per-base?
+  What happens for multiple deployments at same base?
+
 * Refactor SearchPanel map/chart mode content the React way
   (declaratively rendered, not via shown/hidden CSS classes)
 * Add hover animation to buttons
@@ -30,6 +39,7 @@
 ### Deprioritized
 
 * Rethink how to pull `db_seed.sql` in post-receive deployment hook
+* Generate fake sample data for public demo version
 * Validate string value of `userFlow.contaminant`
 * Configure eslint/prettier (and document usage in README)
 * WORKAROUND IMPLEMENTED: update to mapbox-gl v1.9.0+
@@ -39,3 +49,4 @@
   (set `tabindex="-1"` for date picker when preceding search box is empty)
 * Migrate from PropTypes to TypeScript
 * Find a better way to test Mapbox access token validity than `fetch('<endpoint>')`
+* Animate switch from search form to exposure menu
