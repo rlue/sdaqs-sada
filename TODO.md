@@ -7,8 +7,6 @@
 * Split up aggregate figures on a per-deployment basis
 * Add aggregate figures (average, standard deviation) to charts
 * Animate switch from search form to exposure menu
-* Rename SearchPanel component
-  (because in “chart” mode, it’s not for search)
 * Refactor SearchPanel map/chart mode content the React way
   (declaratively rendered, not via shown/hidden CSS classes)
 * Add hover animation to buttons

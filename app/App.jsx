@@ -2,7 +2,7 @@ import React, { useReducer, useState, useEffect, useRef } from 'react';
 import 'antd/dist/antd.css';
 import classNames from 'classnames';
 import '../assets/index.css';
-import SearchPanel from './components/SearchPanel';
+import SidePanel from './components/SidePanel';
 import Map from './components/Map';
 import ChartPage from './components/ChartPage';
 import GuidedTour from './components/GuidedTour';
@@ -81,7 +81,7 @@ export default function App() {
 
   return (
     <>
-      <SearchPanel
+      <SidePanel
         {...{
           userFlow,
           setUserFlow,

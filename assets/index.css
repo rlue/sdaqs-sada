@@ -42,7 +42,7 @@
 
 /* SEARCH PANEL ============================================================= */
 
-.search-panel {
+.side-panel {
   @apply absolute z-10 mx-4 bg-white shadow-md rounded-b-lg w-1/4;
   min-width: 15rem;
   max-width: 35rem;
@@ -50,12 +50,12 @@
 
 /* Slanty header ------------------------------------------------------------ */
 
-.search-panel__header {
+.side-panel__header {
   @apply relative p-4 mb-8;
   background: linear-gradient(2deg, hsl(240, 86%, 25%) 0%, hsl(240, 86%, 25%) 40%, hsl(276, 51%, 40%) 100%);
 }
 
-.search-panel__header::after {
+.side-panel__header::after {
   content: "";
 
   @apply absolute inset-x-0 bottom-0 border-solid border-transparent;
@@ -65,18 +65,18 @@
 }
 
 @media screen and (min-width: 140rem) { /* (search panel max-width * 4) */
-  .search-panel__header::after {
+  .side-panel__header::after {
     border-width: 0.875rem 17.5rem; /* (search panel max-width / 40) (search panel max-width / 2) */
   }
 }
 
 @media screen and (max-width: 60rem) { /* (search panel min-width * 4) */
-  .search-panel__header::after {
+  .side-panel__header::after {
     border-width: 0.3rem 7.5rem; /* (search panel min-width / 40) (search panel min-width / 2) */
   }
 }
 
-.search-panel__header > h1 {
+.side-panel__header > h1 {
   @apply relative mb-0 text-white text-5xl text-right leading-normal;
 
   top: 0.5rem;
@@ -94,7 +94,7 @@
                 1px  1px 3px hsla(48, 100%, 50%, 0.2);
 }
 
-.search-panel__back-button {
+.side-panel__back-button {
   @apply block absolute z-10 rounded-full bg-white shadow-md;
 
   transition-property: visibility, transform, opacity;
@@ -102,7 +102,7 @@
   transition-timing-function: ease-out;
 }
 
-.search-panel__back-button--shown {
+.side-panel__back-button--shown {
   visibility: visible;
   transform: scale3d(1, 1, 1);
   opacity: 1;
@@ -110,7 +110,7 @@
   transition-delay: 0s, 0s, 150ms;
 }
 
-.search-panel__back-button--hidden {
+.side-panel__back-button--hidden {
   visibility: hidden;
   transform: scale3d(0.3, 0.3, 0.3);
   opacity: 0;
@@ -232,7 +232,7 @@ svg.map-pin--highlighted {
 
 /* EXPOSURE SUMMARY ========================================================= */
 
-.exposure-shim { /* match width/margin of search-panel */
+.exposure-shim { /* match width/margin of side-panel */
   @apply ml-4 w-1/4 flex-none;
   min-width: 15rem;
   max-width: 35rem;

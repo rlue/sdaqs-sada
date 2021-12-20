@@ -8,7 +8,7 @@ import { selectionProgress, historyEntry } from '../utils/globalStateHelper';
 import { exposureMap } from '../utils/chartHelper';
 import sites from '../../data/sites.json';
 
-export default function SearchPanel({
+export default function SidePanel({
   userFlow,
   setUserFlow,
   deployments,
@@ -29,16 +29,16 @@ export default function SearchPanel({
   const [csvSpinner, setCsvSpinner] = useState(false);
 
   return (
-    <div className="search-panel">
-      <div className="search-panel__header">
+    <div className="side-panel">
+      <div className="side-panel__header">
         <h1>SDAQS</h1>
         <button
           type="button"
           className={classNames(
-            'search-panel__back-button',
+            'side-panel__back-button',
             {
-              'search-panel__back-button--shown': userFlow.mode === 'chart',
-              'search-panel__back-button--hidden': userFlow.mode === 'map',
+              'side-panel__back-button--shown': userFlow.mode === 'chart',
+              'side-panel__back-button--hidden': userFlow.mode === 'map',
             },
           )}
           onClick={() => history.back()}
@@ -163,7 +163,7 @@ export default function SearchPanel({
   );
 }
 
-SearchPanel.propTypes = {
+SidePanel.propTypes = {
   userFlow: PropTypes.shape({
     mode: PropTypes.string,
     for: PropTypes.string,
