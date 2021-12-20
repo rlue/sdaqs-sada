@@ -10,6 +10,7 @@ gem 'pg', '~> 1.2'
 gem 'roda', '~> 3.29'
 gem 'sequel', '~> 5.29'
 gem 'sequel_pg', '~> 1.12', require: false
+gem 'webrick', '~> 1.7'
 
 group :development, :test do
   gem 'pry', '~> 0.13'

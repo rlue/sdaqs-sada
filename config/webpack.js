@@ -39,7 +39,10 @@ module.exports = {
     filename: '[name]-[contenthash].js',
   },
   plugins: [
-    new AssetsPlugin({ path: path.resolve('assets') }),
+    new AssetsPlugin({
+      path: path.resolve('assets'),
+      removeFullPathAutoPrefix: true,
+    }),
     new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['*.js'] }),
     new webpack.DefinePlugin({
       MAPBOXGL_ACCESS_TOKEN: JSON.stringify(process.env.MAPBOXGL_ACCESS_TOKEN),
@@ -49,6 +52,8 @@ module.exports = {
     extensions: ['.js', '.jsx'],
   },
   devServer: {
-    writeToDisk: true,
+    devMiddleware: {
+      writeToDisk: true,
+    },
   },
 }
