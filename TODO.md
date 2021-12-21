@@ -16,8 +16,6 @@
   🤔 average/stddev across all deployments, or per-base?
   What happens for multiple deployments at same base?
 
-* Refactor SearchPanel map/chart mode content the React way
-  (declaratively rendered, not via shown/hidden CSS classes)
 * Add hover animation to buttons
 * Add screenshots to README & guided tour
 
