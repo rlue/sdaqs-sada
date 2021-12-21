@@ -1,10 +1,6 @@
-### Up Next
+### Up Next: Chart mode redesign
 
-
-#### Chart mode redesign
-
-* Feature idea: colorize aggregate figures on summary page to indicate
-  danger/severity of results?
+* Total visual redesign
 
 * Split up aggregate figures on a per-deployment basis
 
@@ -16,8 +12,8 @@
   🤔 average/stddev across all deployments, or per-base?
   What happens for multiple deployments at same base?
 
-* Add hover animation to buttons
-* Add screenshots to README & guided tour
+* Feature idea: colorize aggregate figures on summary page to indicate
+  danger/severity of results?
 
 ### Blocked
 
@@ -36,6 +32,8 @@
 
 ### Deprioritized
 
+* Mobile layout
+* Add screenshots to README & guided tour
 * Rethink how to pull `db_seed.sql` in post-receive deployment hook
 * Generate fake sample data for public demo version
 * Validate string value of `userFlow.contaminant`
@@ -48,3 +46,4 @@
 * Migrate from PropTypes to TypeScript
 * Find a better way to test Mapbox access token validity than `fetch('<endpoint>')`
 * Animate switch from search form to exposure menu
+* Add hover animation to buttons
