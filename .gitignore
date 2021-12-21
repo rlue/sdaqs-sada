@@ -2,6 +2,7 @@
 
 # Compiled assets
 /public/assets/main*.js
+/public/assets/main*.hot-update.json
 /assets/webpack-assets.json
 
 # Raw data
