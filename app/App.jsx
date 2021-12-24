@@ -98,7 +98,6 @@ export default function App() {
           'transition-transform',
           'duration-500',
           'ease-in-out',
-          'transform',
           {
             'translate-x-0': userFlow.mode === 'map',
             '-translate-x-1/2': userFlow.mode === 'chart',

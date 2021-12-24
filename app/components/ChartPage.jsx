@@ -51,7 +51,7 @@ export default function ChartPage({ exposures, exposureStats, userFlow }) {
       <div className="exposure-shim" />
       {
         Object.keys(exposures).length
-          ? <div className="flex-grow m-8">
+          ? <div className="grow m-8">
               <h1 className="text-5xl">{title(exposures)}</h1>
               <h2 className="text-3xl mb-4">{subtitle(exposures)}</h2>
               {userFlow.contaminant

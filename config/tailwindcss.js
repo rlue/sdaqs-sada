@@ -1,11 +1,7 @@
 module.exports = {
   theme: {},
-  variants: {
-    cursor: ['responsive', 'disabled'],
-    opacity: ['responsive', 'hover', 'focus', 'disabled'],
-  },
   plugins: [],
-  purge: [
+  content: [
     './app/**/*.html',
     './app/**/*.jsx',
     './assets/index.css',
