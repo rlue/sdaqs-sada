@@ -83,18 +83,14 @@ class App < Roda
     end
 
     r.get 'exposure_stats' do
-      stats = Base.exposures(**deployment_conditions(r.params))
-        .select do
+      stat_groups = Base.exposures(**deployment_conditions(r.params))
+        .select_group(:base_id).group_rollup
+        .select_append do
           AGGREGATE_FUNCTIONS.product(Base::CONTAMINANTS)
             .map { |func, c| Sequel.function(func, c).as("#{c}_#{func}") }
-        end.map(&:values).first
-
-      Base::CONTAMINANTS.each.with_object({}) do |c, hash|
-        AGGREGATE_FUNCTIONS.each do |func|
-          hash[c] ||= {}
-          hash[c][func] = stats[:"#{c}_#{func}"]
         end
-      end
+        .map(&:values)
+        .map { |stats| [stats.delete(:base_id) || 'aggregate', stats] }.to_h
     rescue ArgumentError, Sequel::Error => e
       case e.message
       when 'invalid query', 'The OR operator requires at least 1 argument'

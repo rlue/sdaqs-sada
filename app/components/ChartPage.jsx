@@ -75,11 +75,7 @@ ChartPage.propTypes = {
       ).isRequired,
     ).isRequired,
   ).isRequired,
-  exposureStats: PropTypes.objectOf( // key: <contaminant> ("pm25")
-    PropTypes.objectOf( // key: <type> ("avg" | "stddev")
-      PropTypes.string.isRequired,
-    ).isRequired,
-  ).isRequired,
+  exposureStats: PropTypes.instanceOf(Map).isRequired, // key: <baseId> ("VA1259")
   userFlow: PropTypes.shape({
     mode: PropTypes.string,
     for: PropTypes.string,

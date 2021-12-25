@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import ExposureTile from './ExposureTile';
 import { exposureMap } from '../utils/chartHelper';
+import sites from '../../data/sites.json';
 
 const reportedContaminants = Object.keys(exposureMap);
 
@@ -12,13 +12,34 @@ function reportedExposureStats(exposureStats) {
 }
 
 export default function ExposureSummary({ exposures, exposureStats }) {
+  const exposureStatsArray = Array.from(exposureStats);
+  if (exposureStatsArray.length === 2) exposureStatsArray.shift();
+
   return (
-    <div className="flex flex-wrap">
-      {Object.entries(exposureStats)
-          .filter(([contaminant,]) => reportedContaminants.includes(contaminant))
-          .map(([contaminant, { avg, stddev }]) =>
-            <ExposureTile key={contaminant} {...{ contaminant, avg, stddev }} />
-          )}
+    <div className="exposure-summary-container">
+      {exposureStatsArray.map(([baseId, stats]) =>
+        <>
+          <h2>{sites[baseId]?.name || 'All Bases'}</h2>
+          <table className="table-auto" key={baseId}>
+            <thead>
+              <tr>
+                <th>Contaminant</th>
+                <th>Average</th>
+                <th>Standard Deviation</th>
+              </tr>
+            </thead>
+            <tbody>
+              {reportedContaminants.map((contaminant) =>
+                <tr key={`${baseId}-${contaminant}`}>
+                  <td>{contaminant}</td>
+                  <td>{new Number(exposureStats.get(baseId)[`${contaminant}_avg`]).toPrecision(3)}</td>
+                  <td>{new Number(exposureStats.get(baseId)[`${contaminant}_stddev`]).toPrecision(3)}</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </>
+      )}
     </div>
   );
 }
@@ -31,9 +52,5 @@ ExposureSummary.propTypes = {
       ).isRequired,
     ).isRequired,
   ).isRequired,
-  exposureStats: PropTypes.objectOf( // key: <contaminant> ("pm25")
-    PropTypes.objectOf( // key: <type> ("avg" | "stddev")
-      PropTypes.string.isRequired,
-    ).isRequired,
-  ).isRequired,
+  exposureStats: PropTypes.instanceOf(Map).isRequired, // key: <baseId> ("VA1259")
 };

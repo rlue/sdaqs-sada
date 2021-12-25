@@ -20,7 +20,7 @@ export default function App() {
     [createDeployment()],
   );
   const [exposures, setExposures] = useState({});
-  const [exposureStats, setExposureStats] = useState({});
+  const [exposureStats, setExposureStats] = useState(new Map());
   const mostRecentFetchQuery = useRef('');
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export default function App() {
 
     mostRecentFetchQuery.current = fetchQuery;
     setExposures({});
-    setExposureStats({});
+    setExposureStats(new Map());
 
     fetch(`/exposures?${fetchQuery}`)
       .then((response) => {
@@ -75,7 +75,16 @@ export default function App() {
 
         return response.json();
       })
-      .then(setExposureStats)
+      .then((exposureStatsObject) => {
+        const aggregateStats = exposureStatsObject.aggregate;
+        delete exposureStatsObject.aggregate;
+
+        setExposureStats(
+          new Map(
+            [["aggregate", aggregateStats]].concat(Object.entries(exposureStatsObject))
+          )
+        );
+      })
       .catch(console.error);
   }, [userFlow.mode, deployments]);
 
