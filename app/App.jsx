@@ -3,7 +3,7 @@ import 'antd/dist/antd.css';
 import classNames from 'classnames';
 import '../assets/index.css';
 import SidePanel from './components/SidePanel';
-import Map from './components/Map';
+import MapPage from './components/MapPage';
 import ChartPage from './components/ChartPage';
 import GuidedTour from './components/GuidedTour';
 import { exposureQuery } from './utils/urlHelper';
@@ -105,7 +105,7 @@ export default function App() {
         )}
         style={{ width: '200vw' }}
       >
-        <Map
+        <MapPage
           {...{
             deployments,
             userFlow,

@@ -9,7 +9,7 @@ mapboxgl.accessToken = MAPBOXGL_ACCESS_TOKEN;
 
 const DEFAULT_MAP_BOUNDS = collectionBounds(Object.values(sites));
 
-export default function Map({
+export default function MapPage({
   deployments,
   userFlow,
   setUserFlow,
@@ -210,7 +210,7 @@ export default function Map({
   return <div className="h-screen w-screen" ref={mapContainer} />;
 }
 
-Map.propTypes = {
+MapPage.propTypes = {
   deployments: PropTypes.arrayOf(PropTypes.object).isRequired,
   userFlow: PropTypes.shape({
     mode: PropTypes.string,
