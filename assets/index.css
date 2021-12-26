@@ -238,6 +238,60 @@ svg.map-pin--highlighted {
   max-width: 35rem;
 }
 
+.exposure-container h1,
+.exposure-container h2 {
+  font-family: Lato;
+}
+
+table.exposure-stats {
+  @apply table-auto text-lg text-right whitespace-nowrap w-full bg-white;
+  @apply border border-separate rounded-3xl border-gray-300 shadow-lg;
+  border-spacing: 0;
+}
+
+table.exposure-stats > thead > tr:first-child > th:first-child {
+  @apply rounded-tl-3xl;
+}
+
+table.exposure-stats > thead > tr:first-child > td:last-child {
+  @apply rounded-tr-3xl;
+}
+
+table.exposure-stats > tbody > tr:last-child > th:first-child {
+  @apply rounded-bl-3xl;
+}
+
+table.exposure-stats > tbody > tr:last-child > td:last-child {
+  @apply rounded-br-3xl;
+}
+
+table.exposure-stats th {
+  @apply text-gray-800;
+}
+
+table.exposure-stats > thead > tr > th,
+table.exposure-stats > thead > tr > td {
+  @apply border-b-4 border-double;
+}
+
+table.exposure-stats > tbody > tr:not(:first-child) > th,
+table.exposure-stats > tbody > tr:not(:first-child) > td {
+  @apply border-t;
+}
+
+table.exposure-stats > tbody > tr > th {
+  @apply border-r-4 border-double bg-amber-50;
+}
+
+table.exposure-stats td,
+table.exposure-stats th {
+  @apply px-4 py-2;
+}
+
+table.exposure-stats td:last-child {
+  @apply w-full;
+}
+
 /* GUIDED TOUR ============================================================== */
 
 #___reactour .reactour__helper {

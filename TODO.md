@@ -2,11 +2,6 @@
 
 * Total visual redesign
 
-* Split up aggregate figures on a per-deployment basis
-
-  🤔 Separate “tabs” with aggregate figures for each deployment,
-  or all on one page in tabular format?
-
 * Add aggregate figures (average, standard deviation) to charts
 
   🤔 average/stddev across all deployments, or per-base?
@@ -14,6 +9,11 @@
 
 * Feature idea: colorize aggregate figures on summary page to indicate
   danger/severity of results?
+
+### Ask
+
+* On ExposureSummary page,
+  separate “tabs” with stats for each deployment, or all on one page?
 
 ### Blocked
 

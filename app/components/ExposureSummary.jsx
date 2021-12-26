@@ -16,31 +16,34 @@ export default function ExposureSummary({ exposures, exposureStats }) {
   if (exposureStatsArray.length === 2) exposureStatsArray.shift();
 
   return (
-    <div className="exposure-summary-container">
+    <>
       {exposureStatsArray.map(([baseId, stats]) =>
-        <>
-          <h2>{sites[baseId]?.name || 'All Bases'}</h2>
-          <table className="table-auto" key={baseId}>
+        <React.Fragment key={baseId}>
+          <h2 className="text-3xl text-gray-600 mt-8 mb-3">{sites[baseId]?.name || 'All Bases'}</h2>
+          <table className="exposure-stats">
+            <caption>All figures in μg/m³</caption>
             <thead>
               <tr>
-                <th>Contaminant</th>
+                <td></td>
                 <th>Average</th>
                 <th>Standard Deviation</th>
+                <td></td>
               </tr>
             </thead>
             <tbody>
               {reportedContaminants.map((contaminant) =>
-                <tr key={`${baseId}-${contaminant}`}>
-                  <td>{contaminant}</td>
-                  <td>{new Number(exposureStats.get(baseId)[`${contaminant}_avg`]).toPrecision(3)}</td>
-                  <td>{new Number(exposureStats.get(baseId)[`${contaminant}_stddev`]).toPrecision(3)}</td>
-                </tr>
+              <tr key={`${baseId}-${contaminant}`}>
+                <th>{exposureMap[contaminant].name}</th>
+                <td>{new Number(exposureStats.get(baseId)[`${contaminant}_avg`]).toPrecision(3)}</td>
+                <td>{new Number(exposureStats.get(baseId)[`${contaminant}_stddev`]).toPrecision(3)}</td>
+                <td></td>
+              </tr>
               )}
             </tbody>
           </table>
-        </>
+        </React.Fragment>
       )}
-    </div>
+    </>
   );
 }
 
