@@ -1,9 +1,11 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { Download } from './Icons';
 import { exposureMap } from '../utils/chartHelper';
 
 export default function SidePanelChartNav({
+  userFlow,
   setUserFlow,
 }) {
   const [csvSpinner, setCsvSpinner] = useState(false);
@@ -14,7 +16,23 @@ export default function SidePanelChartNav({
         <li>
           <button
             type="button"
-            className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+            className={classNames(
+              'block',
+              'w-full',
+              'h-full',
+              'px-5',
+              'py-3',
+              'text-left',
+              'text-lg',
+              'hover:bg-indigo-100',
+              'hover:text-black',
+              'hover:font-normal',
+              {
+                'bg-[#090977]': userFlow.contaminant === undefined,
+                'text-white': userFlow.contaminant === undefined,
+                'font-bold': userFlow.contaminant === undefined,
+              },
+            )}
             onClick={() => setUserFlow({ mode: 'chart' })}
           >
             Summary
@@ -24,7 +42,23 @@ export default function SidePanelChartNav({
           <li key={contaminant}>
             <button
               type="button"
-              className="block w-full h-full px-5 py-3 text-left text-lg hover:bg-indigo-100"
+              className={classNames(
+                'block',
+                'w-full',
+                'h-full',
+                'px-5',
+                'py-3',
+                'text-left',
+                'text-lg',
+                'hover:bg-indigo-100',
+                'hover:text-black',
+                'hover:font-normal',
+                {
+                  'bg-[#090977]': userFlow.contaminant === contaminant,
+                  'text-white': userFlow.contaminant === contaminant,
+                  'font-bold': userFlow.contaminant === contaminant,
+                },
+              )}
               onClick={() => setUserFlow({ mode: 'chart', contaminant })}
             >
               {name}
@@ -62,5 +96,17 @@ export default function SidePanelChartNav({
 }
 
 SidePanelChartNav.propTypes = {
+  userFlow: PropTypes.shape({
+    mode: PropTypes.string,
+    for: PropTypes.string,
+    results: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string,
+        lat: PropTypes.string,
+        lng: PropTypes.string,
+      }),
+    ),
+  }).isRequired,
   setUserFlow: PropTypes.func.isRequired,
 };

@@ -21,7 +21,7 @@ export default function SidePanel({
             userFlow,
             setUserFlow,
           }}/> :
-          <SidePanelChartNav {...{ setUserFlow }} />
+          <SidePanelChartNav {...{ userFlow, setUserFlow }} />
       }
     </div>
   );
