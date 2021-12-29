@@ -125,7 +125,7 @@ Chart.propTypes = {
   exposures: PropTypes.objectOf( // key: <contaminant> ("pm25"),
     PropTypes.objectOf( // key: <baseId> ("VA1259")
       PropTypes.objectOf( // key: <date> ("2012-02-14")
-        PropTypes.string.isRequired,
+        PropTypes.string,
       ).isRequired,
     ).isRequired,
   ).isRequired,
