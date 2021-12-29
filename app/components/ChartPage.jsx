@@ -12,7 +12,7 @@ export default function ChartPage({ exposures, exposureStats, userFlow }) {
           ? <div className="grow m-8">
               <h1 className="text-5xl text-violet-900 uppercase mb-5">Summary</h1>
               {userFlow.contaminant
-                ? <Chart {...{ exposures, userFlow }} />
+                ? <Chart {...{ exposures, exposureStats, userFlow }} />
                 : <ExposureSummary {...{ exposures, exposureStats }} />
               }
             </div>

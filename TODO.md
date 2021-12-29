@@ -2,11 +2,6 @@
 
 * Total visual redesign
 
-* Add aggregate figures (average, standard deviation) to charts
-
-  🤔 average/stddev across all deployments, or per-base?
-  What happens for multiple deployments at same base?
-
 * Feature idea: colorize aggregate figures on summary page to indicate
   danger/severity of results?
 
@@ -14,6 +9,10 @@
 
 * On ExposureSummary page,
   separate “tabs” with stats for each deployment, or all on one page?
+
+* On Chart page,
+  average/stddev across all deployments, or per-base?
+  What happens for multiple deployments at same base?
 
 ### Blocked
 
