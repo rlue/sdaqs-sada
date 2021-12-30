@@ -14,6 +14,7 @@ function reportedExposureStats(exposureStats) {
 export default function ExposureSummary({ exposures, exposureStats }) {
   const exposureStatsArray = Array.from(exposureStats);
   if (exposureStatsArray.length === 2) exposureStatsArray.shift();
+  const orderOfMagnitudeCorrection = (contaminant) => contaminant === 'pm25' ? 1 : 1000000000
 
   return (
     <>
@@ -34,8 +35,8 @@ export default function ExposureSummary({ exposures, exposureStats }) {
               {reportedContaminants.map((contaminant) =>
               <tr key={`${baseId}-${contaminant}`}>
                 <th>{exposureMap[contaminant].name}</th>
-                <td>{new Number(exposureStats.get(baseId)[`${contaminant}_avg`]).toPrecision(3)}</td>
-                <td>{new Number(exposureStats.get(baseId)[`${contaminant}_stddev`]).toPrecision(3)}</td>
+                <td>{new Number(exposureStats.get(baseId)[`${contaminant}_avg`] * orderOfMagnitudeCorrection(contaminant)).toPrecision(3)}</td>
+                <td>{new Number(exposureStats.get(baseId)[`${contaminant}_stddev`] * orderOfMagnitudeCorrection(contaminant)).toPrecision(3)}</td>
                 <td></td>
               </tr>
               )}

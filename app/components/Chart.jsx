@@ -8,7 +8,7 @@ import sites from '../../data/sites.json';
 // NOTE the difference:
 // this `exposures` var            -> exposures[base_id][date]
 // top-level `exposures` state var -> exposures[contaminant][base_id][date]
-function exposuresToChartJSDataset(exposures) {
+function exposuresToChartJSDataset(exposures, orderOfMagnitudeCorrection) {
   return {
     datasets: Object.keys(exposures)
       .map((baseId) => ({
@@ -16,7 +16,7 @@ function exposuresToChartJSDataset(exposures) {
         data: Object.entries(exposures[baseId])
           .map(([date, concentration]) => ({
             x: date,
-            y: concentration,
+            y: concentration * orderOfMagnitudeCorrection,
           })),
       })),
   };
@@ -25,13 +25,14 @@ function exposuresToChartJSDataset(exposures) {
 export default function Chart({ exposures, exposureStats, userFlow }) {
   const chartCanvas = useRef();
   const chart = useRef();
-  const avg = Number(exposureStats.get('aggregate')[`${userFlow.contaminant}_avg`]);
-  const stddev = Number(exposureStats.get('aggregate')[`${userFlow.contaminant}_stddev`]);
+  const orderOfMagnitudeCorrection = userFlow.contaminant === 'pm25' ? 1 : 1000000000
+  const avg = Number(exposureStats.get('aggregate')[`${userFlow.contaminant}_avg`]) * orderOfMagnitudeCorrection;
+  const stddev = Number(exposureStats.get('aggregate')[`${userFlow.contaminant}_stddev`]) * orderOfMagnitudeCorrection;
 
   useEffect(() => {
     chart.current = new ChartJS(chartCanvas.current, {
       type: 'line',
-      data: exposuresToChartJSDataset(exposures[userFlow.contaminant]),
+      data: exposuresToChartJSDataset(exposures[userFlow.contaminant], orderOfMagnitudeCorrection),
       options: {
         elements: {
           point: {
@@ -114,7 +115,7 @@ export default function Chart({ exposures, exposureStats, userFlow }) {
   }, [userFlow.contaminant]);
 
   useEffect(() => {
-    chart.current.data = exposuresToChartJSDataset(exposures[userFlow.contaminant]);
+    chart.current.data = exposuresToChartJSDataset(exposures[userFlow.contaminant], orderOfMagnitudeCorrection);
     chart.current.update();
   }, [exposures, userFlow.contaminant]);
 
