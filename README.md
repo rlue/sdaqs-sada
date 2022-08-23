@@ -84,9 +84,9 @@ consider a reverse proxy or edge router like [traefik][].
 
 ### Installing Non-Public Data
 
-This application depends on air contaminant exposure data
-which cannot be distributed publicly,
-as they reference the geo-coordinates of various US military bases.
+This application depends on air quality exposure data derived through published research that can be found <a href="https://www.sciencedirect.com/science/article/pii/S0160412021000702" target="_blank"> here </a> and <a href="https://www.mdpi.com/2073-4433/13/2/255" target="_blank"> here </a>.
+Data shown in this application cannot be distributed publicly,
+as they reference the geo-coordinates of various US military bases. Please contact the <a href="https://www.statistics.utoronto.ca/people/directories/all-faculty/meredith-franklin" target="_blank"> PI </a> for access to gridded data.
 
 Before the application can be deployed,
 you will need to obtain a SQL dump of this data from the project team
