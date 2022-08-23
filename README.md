@@ -20,25 +20,25 @@ and funded by the NASA Shared Services Center.
 
 ![](./.i/screenshot-map.png)
 
-Generate a **chart** and **downloadable CSV file** of air contaminant levels
-for over 1,600 sites throughout the SADA region,
+Generate a time series **chart** and **downloadable CSV file** of air pollution concentrations
+for over 1,200 military bases throughout Southwest Asia,
 broken down by month, for any period from 2002 to present.
 
 SDAQS-SADA reports individual concentration levels
-for a variety of air contaminant types,
-including sulfates, nitrates, elemental carbon, organic carbon, and dust.
+for fine particulate matter (PM2.5) mass and components,
+including sulfate, nitrate, elemental carbon, organic carbon, and dust.
 
 ### Associated Programs
 
 * **Clinical:** Department of Veterans’ Affairs [CSP #595][1]
-* **Research:** Department of Defense [Millennium Cohort Study][2]
+
 
 ### Project Team
 
-* Meredith Franklin, Ph.D. (University of Southern California)
+* <a href="https://www.statistics.utoronto.ca/people/directories/all-faculty/meredith-franklin" target="_blank">Meredith Franklin</a>, Ph.D. (University of Toronto & University of Southern California)
 * Petros Koutrakis, Ph.D. (Harvard University)
-* Eric Garshick, M.D. (VA Boston Healthcare)
-* Olga Kalashnikova, Ph.D. (JPL)
+* Eric Garshick, M.D. (VA Boston Healthcare & Harvard Medical School)
+* Olga Kalashnikova, Ph.D. (Jet Propulsion Laboratory)
 * Joel Schwartz, Ph.D. (Harvard University)
 * Harvard School of Public Health Environmental Chemistry Lab
 
@@ -149,8 +149,8 @@ SDAQS-SADA is built using Roda + React.
 * Bundler 2.1.4
 * npm 6.0+
 * PostgreSQL
-* [forego][3]
-* [direnv][4] (recommended)
+* [forego][2]
+* [direnv][3] (recommended)
 
 ### Configuration
 
@@ -193,14 +193,14 @@ $ rake server   # or rake s
 
 To embed new fonts into this project:
 
-1. [Convert][5] to WOFF/WOFF2 format
+1. [Convert][4] to WOFF/WOFF2 format
 2. Save to `public/assets/fonts`
-3. Use the [CSS `@font-face` directive][6]
+3. Use the [CSS `@font-face` directive][5]
 
 ### Git Commit Message Codes
 
 This repo follows a pattern for git commit messages
-inspired by [the one used on AngularJS][7].
+inspired by [the one used on AngularJS][6].
 
 The first line of each commit should begin
 with one of the following three-letter codes:
@@ -220,16 +220,15 @@ with one of the following three-letter codes:
 License
 -------
 
-Copyright © 2020 University of Southern California. All rights reserved.
+Copyright © 2022 University of Southern California. All rights reserved.
 
 [0]: https://govtribe.com/award/federal-contract-award/grant-for-research-80nssc19k0225
 [1]: https://www.vacsp.research.va.gov/CSPEC/Studies/INVESTD-R/CSP-595-SHADE.asp
-[2]: https://www.millenniumcohort.org/
-[3]: https://github.com/ddollar/forego/releases
-[4]: https://github.com/direnv/direnv
-[5]: https://www.fontsquirrel.com/tools/webfont-generator
-[6]: https://css-tricks.com/snippets/css/using-font-face/
-[7]: https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y
+[2]: https://github.com/ddollar/forego/releases
+[3]: https://github.com/direnv/direnv
+[4]: https://www.fontsquirrel.com/tools/webfont-generator
+[5]: https://css-tricks.com/snippets/css/using-font-face/
+[6]: https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y
 [traefik]: https://docs.traefik.io
 [Mapbox GL JS]: https://docs.mapbox.com/mapbox-gl-js/overview/
 [How to use Mapbox securely]: https://docs.mapbox.com/help/troubleshooting/how-to-use-mapbox-securely/
