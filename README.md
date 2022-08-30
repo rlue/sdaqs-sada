@@ -6,7 +6,7 @@
   />
   SDAQS-SADA
   <img
-    src="http://1.bp.blogspot.com/-K1zf0nwrZ9w/UE6d1Oz10EI/AAAAAAAACRg/oWgtj0tkmJo/s1600/nasa-logo.jpg"
+    src="./.i/nasa.jpg"
     height="24"
     width="29"
   />
@@ -49,14 +49,14 @@ Requires Docker Compose.
 
 <a href="https://docs.docker.com/">
   <img
-    src="https://www.docker.com/sites/default/files/social/docker_facebook_share.png"
+    src="./.i/docker.png"
     height="64"
     width="75"
   />
 </a>
 <a href="https://docs.docker.com/compose/">
   <img
-    src="https://www.docker.com/blog/wp-content/uploads/2020/02/Compose.png"
+    src="./.i/docker-compose.png"
     height="64"
     width="58"
   />
@@ -99,7 +99,7 @@ Get one at <https://account.mapbox.com>.
 
 <a href="https://account.mapbox.com">
   <img
-    src="https://upload.wikimedia.org/wikipedia/commons/c/c4/Mapbox_logo_2017.svg"
+    src="./.i/mapbox.svg"
     height="64"
     width="284"
   />
@@ -130,14 +130,14 @@ SDAQS-SADA is built using Roda + React.
 
 <a href="https://roda.jeremyevans.net">
   <img
-    src="http://roda.jeremyevans.net/images/roda-logo.svg"
+    src="./.i/roda.svg"
     height="64"
     width="246"
   />
 </a>
 <a href="https://reactjs.org">
   <img
-    src="https://tse2.mm.bing.net/th?id=OIP.LpDrkHxE25QIzQbSF-flFAHaHa"
+    src="./.i/react.jpg"
     height="64"
     width="64"
   />
