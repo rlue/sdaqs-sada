@@ -52,17 +52,19 @@ Requires Docker Compose.
     src="./.i/docker.png"
     height="64"
     width="75"
-  />
-</a>
+  /></a>
 <a href="https://docs.docker.com/compose/">
   <img
     src="./.i/docker-compose.png"
     height="64"
     width="58"
-  />
-</a>
+  /></a>
 
 ```sh
+# download the repo
+$ git clone https://github.com/rlue/sdaqs-sada
+$ cd sdaqs-sada
+
 # setup
 $ mv path/to/db_seed.sql data/
 $ export MAPBOXGL_ACCESS_TOKEN="pk.eyJ1Ijoicmx..."
@@ -84,9 +86,9 @@ consider a reverse proxy or edge router like [traefik][].
 
 ### Installing Non-Public Data
 
-This application depends on air quality exposure data derived through published research that can be found <a href="https://www.sciencedirect.com/science/article/pii/S0160412021000702" target="_blank"> here </a> and <a href="https://www.mdpi.com/2073-4433/13/2/255" target="_blank"> here </a>.
+This application depends on air quality exposure data derived through published research that can be found <a href="https://www.sciencedirect.com/science/article/pii/S0160412021000702" target="_blank">here</a> and <a href="https://www.mdpi.com/2073-4433/13/2/255" target="_blank"> here </a>.
 Data shown in this application cannot be distributed publicly,
-as they reference the geo-coordinates of various US military bases. Please contact the <a href="https://www.statistics.utoronto.ca/people/directories/all-faculty/meredith-franklin" target="_blank"> PI </a> for access to gridded data.
+as they reference the geo-coordinates of various US military bases. Please contact the <a href="https://www.statistics.utoronto.ca/people/directories/all-faculty/meredith-franklin" target="_blank">PI</a> for access to gridded data.
 
 Before the application can be deployed,
 you will need to obtain a SQL dump of this data from the project team
@@ -102,8 +104,7 @@ Get one at <https://account.mapbox.com>.
     src="./.i/mapbox.svg"
     height="64"
     width="284"
-  />
-</a>
+  /></a>
 
 Deploying this application will expose this token
 to anyone who can access the site—it’s not shown in the open,
@@ -133,15 +134,13 @@ SDAQS-SADA is built using Roda + React.
     src="./.i/roda.svg"
     height="64"
     width="246"
-  />
-</a>
+  /></a>
 <a href="https://reactjs.org">
   <img
     src="./.i/react.jpg"
     height="64"
     width="64"
-  />
-</a>
+  /></a>
 
 ### Requirements
 
